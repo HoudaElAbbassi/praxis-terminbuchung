@@ -68,7 +68,7 @@ model Appointment {
   date              DateTime
   startTime         DateTime
   endTime           DateTime
-  status            AppointmentStatus @default(CONFIRMED)
+  status            AppointmentStatus @default(PENDING)
   notes             String?
 
   // Relationen
@@ -88,10 +88,36 @@ model Appointment {
 }
 
 enum AppointmentStatus {
+  PENDING
   CONFIRMED
   CANCELLED
   COMPLETED
   NO_SHOW
+}
+
+// Verfügbarkeit des Arztes
+model Availability {
+  id            String       @id @default(cuid())
+  dayOfWeek     DayOfWeek
+  startTime     String       // Format: "HH:MM"
+  endTime       String       // Format: "HH:MM"
+  isActive      Boolean      @default(true)
+
+  // Timestamps
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  @@index([dayOfWeek])
+}
+
+enum DayOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
 }
 
 // Praxis-Einstellungen

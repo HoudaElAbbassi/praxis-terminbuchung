@@ -75,6 +75,27 @@ export default function AdminDashboard() {
     }
   };
 
+  const updateAppointmentStatus = async (appointmentId: string, newStatus: string) => {
+    try {
+      const res = await fetch(`/api/admin/appointments/${appointmentId}/status`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: newStatus }),
+      });
+
+      if (res.ok) {
+        // Refresh appointments list
+        fetchAppointments();
+        fetchStats();
+      } else {
+        alert("Fehler beim Aktualisieren des Terminstatus");
+      }
+    } catch (error) {
+      console.error("Error updating appointment status:", error);
+      alert("Fehler beim Aktualisieren des Terminstatus");
+    }
+  };
+
   if (status === "loading" || isLoading) {
     return <div className="min-h-screen flex items-center justify-center">Lädt...</div>;
   }
@@ -105,12 +126,20 @@ export default function AdminDashboard() {
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900">Admin Dashboard</h1>
-          <Link
-            href="/admin/einstellungen"
-            className="bg-gray-800 hover:bg-gray-900 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
-          >
-            Einstellungen
-          </Link>
+          <div className="flex gap-3">
+            <Link
+              href="/admin/verfuegbarkeit"
+              className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+            >
+              Verfügbarkeit verwalten
+            </Link>
+            <Link
+              href="/admin/einstellungen"
+              className="bg-gray-800 hover:bg-gray-900 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+            >
+              Einstellungen
+            </Link>
+          </div>
         </div>
 
         {/* Statistics Cards */}
@@ -195,8 +224,18 @@ export default function AdminDashboard() {
                         <span className="text-lg font-semibold text-primary-600">
                           {formatTime(appointment.startTime)} - {formatTime(appointment.endTime)}
                         </span>
-                        <span className="px-3 py-1 bg-green-100 text-green-800 text-sm font-semibold rounded-full">
-                          {appointment.status === "CONFIRMED" ? "Bestätigt" : appointment.status}
+                        <span className={`px-3 py-1 text-sm font-semibold rounded-full ${
+                          appointment.status === "PENDING" ? "bg-yellow-100 text-yellow-800" :
+                          appointment.status === "CONFIRMED" ? "bg-green-100 text-green-800" :
+                          appointment.status === "CANCELLED" ? "bg-red-100 text-red-800" :
+                          appointment.status === "COMPLETED" ? "bg-blue-100 text-blue-800" :
+                          "bg-gray-100 text-gray-800"
+                        }`}>
+                          {appointment.status === "PENDING" ? "Ausstehend" :
+                           appointment.status === "CONFIRMED" ? "Bestätigt" :
+                           appointment.status === "CANCELLED" ? "Abgesagt" :
+                           appointment.status === "COMPLETED" ? "Abgeschlossen" :
+                           appointment.status}
                         </span>
                       </div>
 
@@ -210,6 +249,41 @@ export default function AdminDashboard() {
                         <p><span className="font-medium">Terminart:</span> {appointment.appointmentType.name}</p>
                         <p><span className="font-medium">Dauer:</span> {appointment.appointmentType.duration} Min</p>
                       </div>
+
+                      {/* Action Buttons */}
+                      {appointment.status === "PENDING" && (
+                        <div className="flex gap-3 mt-4">
+                          <button
+                            onClick={() => updateAppointmentStatus(appointment.id, "CONFIRMED")}
+                            className="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
+                          >
+                            ✓ Annehmen
+                          </button>
+                          <button
+                            onClick={() => updateAppointmentStatus(appointment.id, "CANCELLED")}
+                            className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
+                          >
+                            ✗ Ablehnen
+                          </button>
+                        </div>
+                      )}
+
+                      {appointment.status === "CONFIRMED" && (
+                        <div className="flex gap-3 mt-4">
+                          <button
+                            onClick={() => updateAppointmentStatus(appointment.id, "COMPLETED")}
+                            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
+                          >
+                            Als abgeschlossen markieren
+                          </button>
+                          <button
+                            onClick={() => updateAppointmentStatus(appointment.id, "CANCELLED")}
+                            className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
+                          >
+                            Absagen
+                          </button>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

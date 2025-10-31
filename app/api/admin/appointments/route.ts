@@ -24,7 +24,7 @@ export async function GET(req: NextRequest) {
       where: {
         date: selectedDate,
         status: {
-          not: "CANCELLED",
+          in: ["PENDING", "CONFIRMED", "COMPLETED"],
         },
       },
       include: {

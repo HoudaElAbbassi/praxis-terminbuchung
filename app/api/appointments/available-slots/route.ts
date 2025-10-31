@@ -1,11 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-// Konfiguration - später aus Settings-Tabelle laden
-const OPENING_TIME = 8; // 8:00 Uhr
-const CLOSING_TIME = 16; // 16:00 Uhr
 const SLOT_DURATION = 15; // Basis-Slot: 15 Minuten
 const BUFFER_TIME = 5; // Pufferzeit zwischen Terminen: 5 Minuten
+
+// Map JavaScript day to DayOfWeek enum
+const dayOfWeekMap: Record<number, string> = {
+  0: "SUNDAY",
+  1: "MONDAY",
+  2: "TUESDAY",
+  3: "WEDNESDAY",
+  4: "THURSDAY",
+  5: "FRIDAY",
+  6: "SATURDAY",
+};
 
 export async function GET(req: NextRequest) {
   try {
@@ -43,9 +51,20 @@ export async function GET(req: NextRequest) {
       return NextResponse.json([]);
     }
 
-    // Check if it's a weekend (Saturday = 6, Sunday = 0)
+    // Get day of week for selected date
     const dayOfWeek = selectedDate.getDay();
-    if (dayOfWeek === 0 || dayOfWeek === 6) {
+    const dayOfWeekString = dayOfWeekMap[dayOfWeek];
+
+    // Get availabilities for this day of week
+    const availabilities = await prisma.availability.findMany({
+      where: {
+        dayOfWeek: dayOfWeekString,
+        isActive: true,
+      },
+    });
+
+    // If no availabilities defined for this day, return empty
+    if (availabilities.length === 0) {
       return NextResponse.json([]);
     }
 
@@ -54,7 +73,7 @@ export async function GET(req: NextRequest) {
       where: {
         date: selectedDate,
         status: {
-          not: "CANCELLED",
+          in: ["PENDING", "CONFIRMED"],
         },
       },
       select: {
@@ -63,51 +82,62 @@ export async function GET(req: NextRequest) {
       },
     });
 
-    // Generate all possible time slots
+    // Generate time slots for all availability periods
     const slots = [];
     const appointmentDuration = appointmentType.duration;
-    const totalSlotTime = appointmentDuration + BUFFER_TIME;
 
-    // Start from opening time
-    let currentTime = OPENING_TIME * 60; // Convert to minutes
-    const closingTimeMinutes = CLOSING_TIME * 60;
+    for (const availability of availabilities) {
+      // Parse availability times (format: "HH:MM")
+      const [startHour, startMinute] = availability.startTime.split(":").map(Number);
+      const [endHour, endMinute] = availability.endTime.split(":").map(Number);
 
-    while (currentTime + appointmentDuration <= closingTimeMinutes) {
-      const hours = Math.floor(currentTime / 60);
-      const minutes = currentTime % 60;
-      const timeString = `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+      let currentTime = startHour * 60 + startMinute; // Convert to minutes
+      const endTimeMinutes = endHour * 60 + endMinute;
 
-      // Create start and end time for this slot
-      const slotStart = new Date(selectedDate);
-      slotStart.setHours(hours, minutes, 0, 0);
+      while (currentTime + appointmentDuration <= endTimeMinutes) {
+        const hours = Math.floor(currentTime / 60);
+        const minutes = currentTime % 60;
+        const timeString = `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
 
-      const slotEnd = new Date(slotStart);
-      slotEnd.setMinutes(slotEnd.getMinutes() + appointmentDuration);
+        // Create start and end time for this slot
+        const slotStart = new Date(selectedDate);
+        slotStart.setHours(hours, minutes, 0, 0);
 
-      // Check if this slot conflicts with any existing appointment
-      const isAvailable = !appointments.some((appointment) => {
-        const appointmentStart = new Date(appointment.startTime);
-        const appointmentEnd = new Date(appointment.endTime);
+        const slotEnd = new Date(slotStart);
+        slotEnd.setMinutes(slotEnd.getMinutes() + appointmentDuration);
 
-        // Add buffer time to existing appointments
-        appointmentEnd.setMinutes(appointmentEnd.getMinutes() + BUFFER_TIME);
+        // Check if this slot conflicts with any existing appointment
+        const isAvailable = !appointments.some((appointment) => {
+          const appointmentStart = new Date(appointment.startTime);
+          const appointmentEnd = new Date(appointment.endTime);
 
-        // Check for overlap
-        return slotStart < appointmentEnd && slotEnd > appointmentStart;
-      });
+          // Add buffer time to existing appointments
+          appointmentEnd.setMinutes(appointmentEnd.getMinutes() + BUFFER_TIME);
 
-      // If it's today, check if the time has already passed
-      const now = new Date();
-      const isInPast = selectedDate.getTime() === today.getTime() && slotStart <= now;
+          // Check for overlap
+          return slotStart < appointmentEnd && slotEnd > appointmentStart;
+        });
 
-      slots.push({
-        time: timeString,
-        available: isAvailable && !isInPast,
-      });
+        // If it's today, check if the time has already passed
+        const now = new Date();
+        const isInPast = selectedDate.getTime() === today.getTime() && slotStart <= now;
 
-      // Move to next slot (use SLOT_DURATION for grid, not totalSlotTime)
-      currentTime += SLOT_DURATION;
+        // Only add if not already in slots array (avoid duplicates if availability periods overlap)
+        const existingSlot = slots.find((s) => s.time === timeString);
+        if (!existingSlot) {
+          slots.push({
+            time: timeString,
+            available: isAvailable && !isInPast,
+          });
+        }
+
+        // Move to next slot
+        currentTime += SLOT_DURATION;
+      }
     }
+
+    // Sort slots by time
+    slots.sort((a, b) => a.time.localeCompare(b.time));
 
     return NextResponse.json(slots);
   } catch (error) {

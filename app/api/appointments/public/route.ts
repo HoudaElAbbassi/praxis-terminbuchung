@@ -111,13 +111,13 @@ export async function POST(request: Request) {
       });
     }
 
-    // Create appointment
+    // Create appointment with PENDING status (admin needs to confirm)
     const appointment = await prisma.appointment.create({
       data: {
         date: appointmentDate,
         startTime,
         endTime,
-        status: "CONFIRMED",
+        status: "PENDING",
         notes: notes || null,
         userId: user.id,
         appointmentTypeId: appointmentType.id,

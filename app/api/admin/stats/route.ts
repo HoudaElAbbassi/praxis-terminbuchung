@@ -20,7 +20,7 @@ export async function GET() {
     const total = await prisma.appointment.count({
       where: {
         status: {
-          not: "CANCELLED",
+          in: ["PENDING", "CONFIRMED", "COMPLETED"],
         },
       },
     });
@@ -30,7 +30,7 @@ export async function GET() {
       where: {
         date: today,
         status: {
-          not: "CANCELLED",
+          in: ["PENDING", "CONFIRMED", "COMPLETED"],
         },
       },
     });
@@ -42,7 +42,7 @@ export async function GET() {
           gte: tomorrow,
         },
         status: {
-          not: "CANCELLED",
+          in: ["PENDING", "CONFIRMED"],
         },
       },
     });
