@@ -32,8 +32,19 @@ export default function AdminDashboard() {
   const [stats, setStats] = useState({ total: 0, today: 0, upcoming: 0 });
 
   useEffect(() => {
+    if (status === "loading") {
+      return;
+    }
+
+    if (status === "unauthenticated") {
+      setIsLoading(false);
+      router.push("/auth/login");
+      return;
+    }
+
     if (status === "authenticated") {
       if (session?.user?.role !== "ADMIN") {
+        setIsLoading(false);
         router.push("/");
         return;
       }
