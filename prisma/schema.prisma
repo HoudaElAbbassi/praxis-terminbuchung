@@ -1,0 +1,109 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Benutzer-Modell (für Patienten und Admins)
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  password      String
+  role          UserRole  @default(PATIENT)
+
+  // Patientendaten
+  firstName     String
+  lastName      String
+  phone         String
+  dateOfBirth   DateTime?
+  address       String?
+
+  // Timestamps
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relationen
+  appointments  Appointment[]
+
+  @@index([email])
+}
+
+enum UserRole {
+  PATIENT
+  ADMIN
+}
+
+// Terminarten-Modell
+model AppointmentType {
+  id            String    @id @default(cuid())
+  name          String    @unique
+  duration      Int       // Dauer in Minuten
+  description   String?
+  isActive      Boolean   @default(true)
+
+  // Timestamps
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relationen
+  appointments  Appointment[]
+
+  @@index([name])
+}
+
+// Termin-Modell
+model Appointment {
+  id                String          @id @default(cuid())
+
+  // Termin-Details
+  date              DateTime
+  startTime         DateTime
+  endTime           DateTime
+  status            AppointmentStatus @default(CONFIRMED)
+  notes             String?
+
+  // Relationen
+  userId            String
+  user              User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  appointmentTypeId String
+  appointmentType   AppointmentType @relation(fields: [appointmentTypeId], references: [id])
+
+  // Timestamps
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  @@index([userId])
+  @@index([date])
+  @@index([startTime])
+}
+
+enum AppointmentStatus {
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+  NO_SHOW
+}
+
+// Praxis-Einstellungen
+model Settings {
+  id            String    @id @default(cuid())
+  key           String    @unique
+  value         String
+
+  // Timestamps
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([key])
+}
