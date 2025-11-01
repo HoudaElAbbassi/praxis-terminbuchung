@@ -58,7 +58,7 @@ export async function GET(req: NextRequest) {
     // Get availabilities for this day of week
     const availabilities = await prisma.availability.findMany({
       where: {
-        dayOfWeek: dayOfWeekString,
+        dayOfWeek: dayOfWeekString as any,
         isActive: true,
       },
     });
