@@ -4,7 +4,7 @@ import { auth } from "@/lib/auth";
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth();
@@ -13,6 +13,7 @@ export async function PUT(
       return NextResponse.json({ error: "Nicht autorisiert" }, { status: 403 });
     }
 
+    const { id } = await params;
     const body = await request.json();
     const { dayOfWeek, startTime, endTime, isActive } = body;
 
@@ -49,7 +50,7 @@ export async function PUT(
     }
 
     const availability = await prisma.availability.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         ...(dayOfWeek && { dayOfWeek }),
         ...(startTime && { startTime }),
@@ -70,7 +71,7 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth();
@@ -79,8 +80,10 @@ export async function DELETE(
       return NextResponse.json({ error: "Nicht autorisiert" }, { status: 403 });
     }
 
+    const { id } = await params;
+
     await prisma.availability.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return NextResponse.json({ success: true });
