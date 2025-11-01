@@ -150,7 +150,7 @@ export default function EinstellungenPage() {
                     required
                     value={newType.name}
                     onChange={(e) => setNewType({ ...newType, name: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 text-gray-900"
                     placeholder="z.B. Standard-Konsultation"
                   />
                 </div>
@@ -165,7 +165,7 @@ export default function EinstellungenPage() {
                     step="5"
                     value={newType.duration}
                     onChange={(e) => setNewType({ ...newType, duration: parseInt(e.target.value) })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 text-gray-900"
                   />
                 </div>
               </div>
@@ -176,7 +176,7 @@ export default function EinstellungenPage() {
                 <textarea
                   value={newType.description}
                   onChange={(e) => setNewType({ ...newType, description: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 text-gray-900"
                   rows={3}
                   placeholder="Optionale Beschreibung für Patienten"
                 />

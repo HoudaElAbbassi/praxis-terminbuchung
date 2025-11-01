@@ -283,7 +283,7 @@ export default function BuchenPage() {
                           selectedTime === slot.time
                             ? "border-primary-600 bg-primary-600 text-white"
                             : slot.available
-                            ? "border-gray-300 hover:border-primary-500 hover:bg-primary-50"
+                            ? "border-gray-300 hover:border-primary-500 hover:bg-primary-50 text-gray-900"
                             : "border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed"
                         }`}
                       >
