@@ -57,9 +57,16 @@ export default function AdminDashboard() {
     try {
       const res = await fetch(`/api/admin/appointments?date=${selectedDate}`);
       const data = await res.json();
-      setAppointments(data);
+
+      if (res.ok && Array.isArray(data)) {
+        setAppointments(data);
+      } else {
+        console.error("Error from API:", data);
+        setAppointments([]);
+      }
     } catch (error) {
       console.error("Error fetching appointments:", error);
+      setAppointments([]);
     } finally {
       setIsLoading(false);
     }
