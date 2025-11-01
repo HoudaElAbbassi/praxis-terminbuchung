@@ -263,7 +263,7 @@ export default function BuchenPage() {
                   onChange={(e) => setSelectedDate(e.target.value)}
                   min={today}
                   max={maxDateStr}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-gray-900"
                 />
               </div>
 
@@ -335,7 +335,7 @@ export default function BuchenPage() {
                     required
                     value={contactData.firstName}
                     onChange={handleContactChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-gray-900"
                   />
                 </div>
                 <div>
@@ -348,7 +348,7 @@ export default function BuchenPage() {
                     required
                     value={contactData.lastName}
                     onChange={handleContactChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-gray-900"
                   />
                 </div>
               </div>
@@ -364,7 +364,7 @@ export default function BuchenPage() {
                     required
                     value={contactData.email}
                     onChange={handleContactChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-gray-900"
                   />
                 </div>
                 <div>
@@ -377,7 +377,7 @@ export default function BuchenPage() {
                     required
                     value={contactData.phone}
                     onChange={handleContactChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-gray-900"
                   />
                 </div>
               </div>
@@ -392,7 +392,7 @@ export default function BuchenPage() {
                     name="dateOfBirth"
                     value={contactData.dateOfBirth}
                     onChange={handleContactChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-gray-900"
                   />
                 </div>
                 <div>
@@ -404,7 +404,7 @@ export default function BuchenPage() {
                     name="address"
                     value={contactData.address}
                     onChange={handleContactChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-gray-900"
                   />
                 </div>
               </div>
@@ -418,7 +418,7 @@ export default function BuchenPage() {
                   value={contactData.notes}
                   onChange={handleContactChange}
                   rows={3}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-gray-900"
                   placeholder="Besondere Anmerkungen oder Wünsche..."
                 />
               </div>
