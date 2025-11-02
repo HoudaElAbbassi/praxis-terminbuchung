@@ -36,6 +36,7 @@ const getAuthSecret = () => {
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   secret: getAuthSecret(),
+  trustHost: true,
   session: { strategy: "jwt" },
   pages: {
     signIn: "/auth/login",
