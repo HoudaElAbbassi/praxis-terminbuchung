@@ -161,9 +161,12 @@ export default function AvailabilityManagement() {
           <div>
             <Link
               href="/admin"
-              className="text-primary-600 hover:text-primary-700 font-medium mb-2 inline-block"
+              className="inline-flex items-center gap-2 text-white bg-gray-700 hover:bg-gray-800 px-5 py-2.5 rounded-lg font-medium shadow-md hover:shadow-lg transition-all mb-4"
             >
-              ← Zurück zum Dashboard
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+              Zurück zum Dashboard
             </Link>
             <h1 className="text-4xl font-bold text-gray-900">Verfügbarkeit verwalten</h1>
             <p className="text-gray-600 mt-2">

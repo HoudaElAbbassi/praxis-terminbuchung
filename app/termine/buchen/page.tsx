@@ -158,15 +158,20 @@ export default function BuchenPage() {
     <div className="min-h-screen bg-gradient-to-b from-primary-50 to-white py-12 px-4">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center text-primary-600 hover:text-primary-700 mb-4">
-            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="mb-8">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 text-white bg-primary-600 hover:bg-primary-700 px-6 py-3 rounded-lg font-medium shadow-md hover:shadow-lg transition-all mb-6"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
             Zurück zur Startseite
           </Link>
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Online-Terminbuchung</h1>
-          <p className="text-lg text-gray-600">Wählen Sie Ihren Wunschtermin in nur wenigen Schritten</p>
+          <div className="text-center">
+            <h1 className="text-4xl font-bold text-gray-900 mb-2">Online-Terminbuchung</h1>
+            <p className="text-lg text-gray-600">Wählen Sie Ihren Wunschtermin in nur wenigen Schritten</p>
+          </div>
         </div>
 
         {/* Progress Steps */}
@@ -279,14 +284,19 @@ export default function BuchenPage() {
                         key={slot.time}
                         onClick={() => setSelectedTime(slot.time)}
                         disabled={!slot.available}
-                        className={`py-3 px-3 rounded-lg border-2 text-sm font-medium transition-all ${
+                        className={`py-3 px-3 rounded-lg border-2 text-sm font-medium transition-all relative ${
                           selectedTime === slot.time
-                            ? "border-primary-600 bg-primary-600 text-white"
+                            ? "border-primary-600 bg-primary-600 text-white shadow-lg scale-105"
                             : slot.available
-                            ? "border-gray-300 hover:border-primary-500 hover:bg-primary-50 text-gray-900"
+                            ? "border-gray-300 hover:border-primary-500 hover:bg-primary-50 text-gray-900 hover:scale-102"
                             : "border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed"
                         }`}
                       >
+                        {selectedTime === slot.time && (
+                          <svg className="w-4 h-4 absolute top-1 right-1" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        )}
                         {slot.time}
                       </button>
                     ))}

@@ -35,11 +35,11 @@ export async function GET() {
       },
     });
 
-    // Upcoming appointments (from tomorrow onwards)
+    // Upcoming appointments (from today onwards)
     const upcoming = await prisma.appointment.count({
       where: {
         date: {
-          gte: tomorrow,
+          gte: today,
         },
         status: {
           in: ["PENDING", "CONFIRMED"],
