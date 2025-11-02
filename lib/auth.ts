@@ -2,7 +2,9 @@ import NextAuth, { DefaultSession } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { prisma } from "./prisma";
 import bcrypt from "bcrypt";
-import { UserRole } from "@prisma/client";
+
+// Define UserRole type locally to avoid build issues
+type UserRole = "PATIENT" | "ADMIN";
 
 declare module "next-auth" {
   interface Session {
