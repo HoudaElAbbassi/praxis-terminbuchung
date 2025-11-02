@@ -52,11 +52,6 @@ export default function DatenschutzPage() {
                 Daten handeln, die Sie in ein Kontaktformular oder bei der Terminbuchung eingeben.
               </p>
 
-              <p className="mb-2"><strong>Wofür nutzen wir Ihre Daten?</strong></p>
-              <p className="mb-4">
-                Ein Teil der Daten wird erhoben, um eine fehlerfreie Bereitstellung der Website zu gewährleisten.
-                Andere Daten können zur Analyse Ihres Nutzerverhaltens verwendet werden oder für die Terminverwaltung.
-              </p>
 
               <p className="mb-2"><strong>Welche Rechte haben Sie bezüglich Ihrer Daten?</strong></p>
               <p className="mb-4">
@@ -78,26 +73,6 @@ export default function DatenschutzPage() {
                 Telefon: [+49 XXX XXXXXX] [BITTE ANPASSEN]<br />
                 E-Mail: [kontakt@praxis.de] [BITTE ANPASSEN]
               </p>
-            </section>
-
-            <section>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-3">3. Hosting und Content Delivery Networks (CDN)</h2>
-              <p className="mb-4">
-                Diese Website wird bei [HOSTING-ANBIETER] [BITTE ANPASSEN] gehostet. Die Server befinden sich in
-                [LAND/REGION] [BITTE ANPASSEN].
-              </p>
-              <p>
-                Beim Besuch dieser Website erfasst der Hoster automatisch Informationen in sogenannten Server-Log-Dateien,
-                die Ihr Browser automatisch übermittelt. Dies sind:
-              </p>
-              <ul className="list-disc list-inside mt-2 mb-4 space-y-1">
-                <li>Browsertyp und Browserversion</li>
-                <li>Verwendetes Betriebssystem</li>
-                <li>Referrer URL</li>
-                <li>Hostname des zugreifenden Rechners</li>
-                <li>Uhrzeit der Serveranfrage</li>
-                <li>IP-Adresse</li>
-              </ul>
             </section>
 
             <section>

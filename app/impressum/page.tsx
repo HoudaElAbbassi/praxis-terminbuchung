@@ -30,7 +30,7 @@ export default function ImpressumPage() {
           <div className="space-y-6 text-gray-700">
             <section>
               <h2 className="text-2xl font-semibold text-gray-900 mb-3">Angaben gemäß § 5 TMG</h2>
-              <p className="font-medium text-lg">Praxisname [BITTE ANPASSEN]</p>
+              <p className="font-medium text-lg">Praxisname </p>
               <p>Inhaber: Dr. med. [NAME] [BITTE ANPASSEN]</p>
               <p>[Straße und Hausnummer] [BITTE ANPASSEN]</p>
               <p>[PLZ] [Stadt] [BITTE ANPASSEN]</p>
