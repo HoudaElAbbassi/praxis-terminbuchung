@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Home() {
   return (
@@ -7,7 +8,14 @@ export default function Home() {
       <nav className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
+            <div className="flex items-center gap-3">
+              <Image
+                src="/images/logo.jpeg"
+                alt="Praxis Logo"
+                width={50}
+                height={50}
+                className="rounded-lg"
+              />
               <div className="text-2xl font-bold text-primary-600">
                 Praxis Dr. Med.
               </div>

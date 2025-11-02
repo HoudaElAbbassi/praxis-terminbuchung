@@ -44,10 +44,19 @@ export default function BuchenPage() {
     const fetchAppointmentTypes = async () => {
       try {
         const res = await fetch("/api/appointment-types");
+        if (!res.ok) {
+          setError("Die Terminarten konnten nicht geladen werden. Bitte kontaktieren Sie die Praxis.");
+          return;
+        }
         const data = await res.json();
+        if (data.error) {
+          setError("Die Terminarten konnten nicht geladen werden. Bitte kontaktieren Sie die Praxis.");
+          return;
+        }
         setAppointmentTypes(data);
       } catch (error) {
         console.error("Error fetching appointment types:", error);
+        setError("Die Terminarten konnten nicht geladen werden. Bitte kontaktieren Sie die Praxis.");
       }
     };
     fetchAppointmentTypes();
