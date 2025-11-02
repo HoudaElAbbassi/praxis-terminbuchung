@@ -52,6 +52,8 @@ Fügen Sie folgende Variablen hinzu:
 | `NEXTAUTH_URL` | Ihre Netlify-URL | `https://ihre-app.netlify.app` |
 | `NEXTAUTH_SECRET` | Generiertes Secret | `[output von openssl rand -base64 32]` |
 
+**WICHTIG für NextAuth v5:** Sie können entweder `NEXTAUTH_SECRET` oder `AUTH_SECRET` verwenden (beide funktionieren).
+
 **Optional:**
 - `EMAIL_SERVER` - SMTP-Server für E-Mail-Benachrichtigungen
 - `EMAIL_FROM` - Absender-E-Mail-Adresse
