@@ -287,9 +287,8 @@ export default function Home() {
             <div>
               <h3 className="text-xl font-bold mb-4">Rechtliches</h3>
               <ul className="space-y-2">
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Impressum</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Datenschutz</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">AGB</a></li>
+                <li><Link href="/impressum" className="text-gray-400 hover:text-white transition-colors">Impressum</Link></li>
+                <li><Link href="/datenschutz" className="text-gray-400 hover:text-white transition-colors">Datenschutzerklärung</Link></li>
               </ul>
             </div>
           </div>
