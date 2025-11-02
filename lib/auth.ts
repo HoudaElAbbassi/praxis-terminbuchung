@@ -19,8 +19,23 @@ declare module "next-auth" {
   }
 }
 
+// Validate and get auth secret
+const getAuthSecret = () => {
+  const secret = process.env.NEXTAUTH_SECRET || process.env.AUTH_SECRET;
+
+  if (!secret && process.env.NODE_ENV === "production") {
+    throw new Error(
+      "NEXTAUTH_SECRET or AUTH_SECRET environment variable is required in production. " +
+      "Generate one with: openssl rand -base64 32"
+    );
+  }
+
+  // Fallback for development only
+  return secret || "development-secret-please-change-in-production";
+};
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  secret: process.env.NEXTAUTH_SECRET || process.env.AUTH_SECRET,
+  secret: getAuthSecret(),
   session: { strategy: "jwt" },
   pages: {
     signIn: "/auth/login",
