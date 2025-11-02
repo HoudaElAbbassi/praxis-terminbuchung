@@ -61,22 +61,27 @@ Fügen Sie folgende Variablen hinzu:
 
 ### Schritt 4: Datenbank initialisieren
 
+⚠️ **WICHTIG:** Die Datenbank muss initialisiert werden, bevor Sie die App nutzen können!
+
 Nach dem ersten erfolgreichen Deployment:
 
-1. Öffnen Sie ein Terminal auf Ihrem lokalen Rechner
-2. Setzen Sie die Produktions-DATABASE_URL temporär:
-   ```bash
-   export DATABASE_URL="ihre-produktions-database-url"
-   ```
-3. Führen Sie aus:
-   ```bash
-   npx prisma db push
-   npm run db:seed
-   ```
+**Option 1: Automatisches Skript (empfohlen)**
+```bash
+export DATABASE_URL="ihre-produktions-database-url"
+./scripts/init-db.sh
+```
 
-Dies erstellt die Datenbank-Tabellen und einen Admin-Benutzer:
-- **Email:** admin@praxis.de
-- **Passwort:** admin123
+**Option 2: Manuelle Schritte**
+```bash
+export DATABASE_URL="ihre-produktions-database-url"
+npx prisma db push
+npm run db:seed
+```
+
+Dies erstellt:
+- ✅ Alle Datenbank-Tabellen (User, Appointment, AppointmentType, Availability, etc.)
+- ✅ Admin-Benutzer: `admin@praxis.de` / `admin123`
+- ✅ Standard-Termintypen (Erstgespräch, Standard-Konsultation, Spezialbehandlung)
 
 **WICHTIG:** Ändern Sie das Admin-Passwort sofort nach dem ersten Login!
 
