@@ -11,7 +11,8 @@
     "db:seed": "tsx prisma/seed.ts",
     "db:studio": "prisma studio",
     "create-admin": "tsx scripts/create-admin.ts",
-    "check-db": "tsx scripts/check-db.ts"
+    "check-db": "tsx scripts/check-db.ts",
+    "test-login": "tsx scripts/test-login.ts"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.1",

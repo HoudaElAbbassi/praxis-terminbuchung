@@ -56,11 +56,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         try {
           const user = await prisma.user.findUnique({
             where: {
-              email: credentials.email as string,
+              email: (credentials.email as string).toLowerCase(),
             },
           });
 
           if (!user) {
+            console.log(`Login failed: User not found for email: ${credentials.email}`);
             return null;
           }
 
@@ -70,8 +71,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           );
 
           if (!isPasswordValid) {
+            console.log(`Login failed: Invalid password for email: ${credentials.email}`);
             return null;
           }
+
+          console.log(`Login successful for: ${user.email} (${user.role})`);
 
           return {
             id: user.id,
