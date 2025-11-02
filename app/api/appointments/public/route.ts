@@ -69,7 +69,7 @@ export async function POST(request: Request) {
     });
 
     const BUFFER_TIME = 5;
-    const isSlotAvailable = !existingAppointments.some((appointment) => {
+    const isSlotAvailable = !existingAppointments.some((appointment: { startTime: Date; endTime: Date }) => {
       const appointmentStart = new Date(appointment.startTime);
       const appointmentEnd = new Date(appointment.endTime);
       appointmentEnd.setMinutes(appointmentEnd.getMinutes() + BUFFER_TIME);
