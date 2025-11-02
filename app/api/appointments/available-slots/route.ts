@@ -83,7 +83,7 @@ export async function GET(req: NextRequest) {
     });
 
     // Generate time slots for all availability periods
-    const slots = [];
+    const slots: { time: string; available: boolean }[] = [];
     const appointmentDuration = appointmentType.duration;
 
     for (const availability of availabilities) {
