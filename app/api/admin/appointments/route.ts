@@ -13,37 +13,68 @@ export async function GET(req: NextRequest) {
     const searchParams = req.nextUrl.searchParams;
     const dateParam = searchParams.get("date");
 
-    if (!dateParam) {
-      return NextResponse.json({ error: "Datum erforderlich" }, { status: 400 });
-    }
+    if (dateParam) {
+      // If date is provided, filter by that specific date
+      const selectedDate = new Date(dateParam);
+      selectedDate.setHours(0, 0, 0, 0);
 
-    const selectedDate = new Date(dateParam);
-    selectedDate.setHours(0, 0, 0, 0);
-
-    const appointments = await prisma.appointment.findMany({
-      where: {
-        date: selectedDate,
-        status: {
-          in: ["PENDING", "CONFIRMED", "COMPLETED"],
-        },
-      },
-      include: {
-        user: {
-          select: {
-            firstName: true,
-            lastName: true,
-            email: true,
-            phone: true,
+      const appointments = await prisma.appointment.findMany({
+        where: {
+          date: selectedDate,
+          status: {
+            in: ["PENDING", "CONFIRMED", "COMPLETED"],
           },
         },
-        appointmentType: true,
-      },
-      orderBy: {
-        startTime: "asc",
-      },
-    });
+        include: {
+          user: {
+            select: {
+              firstName: true,
+              lastName: true,
+              email: true,
+              phone: true,
+            },
+          },
+          appointmentType: true,
+        },
+        orderBy: {
+          startTime: "asc",
+        },
+      });
 
-    return NextResponse.json(appointments);
+      return NextResponse.json(appointments);
+    } else {
+      // If no date provided, show upcoming appointments (from today onwards)
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const appointments = await prisma.appointment.findMany({
+        where: {
+          date: {
+            gte: today,
+          },
+          status: {
+            in: ["PENDING", "CONFIRMED", "COMPLETED"],
+          },
+        },
+        include: {
+          user: {
+            select: {
+              firstName: true,
+              lastName: true,
+              email: true,
+              phone: true,
+            },
+          },
+          appointmentType: true,
+        },
+        orderBy: {
+          startTime: "asc",
+        },
+        take: 50, // Limit to 50 upcoming appointments
+      });
+
+      return NextResponse.json(appointments);
+    }
   } catch (error) {
     console.error("Error fetching admin appointments:", error);
     return NextResponse.json(

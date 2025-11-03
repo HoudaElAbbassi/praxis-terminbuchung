@@ -63,12 +63,34 @@ export default function BuchenPage() {
     fetchAppointmentTypes();
   }, []);
 
+  // Lade nächsten verfügbaren Termin wenn Terminart gewählt wird
+  useEffect(() => {
+    if (selectedType && step === 2 && !selectedDate) {
+      fetchNextAvailableSlot();
+    }
+  }, [selectedType, step]);
+
   // Lade verfügbare Zeitslots wenn Datum gewählt wird
   useEffect(() => {
     if (selectedDate && selectedType) {
       fetchTimeSlots();
     }
   }, [selectedDate, selectedType]);
+
+  const fetchNextAvailableSlot = async () => {
+    try {
+      const res = await fetch(`/api/appointments/next-available?typeId=${selectedType?.id}`);
+      const data = await res.json();
+
+      if (res.ok && data.date && data.time) {
+        // Set the next available date and time
+        setSelectedDate(data.date);
+        setSelectedTime(data.time);
+      }
+    } catch (error) {
+      console.error("Error fetching next available slot:", error);
+    }
+  };
 
   const fetchTimeSlots = async () => {
     try {
@@ -338,12 +360,20 @@ export default function BuchenPage() {
                 Wählen Sie Datum und Uhrzeit
               </h2>
               <div className="bg-[#e8f4f2] border border-[#4a9d8f] rounded-lg p-4 mb-6">
-                <p className="text-gray-700">
+                <p className="text-gray-700 mb-2">
                   <svg className="w-5 h-5 inline-block mr-2 text-[#4a9d8f]" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
                   </svg>
                   Gewählte Terminart: <span className="font-bold text-[#2c5f7c]">{selectedType?.name}</span> ({selectedType?.duration} Min)
                 </p>
+                {selectedDate && selectedTime && (
+                  <p className="text-sm text-[#2c5f7c] font-semibold flex items-center gap-2 mt-3 pt-3 border-t border-[#4a9d8f]">
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    Nächster verfügbarer Termin automatisch vorgeschlagen!
+                  </p>
+                )}
               </div>
 
               {/* Datum wählen */}

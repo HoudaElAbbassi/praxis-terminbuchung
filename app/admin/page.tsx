@@ -29,7 +29,7 @@ export default function AdminDashboard() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [appointments, setAppointments] = useState<Appointment[]>([]);
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
+  const [selectedDate, setSelectedDate] = useState(""); // Empty = show all upcoming
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({ total: 0, today: 0, upcoming: 0 });
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -59,7 +59,11 @@ export default function AdminDashboard() {
 
   const fetchAppointments = async () => {
     try {
-      const res = await fetch(`/api/admin/appointments?date=${selectedDate}`);
+      const url = selectedDate
+        ? `/api/admin/appointments?date=${selectedDate}`
+        : `/api/admin/appointments`; // No date = all upcoming
+
+      const res = await fetch(url);
       const data = await res.json();
 
       if (res.ok && Array.isArray(data)) {
@@ -261,18 +265,40 @@ export default function AdminDashboard() {
 
         {/* Date Selector */}
         <div className="card">
-          <label className="block text-sm font-semibold text-[#2d3748] mb-3">
-            <svg className="w-5 h-5 inline-block mr-2 text-[#2c5f7c]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-            Datum auswählen
-          </label>
+          <div className="flex items-center justify-between mb-4">
+            <label className="block text-sm font-semibold text-[#2d3748]">
+              <svg className="w-5 h-5 inline-block mr-2 text-[#2c5f7c]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              Datum filtern (optional)
+            </label>
+            {selectedDate && (
+              <button
+                onClick={() => setSelectedDate("")}
+                className="text-sm text-[#2c5f7c] hover:text-[#1f4459] font-semibold flex items-center gap-1"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                Filter entfernen
+              </button>
+            )}
+          </div>
           <input
             type="date"
             value={selectedDate}
             onChange={(e) => setSelectedDate(e.target.value)}
+            placeholder="Alle anstehenden Termine"
             className="input-field text-gray-900"
           />
+          {!selectedDate && (
+            <p className="text-sm text-gray-600 mt-2 flex items-center gap-1">
+              <svg className="w-4 h-4 text-[#4a9d8f]" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+              </svg>
+              Zeige alle anstehenden Termine (bis zu 50)
+            </p>
+          )}
         </div>
 
         {/* Appointments List */}
@@ -281,7 +307,7 @@ export default function AdminDashboard() {
             className="text-2xl font-bold text-[#2c5f7c] mb-6"
             style={{fontFamily: "'Playfair Display', serif"}}
           >
-            Termine für {formatDate(selectedDate)}
+            {selectedDate ? `Termine für ${formatDate(selectedDate)}` : "Alle anstehenden Termine"}
           </h2>
 
           {appointments.length === 0 ? (
@@ -289,11 +315,36 @@ export default function AdminDashboard() {
               <svg className="w-20 h-20 mx-auto text-[#4a9d8f] mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
-              <p className="text-gray-600 text-lg">Keine Termine für diesen Tag</p>
+              <p className="text-gray-600 text-lg">{selectedDate ? "Keine Termine für diesen Tag" : "Keine anstehenden Termine"}</p>
             </div>
           ) : (
-            <div className="space-y-4">
-              {appointments.map((appointment) => (
+            <div className="space-y-6">
+              {!selectedDate ? (
+                // Group by date when no filter is active
+                (() => {
+                  const groupedByDate: { [key: string]: Appointment[] } = {};
+                  appointments.forEach(apt => {
+                    const dateKey = apt.date;
+                    if (!groupedByDate[dateKey]) {
+                      groupedByDate[dateKey] = [];
+                    }
+                    groupedByDate[dateKey].push(apt);
+                  });
+
+                  return Object.keys(groupedByDate).map(dateKey => (
+                    <div key={dateKey} className="space-y-4">
+                      <div className="bg-[#2c5f7c] text-white px-4 py-3 rounded-lg sticky top-0 z-10 shadow-md">
+                        <h3 className="font-bold text-lg flex items-center gap-2">
+                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
+                          </svg>
+                          {formatDate(dateKey)}
+                          <span className="ml-auto bg-white text-[#2c5f7c] px-3 py-1 rounded-full text-sm font-semibold">
+                            {groupedByDate[dateKey].length} {groupedByDate[dateKey].length === 1 ? 'Termin' : 'Termine'}
+                          </span>
+                        </h3>
+                      </div>
+                      {groupedByDate[dateKey].map((appointment) => (
                 <div
                   key={appointment.id}
                   className="border-2 border-gray-200 rounded-lg p-6 hover:border-[#2c5f7c] hover:shadow-lg transition-all duration-300 bg-white"
@@ -406,7 +457,127 @@ export default function AdminDashboard() {
                     </div>
                   </div>
                 </div>
-              ))}
+                      ))}
+                    </div>
+                  ));
+                })()
+              ) : (
+                // Show appointments without grouping when a date is selected
+                appointments.map((appointment) => (
+                  <div
+                    key={appointment.id}
+                    className="border-2 border-gray-200 rounded-lg p-6 hover:border-[#2c5f7c] hover:shadow-lg transition-all duration-300 bg-white"
+                  >
+                    <div className="flex justify-between items-start">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-4 mb-3">
+                          <span className="text-lg font-bold text-[#2c5f7c]">
+                            {formatTime(appointment.startTime)} - {formatTime(appointment.endTime)}
+                          </span>
+                          <span className={`px-4 py-1.5 text-sm font-semibold rounded-full ${
+                            appointment.status === "PENDING" ? "bg-yellow-100 text-yellow-800 border border-yellow-300" :
+                            appointment.status === "CONFIRMED" ? "bg-green-100 text-green-800 border border-green-300" :
+                            appointment.status === "CANCELLED" ? "bg-red-100 text-red-800 border border-red-300" :
+                            appointment.status === "COMPLETED" ? "bg-blue-100 text-blue-800 border border-blue-300" :
+                            "bg-gray-100 text-gray-800 border border-gray-300"
+                          }`}>
+                            {appointment.status === "PENDING" ? "⏳ Ausstehend" :
+                             appointment.status === "CONFIRMED" ? "✓ Bestätigt" :
+                             appointment.status === "CANCELLED" ? "✗ Abgesagt" :
+                             appointment.status === "COMPLETED" ? "✓ Abgeschlossen" :
+                             appointment.status}
+                          </span>
+                        </div>
+
+                        <h3
+                          className="text-xl font-bold text-[#2d3748] mb-3"
+                          style={{fontFamily: "'Playfair Display', serif"}}
+                        >
+                          {appointment.user.firstName} {appointment.user.lastName}
+                        </h3>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-gray-700 bg-[#f7fafc] p-4 rounded-lg mb-4">
+                          <p className="flex items-center gap-2">
+                            <svg className="w-4 h-4 text-[#4a9d8f]" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                              <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                            </svg>
+                            <span className="font-medium">Email:</span> {appointment.user.email}
+                          </p>
+                          <p className="flex items-center gap-2">
+                            <svg className="w-4 h-4 text-[#4a9d8f]" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+                            </svg>
+                            <span className="font-medium">Telefon:</span> {appointment.user.phone}
+                          </p>
+                          <p className="flex items-center gap-2">
+                            <svg className="w-4 h-4 text-[#4a9d8f]" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                            </svg>
+                            <span className="font-medium">Terminart:</span> {appointment.appointmentType.name}
+                          </p>
+                          <p className="flex items-center gap-2">
+                            <svg className="w-4 h-4 text-[#4a9d8f]" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                            </svg>
+                            <span className="font-medium">Dauer:</span> {appointment.appointmentType.duration} Min
+                          </p>
+                        </div>
+
+                        {/* Action Buttons */}
+                        {appointment.status === "PENDING" && (
+                          <div className="flex flex-col sm:flex-row gap-3">
+                            <button
+                              onClick={() => updateAppointmentStatus(appointment.id, "CONFIRMED")}
+                              className="flex-1 bg-[#4a9d8f] hover:bg-[#3d8378] text-white px-4 py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                            >
+                              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                              </svg>
+                              Annehmen
+                            </button>
+                            <button
+                              onClick={() => handleAlternativeAppointment(appointment)}
+                              className="flex-1 bg-[#2c5f7c] hover:bg-[#1f4459] text-white px-4 py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                            >
+                              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                              </svg>
+                              Alternativvorschlag
+                            </button>
+                            <button
+                              onClick={() => updateAppointmentStatus(appointment.id, "CANCELLED")}
+                              className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                            >
+                              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                              </svg>
+                              Ablehnen
+                            </button>
+                          </div>
+                        )}
+
+                        {appointment.status === "CONFIRMED" && (
+                          <div className="flex gap-3">
+                            <button
+                              onClick={() => updateAppointmentStatus(appointment.id, "COMPLETED")}
+                              className="flex-1 bg-[#2c5f7c] hover:bg-[#1f4459] text-white px-4 py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg"
+                            >
+                              Als abgeschlossen markieren
+                            </button>
+                            <button
+                              onClick={() => updateAppointmentStatus(appointment.id, "CANCELLED")}
+                              className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg"
+                            >
+                              Absagen
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           )}
         </div>
