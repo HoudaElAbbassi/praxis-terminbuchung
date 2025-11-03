@@ -1,7 +1,7 @@
 import { Resend } from 'resend';
 
-// Initialize Resend with API key
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Initialize Resend with API key (or empty string for build time)
+const resend = new Resend(process.env.RESEND_API_KEY || 'dummy-key-for-build');
 
 // Default sender email
 const FROM_EMAIL = process.env.EMAIL_FROM || 'noreply@praxis-remscheid.de';

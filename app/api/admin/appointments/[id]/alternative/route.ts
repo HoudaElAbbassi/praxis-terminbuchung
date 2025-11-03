@@ -5,7 +5,7 @@ import { auth } from "@/lib/auth";
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth();
@@ -14,6 +14,7 @@ export async function POST(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const { id } = await params;
     const { alternativeDate, alternativeTime, reason } = await request.json();
 
     if (!alternativeDate || !alternativeTime) {
@@ -25,7 +26,7 @@ export async function POST(
 
     // Get appointment with user details
     const appointment = await prisma.appointment.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         user: true,
         appointmentType: true,
@@ -41,7 +42,7 @@ export async function POST(
 
     // Update appointment status to CANCELLED
     await prisma.appointment.update({
-      where: { id: params.id },
+      where: { id },
       data: { status: "CANCELLED" },
     });
 
