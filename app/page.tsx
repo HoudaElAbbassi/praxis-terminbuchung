@@ -48,7 +48,7 @@ export default function Home() {
                 alt="Praxis für Gefäßmedizin Remscheid"
                 width={250}
                 height={250}
-                className="rounded-2xl shadow-2xl hover:scale-105 transition-transform duration-300"
+                className="rounded-full opacity-95 hover:opacity-100 hover:scale-105 transition-all duration-300"
                 priority
               />
             </div>
