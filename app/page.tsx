@@ -41,6 +41,18 @@ export default function Home() {
       <section className="relative bg-gradient-to-br from-[#e8f4f2] via-white to-[#f7fafc] py-24 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-4xl mx-auto">
+            {/* Großes Logo in der Mitte */}
+            <div className="flex justify-center mb-12">
+              <Image
+                src="/images/logo.jpeg"
+                alt="Praxis für Gefäßmedizin Remscheid"
+                width={250}
+                height={250}
+                className="rounded-2xl shadow-2xl hover:scale-105 transition-transform duration-300"
+                priority
+              />
+            </div>
+
             <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight" style={{fontFamily: "'Playfair Display', serif"}}>
               Praxis für Gefäßmedizin <span className="text-[#2c5f7c]">Remscheid</span>
             </h1>

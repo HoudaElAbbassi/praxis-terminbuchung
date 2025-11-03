@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import AlternativeAppointmentModal from "@/components/AlternativeAppointmentModal";
 
 type Appointment = {
   id: string;
@@ -31,6 +32,8 @@ export default function AdminDashboard() {
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({ total: 0, today: 0, upcoming: 0 });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
 
   useEffect(() => {
     if (status === "loading") {
@@ -101,6 +104,40 @@ export default function AdminDashboard() {
     } catch (error) {
       console.error("Error updating appointment status:", error);
       alert("Fehler beim Aktualisieren des Terminstatus");
+    }
+  };
+
+  const handleAlternativeAppointment = (appointment: Appointment) => {
+    setSelectedAppointment(appointment);
+    setIsModalOpen(true);
+  };
+
+  const handleSubmitAlternative = async (data: { date: string; time: string; reason?: string }) => {
+    if (!selectedAppointment) return;
+
+    try {
+      const res = await fetch(`/api/admin/appointments/${selectedAppointment.id}/alternative`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          alternativeDate: data.date,
+          alternativeTime: data.time,
+          reason: data.reason,
+        }),
+      });
+
+      const result = await res.json();
+
+      if (res.ok) {
+        alert("Alternativtermin erfolgreich vorgeschlagen und E-Mail versendet!");
+        fetchAppointments();
+        fetchStats();
+      } else {
+        alert(result.error || "Fehler beim Vorschlagen des Alternativtermins");
+      }
+    } catch (error) {
+      console.error("Error suggesting alternative appointment:", error);
+      alert("Fehler beim Vorschlagen des Alternativtermins");
     }
   };
 
@@ -319,7 +356,7 @@ export default function AdminDashboard() {
 
                       {/* Action Buttons */}
                       {appointment.status === "PENDING" && (
-                        <div className="flex gap-3">
+                        <div className="flex flex-col sm:flex-row gap-3">
                           <button
                             onClick={() => updateAppointmentStatus(appointment.id, "CONFIRMED")}
                             className="flex-1 bg-[#4a9d8f] hover:bg-[#3d8378] text-white px-4 py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2"
@@ -328,6 +365,15 @@ export default function AdminDashboard() {
                               <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                             </svg>
                             Annehmen
+                          </button>
+                          <button
+                            onClick={() => handleAlternativeAppointment(appointment)}
+                            className="flex-1 bg-[#2c5f7c] hover:bg-[#1f4459] text-white px-4 py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                          >
+                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            Alternativvorschlag
                           </button>
                           <button
                             onClick={() => updateAppointmentStatus(appointment.id, "CANCELLED")}
@@ -365,6 +411,21 @@ export default function AdminDashboard() {
           )}
         </div>
       </div>
+
+      {/* Alternative Appointment Modal */}
+      {selectedAppointment && (
+        <AlternativeAppointmentModal
+          isOpen={isModalOpen}
+          onClose={() => {
+            setIsModalOpen(false);
+            setSelectedAppointment(null);
+          }}
+          onSubmit={handleSubmitAlternative}
+          appointmentId={selectedAppointment.id}
+          currentDate={selectedAppointment.date}
+          currentTime={formatTime(selectedAppointment.startTime)}
+        />
+      )}
     </div>
   );
 }

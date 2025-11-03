@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
+import { sendAppointmentConfirmedEmail, sendAppointmentRejectedEmail } from "@/lib/email";
 
 export async function PATCH(
   request: NextRequest,
@@ -42,7 +43,33 @@ export async function PATCH(
       },
     });
 
-    // TODO: Send email notification to patient about status change
+    // Send email notification to patient about status change
+    const appointmentDate = new Date(appointment.date).toLocaleDateString("de-DE", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+
+    const appointmentTime = new Date(appointment.startTime).toLocaleTimeString("de-DE", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    const emailData = {
+      patientName: `${appointment.user.firstName} ${appointment.user.lastName}`,
+      patientEmail: appointment.user.email,
+      date: appointmentDate,
+      time: appointmentTime,
+      appointmentType: appointment.appointmentType.name,
+      doctorName: "Dr. med. Abdelkarim Alyandouzi",
+    };
+
+    if (status === "CONFIRMED") {
+      await sendAppointmentConfirmedEmail(emailData);
+    } else if (status === "CANCELLED") {
+      await sendAppointmentRejectedEmail(emailData);
+    }
 
     return NextResponse.json(appointment);
   } catch (error) {

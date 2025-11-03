@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
+import { sendNewAppointmentNotification } from "@/lib/email";
 
 export async function POST(req: NextRequest) {
   try {
@@ -72,7 +73,7 @@ export async function POST(req: NextRequest) {
         date: appointmentDate,
         startTime,
         endTime,
-        status: "CONFIRMED",
+        status: "PENDING", // Changed from CONFIRMED to PENDING - doctor must confirm first
       },
       include: {
         appointmentType: true,
@@ -84,6 +85,27 @@ export async function POST(req: NextRequest) {
           },
         },
       },
+    });
+
+    // Send email notification to patient
+    const formattedDate = appointmentDate.toLocaleDateString("de-DE", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+
+    const formattedTime = startTime.toLocaleTimeString("de-DE", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    await sendNewAppointmentNotification({
+      patientName: `${appointment.user.firstName} ${appointment.user.lastName}`,
+      patientEmail: appointment.user.email,
+      date: formattedDate,
+      time: formattedTime,
+      appointmentType: appointment.appointmentType.name,
     });
 
     return NextResponse.json(appointment, { status: 201 });
