@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
       bodySizeLimit: '2mb',
     },
   },
+  // Disable image optimization for Netlify/Vercel compatibility
+  images: {
+    unoptimized: true,
+  },
 };
 
 export default nextConfig;
