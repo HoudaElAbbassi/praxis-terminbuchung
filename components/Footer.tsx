@@ -9,13 +9,16 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-4">Kontakt</h3>
             <p className="text-gray-300 text-sm">
-              [Praxisname] [BITTE ANPASSEN]<br />
+              Praxis für Gefäßmedizin Remscheid<br />
+              Dr. med. Abdelkarim Alyandouzi<br />
               [Straße und Hausnummer] [BITTE ANPASSEN]<br />
-              [PLZ] [Stadt] [BITTE ANPASSEN]
+              Ärztehaus Remscheid<br />
+              [PLZ] Remscheid [BITTE ANPASSEN]
             </p>
             <p className="text-gray-300 text-sm mt-3">
-              Tel: [+49 XXX XXXXXX] [BITTE ANPASSEN]<br />
-              E-Mail: [kontakt@praxis.de] [BITTE ANPASSEN]
+              Tel: 02191 6917400<br />
+              Fax: 02191 4694938<br />
+              E-Mail: info@praxis-remscheid.de
             </p>
           </div>
 
@@ -23,9 +26,11 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-4">Öffnungszeiten</h3>
             <p className="text-gray-300 text-sm">
-              Mo-Fr: 08:00 - 18:00 Uhr [BITTE ANPASSEN]<br />
-              Sa: Nach Vereinbarung [BITTE ANPASSEN]<br />
-              So: Geschlossen [BITTE ANPASSEN]
+              Termine nach Vereinbarung<br />
+              <br />
+              Kontaktieren Sie uns telefonisch<br />
+              oder nutzen Sie unser<br />
+              Online-Buchungssystem
             </p>
           </div>
 
@@ -55,7 +60,7 @@ export default function Footer() {
 
         <div className="border-t border-gray-800 mt-8 pt-6 text-center text-sm text-gray-400">
           <p>
-            © {new Date().getFullYear()} [Praxisname] [BITTE ANPASSEN]. Alle Rechte vorbehalten.
+            © {new Date().getFullYear()} Praxis für Gefäßmedizin Remscheid. Alle Rechte vorbehalten.
           </p>
         </div>
       </div>

@@ -3,11 +3,11 @@ import Image from "next/image";
 
 export default function ImpressumPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-primary-50 to-white py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-b from-[#e8f4f2] to-white py-12 px-4">
       <div className="max-w-4xl mx-auto">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-white bg-primary-600 hover:bg-primary-700 px-6 py-3 rounded-lg font-medium shadow-md hover:shadow-lg transition-all mb-8"
+          className="inline-flex items-center gap-2 text-white bg-[#2c5f7c] hover:bg-[#1f4459] px-6 py-3 rounded-lg font-medium shadow-md hover:shadow-lg transition-all mb-8"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -30,37 +30,40 @@ export default function ImpressumPage() {
           <div className="space-y-6 text-gray-700">
             <section>
               <h2 className="text-2xl font-semibold text-gray-900 mb-3">Angaben gemäß § 5 TMG</h2>
-              <p className="font-medium text-lg">Praxisname </p>
-              <p>Inhaber: Dr. med. [NAME] [BITTE ANPASSEN]</p>
+              <p className="font-medium text-lg">Praxis für Gefäßmedizin Remscheid</p>
+              <p>Inhaber: Dr. med. Abdelkarim Alyandouzi</p>
               <p>[Straße und Hausnummer] [BITTE ANPASSEN]</p>
-              <p>[PLZ] [Stadt] [BITTE ANPASSEN]</p>
+              <p>Ärztehaus Remscheid</p>
+              <p>[PLZ] Remscheid [BITTE ANPASSEN]</p>
             </section>
 
             <section>
               <h2 className="text-2xl font-semibold text-gray-900 mb-3">Kontakt</h2>
               <p>
-                <strong>Telefon:</strong> [+49 XXX XXXXXX] [BITTE ANPASSEN]
+                <strong>Telefon:</strong> 02191 6917400
               </p>
               <p>
-                <strong>E-Mail:</strong> [kontakt@praxis.de] [BITTE ANPASSEN]
+                <strong>Fax:</strong> 02191 4694938
               </p>
               <p>
-                <strong>Website:</strong> [www.praxis.de] [BITTE ANPASSEN]
+                <strong>E-Mail:</strong> info@praxis-remscheid.de
               </p>
             </section>
 
             <section>
               <h2 className="text-2xl font-semibold text-gray-900 mb-3">Berufsbezeichnung</h2>
-              <p>Arzt/Ärztin [BITTE ANPASSEN]</p>
-              <p>Verliehen in: Deutschland [BITTE ANPASSEN]</p>
+              <p>Facharzt für Gefäßchirurgie</p>
+              <p>Facharzt für Viszeralchirurgie</p>
+              <p>Verliehen in: Deutschland</p>
             </section>
 
             <section>
               <h2 className="text-2xl font-semibold text-gray-900 mb-3">Zuständige Kammer</h2>
-              <p>[Landesärztekammer] [BITTE ANPASSEN]</p>
-              <p>[Adresse der Kammer] [BITTE ANPASSEN]</p>
+              <p>Ärztekammer Nordrhein</p>
+              <p>Tersteegenstraße 9</p>
+              <p>40474 Düsseldorf</p>
               <p>
-                <strong>Website:</strong> [www.aerztekammer.de] [BITTE ANPASSEN]
+                <strong>Website:</strong> <a href="https://www.aekno.de" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">www.aekno.de</a>
               </p>
             </section>
 
@@ -93,8 +96,11 @@ export default function ImpressumPage() {
               <p>
                 Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:
               </p>
-              <p className="mt-2">Dr. med. [NAME] [BITTE ANPASSEN]</p>
-              <p>[Adresse wie oben] [BITTE ANPASSEN]</p>
+              <p className="mt-2">Dr. med. Abdelkarim Alyandouzi</p>
+              <p>Praxis für Gefäßmedizin Remscheid</p>
+              <p>[Straße und Hausnummer] [BITTE ANPASSEN]</p>
+              <p>Ärztehaus Remscheid</p>
+              <p>[PLZ] Remscheid [BITTE ANPASSEN]</p>
             </section>
 
             <section>

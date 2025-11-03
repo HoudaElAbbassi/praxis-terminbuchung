@@ -3,11 +3,11 @@ import Image from "next/image";
 
 export default function DatenschutzPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-primary-50 to-white py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-b from-[#e8f4f2] to-white py-12 px-4">
       <div className="max-w-4xl mx-auto">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-white bg-primary-600 hover:bg-primary-700 px-6 py-3 rounded-lg font-medium shadow-md hover:shadow-lg transition-all mb-8"
+          className="inline-flex items-center gap-2 text-white bg-[#2c5f7c] hover:bg-[#1f4459] px-6 py-3 rounded-lg font-medium shadow-md hover:shadow-lg transition-all mb-8"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -66,12 +66,36 @@ export default function DatenschutzPage() {
               <h2 className="text-2xl font-semibold text-gray-900 mb-3">2. Verantwortlicher</h2>
               <p>Verantwortlicher für die Datenverarbeitung auf dieser Website ist:</p>
               <p className="mt-2">
-                [Praxisname] [BITTE ANPASSEN]<br />
+                Praxis für Gefäßmedizin Remscheid<br />
+                Dr. med. Abdelkarim Alyandouzi<br />
                 [Straße und Hausnummer] [BITTE ANPASSEN]<br />
-                [PLZ] [Stadt] [BITTE ANPASSEN]<br />
+                Ärztehaus Remscheid<br />
+                [PLZ] Remscheid [BITTE ANPASSEN]<br />
                 <br />
-                Telefon: [+49 XXX XXXXXX] [BITTE ANPASSEN]<br />
-                E-Mail: [kontakt@praxis.de] [BITTE ANPASSEN]
+                Telefon: 02191 6917400<br />
+                Fax: 02191 4694938<br />
+                E-Mail: info@praxis-remscheid.de
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-2xl font-semibold text-gray-900 mb-3">3. SSL-Verschlüsselung und Hosting</h2>
+              <p className="mb-4">
+                Diese Website nutzt aus Sicherheitsgründen und zum Schutz der Übertragung vertraulicher Inhalte,
+                wie zum Beispiel Terminanfragen oder persönlichen Daten, eine SSL-Verschlüsselung. Eine verschlüsselte
+                Verbindung erkennen Sie daran, dass die Adresszeile des Browsers von "http://" auf "https://" wechselt
+                und an dem Schloss-Symbol in Ihrer Browserzeile.
+              </p>
+              <p className="mb-4">
+                Wenn die SSL-Verschlüsselung aktiviert ist, können die Daten, die Sie an uns übermitteln, nicht von
+                Dritten mitgelesen werden.
+              </p>
+              <p className="mb-4">
+                <strong>Hosting:</strong> Diese Website wird extern gehostet. Die personenbezogenen Daten, die auf
+                dieser Website erfasst werden, werden auf den Servern des Hosters gespeichert. Der Einsatz des Hosters
+                erfolgt zum Zweck der Vertragserfüllung gegenüber unseren potenziellen und bestehenden Patienten
+                (Art. 6 Abs. 1 lit. b DSGVO) und im Interesse einer sicheren, schnellen und effizienten Bereitstellung
+                unseres Online-Angebots durch einen professionellen Anbieter (Art. 6 Abs. 1 lit. f DSGVO).
               </p>
             </section>
 
@@ -196,11 +220,11 @@ export default function DatenschutzPage() {
               </p>
             </section>
 
-            <div className="mt-8 pt-6 border-t border-gray-300 bg-blue-50 p-4 rounded-lg">
-              <p className="text-sm text-blue-900">
-                <strong>Wichtiger Hinweis:</strong> Diese Datenschutzerklärung ist eine Vorlage und muss an Ihre
-                spezifischen Gegebenheiten angepasst werden. Konsultieren Sie einen Datenschutzbeauftragten oder
-                Rechtsanwalt für eine rechtsverbindliche Datenschutzerklärung.
+            <div className="mt-8 pt-6 border-t border-gray-300 bg-[#e8f4f2] p-4 rounded-lg border-l-4 border-[#4a9d8f]">
+              <p className="text-sm text-gray-800">
+                <strong className="text-[#2c5f7c]">Wichtiger Hinweis:</strong> Diese Datenschutzerklärung entspricht den aktuellen Anforderungen der DSGVO.
+                Bitte passen Sie die mit [BITTE ANPASSEN] markierten Platzhalter an Ihre spezifischen Gegebenheiten an.
+                Bei Fragen wenden Sie sich an einen Datenschutzbeauftragten.
               </p>
             </div>
           </div>
