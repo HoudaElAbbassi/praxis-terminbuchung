@@ -238,6 +238,77 @@ export async function sendAlternativeAppointmentEmail(data: AppointmentEmailData
 }
 
 /**
+ * Send email notification to practice staff when new appointment is booked
+ */
+export async function sendNewAppointmentNotificationToPractice(data: AppointmentEmailData) {
+  const PRACTICE_EMAIL = 'info@gefaessmedizinremscheid.de';
+
+  try {
+    await resend.emails.send({
+      from: FROM_EMAIL,
+      to: PRACTICE_EMAIL,
+      subject: `Neue Terminanfrage von ${data.patientName}`,
+      html: `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <meta charset="utf-8">
+            <style>
+              body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+              .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+              .header { background: linear-gradient(135deg, #2c5f7c 0%, #4a9d8f 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+              .content { background: #f7fafc; padding: 30px; border-radius: 0 0 10px 10px; }
+              .appointment-details { background: white; padding: 20px; border-radius: 8px; border-left: 4px solid #4a9d8f; margin: 20px 0; }
+              .patient-info { background: white; padding: 20px; border-radius: 8px; border-left: 4px solid #2c5f7c; margin: 20px 0; }
+              .footer { text-align: center; margin-top: 30px; color: #666; font-size: 14px; }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <div class="header">
+                <h1 style="margin: 0;">🔔 Neue Terminanfrage</h1>
+              </div>
+              <div class="content">
+                <p><strong>Es liegt eine neue Terminanfrage vor, die bestätigt werden muss.</strong></p>
+
+                <div class="patient-info">
+                  <h3 style="color: #2c5f7c; margin-top: 0;">Patienteninformationen:</h3>
+                  <p><strong>Name:</strong> ${data.patientName}</p>
+                  <p><strong>E-Mail:</strong> ${data.patientEmail}</p>
+                </div>
+
+                <div class="appointment-details">
+                  <h3 style="color: #4a9d8f; margin-top: 0;">Gewünschter Termin:</h3>
+                  <p><strong>Datum:</strong> ${data.date}</p>
+                  <p><strong>Uhrzeit:</strong> ${data.time} Uhr</p>
+                  <p><strong>Terminart:</strong> ${data.appointmentType}</p>
+                </div>
+
+                <p><strong>Nächste Schritte:</strong></p>
+                <ul>
+                  <li>Melden Sie sich im Admin-Dashboard an</li>
+                  <li>Prüfen Sie die Terminanfrage</li>
+                  <li>Bestätigen oder lehnen Sie den Termin ab</li>
+                </ul>
+
+                <div class="footer">
+                  <p>Diese E-Mail wurde automatisch generiert vom Terminbuchungssystem<br>
+                  Praxis für Gefäßmedizin Remscheid</p>
+                </div>
+              </div>
+            </div>
+          </body>
+        </html>
+      `,
+    });
+    return { success: true };
+  } catch (error) {
+    console.error('Error sending practice notification:', error);
+    return { success: false, error };
+  }
+}
+
+/**
  * Send email notification to patient when new appointment is booked
  */
 export async function sendNewAppointmentNotification(data: AppointmentEmailData) {

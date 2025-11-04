@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
-import { sendNewAppointmentNotification } from "@/lib/email";
+import { sendNewAppointmentNotification, sendNewAppointmentNotificationToPractice } from "@/lib/email";
 
 export async function POST(req: NextRequest) {
   try {
@@ -100,7 +100,17 @@ export async function POST(req: NextRequest) {
       minute: "2-digit",
     });
 
+    // Send email notification to patient
     await sendNewAppointmentNotification({
+      patientName: `${appointment.user.firstName} ${appointment.user.lastName}`,
+      patientEmail: appointment.user.email,
+      date: formattedDate,
+      time: formattedTime,
+      appointmentType: appointment.appointmentType.name,
+    });
+
+    // Send email notification to practice
+    await sendNewAppointmentNotificationToPractice({
       patientName: `${appointment.user.firstName} ${appointment.user.lastName}`,
       patientEmail: appointment.user.email,
       date: formattedDate,
