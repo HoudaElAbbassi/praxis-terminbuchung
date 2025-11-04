@@ -34,6 +34,17 @@ export default function AdminDashboard() {
   const [stats, setStats] = useState({ total: 0, today: 0, upcoming: 0 });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
+  const [confirmDialog, setConfirmDialog] = useState<{
+    isOpen: boolean;
+    action: string;
+    appointmentId: string;
+    message: string;
+  }>({
+    isOpen: false,
+    action: "",
+    appointmentId: "",
+    message: "",
+  });
 
   useEffect(() => {
     if (status === "loading") {
@@ -90,6 +101,30 @@ export default function AdminDashboard() {
     }
   };
 
+  const openConfirmDialog = (appointmentId: string, action: string) => {
+    let message = "";
+    switch (action) {
+      case "CONFIRMED":
+        message = "Möchten Sie diesen Termin wirklich annehmen?";
+        break;
+      case "CANCELLED":
+        message = "Möchten Sie diesen Termin wirklich ablehnen/absagen?";
+        break;
+      case "COMPLETED":
+        message = "Möchten Sie diesen Termin als abgeschlossen markieren?";
+        break;
+      default:
+        message = "Möchten Sie diese Aktion wirklich durchführen?";
+    }
+
+    setConfirmDialog({
+      isOpen: true,
+      action,
+      appointmentId,
+      message,
+    });
+  };
+
   const updateAppointmentStatus = async (appointmentId: string, newStatus: string) => {
     try {
       const res = await fetch(`/api/admin/appointments/${appointmentId}/status`, {
@@ -102,6 +137,13 @@ export default function AdminDashboard() {
         // Refresh appointments list
         fetchAppointments();
         fetchStats();
+        // Close dialog
+        setConfirmDialog({
+          isOpen: false,
+          action: "",
+          appointmentId: "",
+          message: "",
+        });
       } else {
         alert("Fehler beim Aktualisieren des Terminstatus");
       }
@@ -409,7 +451,7 @@ export default function AdminDashboard() {
                       {appointment.status === "PENDING" && (
                         <div className="flex flex-col sm:flex-row gap-3">
                           <button
-                            onClick={() => updateAppointmentStatus(appointment.id, "CONFIRMED")}
+                            onClick={() => openConfirmDialog(appointment.id, "CONFIRMED")}
                             className="flex-1 bg-[#4a9d8f] hover:bg-[#3d8378] text-white px-4 py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2"
                           >
                             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -427,7 +469,7 @@ export default function AdminDashboard() {
                             Alternativvorschlag
                           </button>
                           <button
-                            onClick={() => updateAppointmentStatus(appointment.id, "CANCELLED")}
+                            onClick={() => openConfirmDialog(appointment.id, "CANCELLED")}
                             className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2"
                           >
                             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -441,13 +483,13 @@ export default function AdminDashboard() {
                       {appointment.status === "CONFIRMED" && (
                         <div className="flex gap-3">
                           <button
-                            onClick={() => updateAppointmentStatus(appointment.id, "COMPLETED")}
+                            onClick={() => openConfirmDialog(appointment.id, "COMPLETED")}
                             className="flex-1 bg-[#2c5f7c] hover:bg-[#1f4459] text-white px-4 py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg"
                           >
                             Als abgeschlossen markieren
                           </button>
                           <button
-                            onClick={() => updateAppointmentStatus(appointment.id, "CANCELLED")}
+                            onClick={() => openConfirmDialog(appointment.id, "CANCELLED")}
                             className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg"
                           >
                             Absagen
@@ -528,7 +570,7 @@ export default function AdminDashboard() {
                         {appointment.status === "PENDING" && (
                           <div className="flex flex-col sm:flex-row gap-3">
                             <button
-                              onClick={() => updateAppointmentStatus(appointment.id, "CONFIRMED")}
+                              onClick={() => openConfirmDialog(appointment.id, "CONFIRMED")}
                               className="flex-1 bg-[#4a9d8f] hover:bg-[#3d8378] text-white px-4 py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2"
                             >
                               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -546,7 +588,7 @@ export default function AdminDashboard() {
                               Alternativvorschlag
                             </button>
                             <button
-                              onClick={() => updateAppointmentStatus(appointment.id, "CANCELLED")}
+                              onClick={() => openConfirmDialog(appointment.id, "CANCELLED")}
                               className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2"
                             >
                               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -560,13 +602,13 @@ export default function AdminDashboard() {
                         {appointment.status === "CONFIRMED" && (
                           <div className="flex gap-3">
                             <button
-                              onClick={() => updateAppointmentStatus(appointment.id, "COMPLETED")}
+                              onClick={() => openConfirmDialog(appointment.id, "COMPLETED")}
                               className="flex-1 bg-[#2c5f7c] hover:bg-[#1f4459] text-white px-4 py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg"
                             >
                               Als abgeschlossen markieren
                             </button>
                             <button
-                              onClick={() => updateAppointmentStatus(appointment.id, "CANCELLED")}
+                              onClick={() => openConfirmDialog(appointment.id, "CANCELLED")}
                               className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg"
                             >
                               Absagen
@@ -596,6 +638,59 @@ export default function AdminDashboard() {
           currentDate={selectedAppointment.date}
           currentTime={formatTime(selectedAppointment.startTime)}
         />
+      )}
+
+      {/* Confirmation Dialog */}
+      {confirmDialog.isOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 transform transition-all">
+            <div className="flex items-center gap-4 mb-4">
+              <div className={`p-3 rounded-full ${
+                confirmDialog.action === "CONFIRMED" ? "bg-green-100" :
+                confirmDialog.action === "CANCELLED" ? "bg-red-100" :
+                "bg-blue-100"
+              }`}>
+                {confirmDialog.action === "CONFIRMED" && (
+                  <svg className="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                )}
+                {confirmDialog.action === "CANCELLED" && (
+                  <svg className="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                )}
+                {confirmDialog.action === "COMPLETED" && (
+                  <svg className="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                )}
+              </div>
+              <h3 className="text-xl font-bold text-[#2c5f7c]">Bestätigung erforderlich</h3>
+            </div>
+
+            <p className="text-gray-700 mb-6 text-base">{confirmDialog.message}</p>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setConfirmDialog({ isOpen: false, action: "", appointmentId: "", message: "" })}
+                className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg hover:bg-gray-50 font-semibold transition-all duration-300 text-gray-700"
+              >
+                Abbrechen
+              </button>
+              <button
+                onClick={() => updateAppointmentStatus(confirmDialog.appointmentId, confirmDialog.action)}
+                className={`flex-1 px-4 py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg text-white ${
+                  confirmDialog.action === "CONFIRMED" ? "bg-[#4a9d8f] hover:bg-[#3d8378]" :
+                  confirmDialog.action === "CANCELLED" ? "bg-red-600 hover:bg-red-700" :
+                  "bg-[#2c5f7c] hover:bg-[#1f4459]"
+                }`}
+              >
+                Bestätigen
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
