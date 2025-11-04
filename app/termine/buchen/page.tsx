@@ -253,56 +253,78 @@ export default function BuchenPage() {
               />
             </div>
             <h1
-              className="text-4xl font-bold text-[#2c5f7c] mb-3"
+              className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2c5f7c] mb-3"
               style={{fontFamily: "'Playfair Display', serif"}}
             >
               Online-Terminbuchung
             </h1>
-            <p className="text-lg text-gray-600">Wählen Sie Ihren Wunschtermin in nur wenigen Schritten</p>
+            <p className="text-base sm:text-lg text-gray-600">Wählen Sie Ihren Wunschtermin in nur wenigen Schritten</p>
           </div>
         </div>
 
-        {/* Progress Steps */}
-        <div className="flex justify-center mb-12">
-          <div className="flex items-center space-x-4">
-            <div className={`flex items-center ${step >= 1 ? "text-[#2c5f7c]" : "text-gray-400"}`}>
-              <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold ${step >= 1 ? "bg-[#2c5f7c] text-white shadow-md" : "bg-gray-300 text-gray-600"}`}>
-                {step > 1 ? (
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                  </svg>
-                ) : "1"}
-              </div>
-              <span className="ml-3 hidden sm:inline font-semibold">Terminart</span>
+        {/* Progress Steps - Mobile Optimiert */}
+        <div className="mb-8 sm:mb-12">
+          {/* Mobile: Kompakte Anzeige */}
+          <div className="sm:hidden">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-sm font-semibold text-[#2c5f7c]">Schritt {step} von 4</span>
+              <span className="text-xs text-gray-600">
+                {step === 1 && "Terminart"}
+                {step === 2 && "Datum & Zeit"}
+                {step === 3 && "Ihre Daten"}
+                {step === 4 && "Bestätigung"}
+              </span>
             </div>
-            <div className={`w-16 h-1 rounded ${step >= 2 ? "bg-[#2c5f7c]" : "bg-gray-300"}`}></div>
-            <div className={`flex items-center ${step >= 2 ? "text-[#2c5f7c]" : "text-gray-400"}`}>
-              <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold ${step >= 2 ? "bg-[#2c5f7c] text-white shadow-md" : "bg-gray-300 text-gray-600"}`}>
-                {step > 2 ? (
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                  </svg>
-                ) : "2"}
-              </div>
-              <span className="ml-3 hidden sm:inline font-semibold">Datum & Zeit</span>
+            <div className="flex gap-1">
+              <div className={`flex-1 h-2 rounded ${step >= 1 ? "bg-[#2c5f7c]" : "bg-gray-300"}`}></div>
+              <div className={`flex-1 h-2 rounded ${step >= 2 ? "bg-[#2c5f7c]" : "bg-gray-300"}`}></div>
+              <div className={`flex-1 h-2 rounded ${step >= 3 ? "bg-[#2c5f7c]" : "bg-gray-300"}`}></div>
+              <div className={`flex-1 h-2 rounded ${step >= 4 ? "bg-[#2c5f7c]" : "bg-gray-300"}`}></div>
             </div>
-            <div className={`w-16 h-1 rounded ${step >= 3 ? "bg-[#2c5f7c]" : "bg-gray-300"}`}></div>
-            <div className={`flex items-center ${step >= 3 ? "text-[#2c5f7c]" : "text-gray-400"}`}>
-              <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold ${step >= 3 ? "bg-[#2c5f7c] text-white shadow-md" : "bg-gray-300 text-gray-600"}`}>
-                {step > 3 ? (
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                  </svg>
-                ) : "3"}
+          </div>
+
+          {/* Desktop: Volle Anzeige */}
+          <div className="hidden sm:flex justify-center">
+            <div className="flex items-center space-x-4">
+              <div className={`flex items-center ${step >= 1 ? "text-[#2c5f7c]" : "text-gray-400"}`}>
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold ${step >= 1 ? "bg-[#2c5f7c] text-white shadow-md" : "bg-gray-300 text-gray-600"}`}>
+                  {step > 1 ? (
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                    </svg>
+                  ) : "1"}
+                </div>
+                <span className="ml-3 font-semibold">Terminart</span>
               </div>
-              <span className="ml-3 hidden sm:inline font-semibold">Ihre Daten</span>
-            </div>
-            <div className={`w-16 h-1 rounded ${step >= 4 ? "bg-[#2c5f7c]" : "bg-gray-300"}`}></div>
-            <div className={`flex items-center ${step >= 4 ? "text-[#2c5f7c]" : "text-gray-400"}`}>
-              <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold ${step >= 4 ? "bg-[#2c5f7c] text-white shadow-md" : "bg-gray-300 text-gray-600"}`}>
-                4
+              <div className={`w-16 h-1 rounded ${step >= 2 ? "bg-[#2c5f7c]" : "bg-gray-300"}`}></div>
+              <div className={`flex items-center ${step >= 2 ? "text-[#2c5f7c]" : "text-gray-400"}`}>
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold ${step >= 2 ? "bg-[#2c5f7c] text-white shadow-md" : "bg-gray-300 text-gray-600"}`}>
+                  {step > 2 ? (
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                    </svg>
+                  ) : "2"}
+                </div>
+                <span className="ml-3 font-semibold">Datum & Zeit</span>
               </div>
-              <span className="ml-3 hidden sm:inline font-semibold">Bestätigung</span>
+              <div className={`w-16 h-1 rounded ${step >= 3 ? "bg-[#2c5f7c]" : "bg-gray-300"}`}></div>
+              <div className={`flex items-center ${step >= 3 ? "text-[#2c5f7c]" : "text-gray-400"}`}>
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold ${step >= 3 ? "bg-[#2c5f7c] text-white shadow-md" : "bg-gray-300 text-gray-600"}`}>
+                  {step > 3 ? (
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                    </svg>
+                  ) : "3"}
+                </div>
+                <span className="ml-3 font-semibold">Ihre Daten</span>
+              </div>
+              <div className={`w-16 h-1 rounded ${step >= 4 ? "bg-[#2c5f7c]" : "bg-gray-300"}`}></div>
+              <div className={`flex items-center ${step >= 4 ? "text-[#2c5f7c]" : "text-gray-400"}`}>
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold ${step >= 4 ? "bg-[#2c5f7c] text-white shadow-md" : "bg-gray-300 text-gray-600"}`}>
+                  4
+                </div>
+                <span className="ml-3 font-semibold">Bestätigung</span>
+              </div>
             </div>
           </div>
         </div>
@@ -321,7 +343,7 @@ export default function BuchenPage() {
           {step === 1 && (
             <div>
               <h2
-                className="text-2xl font-bold text-[#2c5f7c] mb-6"
+                className="text-xl sm:text-2xl font-bold text-[#2c5f7c] mb-4 sm:mb-6"
                 style={{fontFamily: "'Playfair Display', serif"}}
               >
                 Wählen Sie eine Terminart
@@ -334,16 +356,16 @@ export default function BuchenPage() {
                       setSelectedType(type);
                       setStep(2);
                     }}
-                    className="p-6 border-2 border-gray-200 rounded-lg hover:border-[#2c5f7c] hover:bg-[#e8f4f2] transition-all duration-300 text-left group shadow-sm hover:shadow-md"
+                    className="p-4 sm:p-6 border-2 border-gray-200 rounded-lg hover:border-[#2c5f7c] active:border-[#2c5f7c] hover:bg-[#e8f4f2] active:bg-[#e8f4f2] transition-all duration-300 text-left group shadow-sm hover:shadow-md touch-manipulation"
                   >
                     <h3
-                      className="text-xl font-bold text-gray-900 mb-2 group-hover:text-[#2c5f7c]"
+                      className="text-lg sm:text-xl font-bold text-gray-900 mb-2 group-hover:text-[#2c5f7c]"
                       style={{fontFamily: "'Playfair Display', serif"}}
                     >
                       {type.name}
                     </h3>
-                    <p className="text-gray-600 mb-2 font-medium">Dauer: {type.duration} Minuten</p>
-                    {type.description && <p className="text-gray-500 text-sm">{type.description}</p>}
+                    <p className="text-sm sm:text-base text-gray-600 mb-2 font-medium">Dauer: {type.duration} Minuten</p>
+                    {type.description && <p className="text-gray-500 text-xs sm:text-sm">{type.description}</p>}
                   </button>
                 ))}
               </div>
@@ -354,7 +376,7 @@ export default function BuchenPage() {
           {step === 2 && (
             <div>
               <h2
-                className="text-2xl font-bold text-[#2c5f7c] mb-4"
+                className="text-xl sm:text-2xl font-bold text-[#2c5f7c] mb-4"
                 style={{fontFamily: "'Playfair Display', serif"}}
               >
                 Wählen Sie Datum und Uhrzeit
@@ -394,25 +416,25 @@ export default function BuchenPage() {
               {/* Zeit wählen */}
               {selectedDate && (
                 <div className="mb-6">
-                  <label className="block text-sm font-semibold text-[#2d3748] mb-2">
+                  <label className="block text-sm font-semibold text-[#2d3748] mb-3">
                     Uhrzeit auswählen
                   </label>
-                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
+                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2 sm:gap-3">
                     {timeSlots.map((slot) => (
                       <button
                         key={slot.time}
                         onClick={() => setSelectedTime(slot.time)}
                         disabled={!slot.available}
-                        className={`py-3 px-3 rounded-lg border-2 text-sm font-semibold transition-all duration-300 relative ${
+                        className={`py-3 sm:py-3 px-2 sm:px-3 rounded-lg border-2 text-sm sm:text-base font-semibold transition-all duration-200 relative touch-manipulation ${
                           selectedTime === slot.time
                             ? "border-[#2c5f7c] bg-[#2c5f7c] text-white shadow-lg scale-105"
                             : slot.available
-                            ? "border-gray-300 hover:border-[#2c5f7c] hover:bg-[#e8f4f2] text-gray-900 hover:scale-102"
-                            : "border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed"
+                            ? "border-gray-300 hover:border-[#2c5f7c] active:border-[#2c5f7c] hover:bg-[#e8f4f2] active:bg-[#e8f4f2] text-gray-900"
+                            : "border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed opacity-50"
                         }`}
                       >
                         {selectedTime === slot.time && (
-                          <svg className="w-4 h-4 absolute top-1 right-1" fill="currentColor" viewBox="0 0 20 20">
+                          <svg className="w-3 h-3 sm:w-4 sm:h-4 absolute top-0.5 right-0.5 sm:top-1 sm:right-1" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                           </svg>
                         )}
@@ -420,24 +442,29 @@ export default function BuchenPage() {
                       </button>
                     ))}
                   </div>
+                  {timeSlots.length === 0 && (
+                    <p className="text-center text-gray-600 py-8 bg-gray-50 rounded-lg text-sm sm:text-base">
+                      Keine verfügbaren Zeiten für dieses Datum
+                    </p>
+                  )}
                 </div>
               )}
 
-              <div className="flex gap-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <button
                   onClick={() => {
                     setStep(1);
                     setSelectedDate("");
                     setSelectedTime("");
                   }}
-                  className="px-6 py-3 border-2 border-gray-300 rounded-lg hover:bg-gray-50 font-semibold transition-all duration-300 shadow-sm hover:shadow-md"
+                  className="px-6 py-4 sm:py-3 border-2 border-gray-300 rounded-lg hover:bg-gray-50 active:bg-gray-50 font-semibold transition-all duration-300 shadow-sm hover:shadow-md touch-manipulation text-base sm:text-base"
                 >
                   Zurück
                 </button>
                 <button
                   onClick={() => setStep(3)}
                   disabled={!selectedDate || !selectedTime}
-                  className="btn-primary flex-1 disabled:bg-gray-300 disabled:cursor-not-allowed disabled:shadow-none"
+                  className="btn-primary flex-1 py-4 sm:py-3 disabled:bg-gray-300 disabled:cursor-not-allowed disabled:shadow-none touch-manipulation text-base sm:text-base"
                 >
                   Weiter
                 </button>
@@ -449,7 +476,7 @@ export default function BuchenPage() {
           {step === 3 && (
             <div>
               <h2
-                className="text-2xl font-bold text-[#2c5f7c] mb-4"
+                className="text-xl sm:text-2xl font-bold text-[#2c5f7c] mb-4"
                 style={{fontFamily: "'Playfair Display', serif"}}
               >
                 Ihre Kontaktdaten
@@ -562,17 +589,17 @@ export default function BuchenPage() {
                 />
               </div>
 
-              <div className="flex gap-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <button
                   onClick={() => setStep(2)}
-                  className="px-6 py-3 border-2 border-gray-300 rounded-lg hover:bg-gray-50 font-semibold transition-all duration-300 shadow-sm hover:shadow-md"
+                  className="px-6 py-4 sm:py-3 border-2 border-gray-300 rounded-lg hover:bg-gray-50 active:bg-gray-50 font-semibold transition-all duration-300 shadow-sm hover:shadow-md touch-manipulation text-base"
                 >
                   Zurück
                 </button>
                 <button
                   onClick={() => setStep(4)}
                   disabled={!contactData.firstName || !contactData.lastName || !contactData.email || !contactData.phone}
-                  className="btn-primary flex-1 disabled:bg-gray-300 disabled:cursor-not-allowed disabled:shadow-none"
+                  className="btn-primary flex-1 py-4 sm:py-3 disabled:bg-gray-300 disabled:cursor-not-allowed disabled:shadow-none touch-manipulation text-base"
                 >
                   Weiter zur Bestätigung
                 </button>
@@ -584,7 +611,7 @@ export default function BuchenPage() {
           {step === 4 && (
             <div>
               <h2
-                className="text-2xl font-bold text-[#2c5f7c] mb-6"
+                className="text-xl sm:text-2xl font-bold text-[#2c5f7c] mb-4 sm:mb-6"
                 style={{fontFamily: "'Playfair Display', serif"}}
               >
                 Zusammenfassung
@@ -647,17 +674,17 @@ export default function BuchenPage() {
                 </p>
               </div>
 
-              <div className="flex gap-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <button
                   onClick={() => setStep(3)}
-                  className="px-6 py-3 border-2 border-gray-300 rounded-lg hover:bg-gray-50 font-semibold transition-all duration-300 shadow-sm hover:shadow-md"
+                  className="px-6 py-4 sm:py-3 border-2 border-gray-300 rounded-lg hover:bg-gray-50 active:bg-gray-50 font-semibold transition-all duration-300 shadow-sm hover:shadow-md touch-manipulation text-base"
                 >
                   Zurück
                 </button>
                 <button
                   onClick={handleBookAppointment}
                   disabled={isLoading}
-                  className="btn-primary flex-1 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                  className="btn-primary flex-1 py-4 sm:py-3 disabled:bg-gray-400 disabled:cursor-not-allowed touch-manipulation text-base font-semibold"
                 >
                   {isLoading ? (
                     <span className="flex items-center justify-center">
