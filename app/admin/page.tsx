@@ -220,39 +220,39 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#e8f4f2] via-white to-[#f7fafc] py-8 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#e8f4f2] via-white to-[#f7fafc] py-4 sm:py-8 px-3 sm:px-4">
       <div className="max-w-7xl mx-auto">
         {/* Header mit Logo */}
-        <div className="bg-white rounded-xl shadow-md p-6 mb-8">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-4">
+        <div className="bg-white rounded-xl shadow-md p-4 sm:p-6 mb-4 sm:mb-8">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+            <div className="flex items-center gap-3 sm:gap-4">
               <Image
                 src="/images/logo.jpeg"
                 alt="Praxis Logo"
-                width={60}
-                height={60}
-                className="rounded-lg"
+                width={50}
+                height={50}
+                className="rounded-lg sm:w-[60px] sm:h-[60px]"
               />
               <div>
                 <h1
-                  className="text-3xl font-bold text-[#2c5f7c]"
+                  className="text-xl sm:text-2xl md:text-3xl font-bold text-[#2c5f7c]"
                   style={{fontFamily: "'Playfair Display', serif"}}
                 >
                   Admin Dashboard
                 </h1>
-                <p className="text-sm text-gray-600">Terminverwaltung & Übersicht</p>
+                <p className="text-xs sm:text-sm text-gray-600">Terminverwaltung & Übersicht</p>
               </div>
             </div>
-            <div className="flex gap-3">
+            <div className="flex gap-2 sm:gap-3">
               <Link
                 href="/admin/verfuegbarkeit"
-                className="bg-[#4a9d8f] hover:bg-[#3d8378] text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg"
+                className="flex-1 sm:flex-none bg-[#4a9d8f] hover:bg-[#3d8378] active:bg-[#3d8378] text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg text-center text-sm sm:text-base touch-manipulation"
               >
                 Verfügbarkeit
               </Link>
               <Link
                 href="/admin/einstellungen"
-                className="bg-[#2c5f7c] hover:bg-[#1f4459] text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg"
+                className="flex-1 sm:flex-none bg-[#2c5f7c] hover:bg-[#1f4459] active:bg-[#1f4459] text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg text-center text-sm sm:text-base touch-manipulation"
               >
                 Einstellungen
               </Link>
@@ -261,43 +261,43 @@ export default function AdminDashboard() {
         </div>
 
         {/* Statistics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="card border-l-4 border-[#2c5f7c]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6 mb-4 sm:mb-6 md:mb-8">
+          <div className="card border-l-4 border-[#2c5f7c] p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-500 text-sm font-semibold">Termine Gesamt</p>
-                <p className="text-4xl font-bold text-[#2c5f7c] mt-2">{stats.total}</p>
+                <p className="text-gray-500 text-xs sm:text-sm font-semibold">Termine Gesamt</p>
+                <p className="text-3xl sm:text-4xl font-bold text-[#2c5f7c] mt-1 sm:mt-2">{stats.total}</p>
               </div>
-              <div className="bg-[#e8f4f2] p-4 rounded-full">
-                <svg className="w-8 h-8 text-[#2c5f7c]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="bg-[#e8f4f2] p-3 sm:p-4 rounded-full">
+                <svg className="w-6 h-6 sm:w-8 sm:h-8 text-[#2c5f7c]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
               </div>
             </div>
           </div>
 
-          <div className="card border-l-4 border-[#4a9d8f]">
+          <div className="card border-l-4 border-[#4a9d8f] p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-500 text-sm font-semibold">Heute</p>
-                <p className="text-4xl font-bold text-[#4a9d8f] mt-2">{stats.today}</p>
+                <p className="text-gray-500 text-xs sm:text-sm font-semibold">Heute</p>
+                <p className="text-3xl sm:text-4xl font-bold text-[#4a9d8f] mt-1 sm:mt-2">{stats.today}</p>
               </div>
-              <div className="bg-[#e8f4f2] p-4 rounded-full">
-                <svg className="w-8 h-8 text-[#4a9d8f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="bg-[#e8f4f2] p-3 sm:p-4 rounded-full">
+                <svg className="w-6 h-6 sm:w-8 sm:h-8 text-[#4a9d8f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
             </div>
           </div>
 
-          <div className="card border-l-4 border-[#3d7a9e]">
+          <div className="card border-l-4 border-[#3d7a9e] p-4 sm:p-6 sm:col-span-2 lg:col-span-1">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-500 text-sm font-semibold">Bevorstehend</p>
-                <p className="text-4xl font-bold text-[#3d7a9e] mt-2">{stats.upcoming}</p>
+                <p className="text-gray-500 text-xs sm:text-sm font-semibold">Bevorstehend</p>
+                <p className="text-3xl sm:text-4xl font-bold text-[#3d7a9e] mt-1 sm:mt-2">{stats.upcoming}</p>
               </div>
-              <div className="bg-[#e8f4f2] p-4 rounded-full">
-                <svg className="w-8 h-8 text-[#3d7a9e]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="bg-[#e8f4f2] p-3 sm:p-4 rounded-full">
+                <svg className="w-6 h-6 sm:w-8 sm:h-8 text-[#3d7a9e]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                 </svg>
               </div>
@@ -306,10 +306,10 @@ export default function AdminDashboard() {
         </div>
 
         {/* Date Selector */}
-        <div className="card">
-          <div className="flex items-center justify-between mb-4">
-            <label className="block text-sm font-semibold text-[#2d3748]">
-              <svg className="w-5 h-5 inline-block mr-2 text-[#2c5f7c]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="card p-4 sm:p-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0 mb-3 sm:mb-4">
+            <label className="block text-xs sm:text-sm font-semibold text-[#2d3748]">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5 inline-block mr-1 sm:mr-2 text-[#2c5f7c]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
               Datum filtern (optional)
@@ -317,9 +317,9 @@ export default function AdminDashboard() {
             {selectedDate && (
               <button
                 onClick={() => setSelectedDate("")}
-                className="text-sm text-[#2c5f7c] hover:text-[#1f4459] font-semibold flex items-center gap-1"
+                className="text-xs sm:text-sm text-[#2c5f7c] hover:text-[#1f4459] active:text-[#1f4459] font-semibold flex items-center gap-1 touch-manipulation self-start sm:self-auto"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
                 Filter entfernen
@@ -331,11 +331,11 @@ export default function AdminDashboard() {
             value={selectedDate}
             onChange={(e) => setSelectedDate(e.target.value)}
             placeholder="Alle anstehenden Termine"
-            className="input-field text-gray-900"
+            className="input-field text-gray-900 text-sm sm:text-base"
           />
           {!selectedDate && (
-            <p className="text-sm text-gray-600 mt-2 flex items-center gap-1">
-              <svg className="w-4 h-4 text-[#4a9d8f]" fill="currentColor" viewBox="0 0 20 20">
+            <p className="text-xs sm:text-sm text-gray-600 mt-2 flex items-center gap-1">
+              <svg className="w-3 h-3 sm:w-4 sm:h-4 text-[#4a9d8f] flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
               </svg>
               Zeige alle anstehenden Termine (bis zu 50)
@@ -344,23 +344,23 @@ export default function AdminDashboard() {
         </div>
 
         {/* Appointments List */}
-        <div className="card">
+        <div className="card p-4 sm:p-6">
           <h2
-            className="text-2xl font-bold text-[#2c5f7c] mb-6"
+            className="text-lg sm:text-xl md:text-2xl font-bold text-[#2c5f7c] mb-4 sm:mb-6"
             style={{fontFamily: "'Playfair Display', serif"}}
           >
             {selectedDate ? `Termine für ${formatDate(selectedDate)}` : "Alle anstehenden Termine"}
           </h2>
 
           {appointments.length === 0 ? (
-            <div className="text-center py-12 bg-[#e8f4f2] rounded-lg">
-              <svg className="w-20 h-20 mx-auto text-[#4a9d8f] mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="text-center py-8 sm:py-12 bg-[#e8f4f2] rounded-lg">
+              <svg className="w-16 h-16 sm:w-20 sm:h-20 mx-auto text-[#4a9d8f] mb-3 sm:mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
-              <p className="text-gray-600 text-lg">{selectedDate ? "Keine Termine für diesen Tag" : "Keine anstehenden Termine"}</p>
+              <p className="text-gray-600 text-base sm:text-lg">{selectedDate ? "Keine Termine für diesen Tag" : "Keine anstehenden Termine"}</p>
             </div>
           ) : (
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               {!selectedDate ? (
                 // Group by date when no filter is active
                 (() => {
@@ -374,14 +374,14 @@ export default function AdminDashboard() {
                   });
 
                   return Object.keys(groupedByDate).map(dateKey => (
-                    <div key={dateKey} className="space-y-4">
-                      <div className="bg-[#2c5f7c] text-white px-4 py-3 rounded-lg sticky top-0 z-10 shadow-md">
-                        <h3 className="font-bold text-lg flex items-center gap-2">
-                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <div key={dateKey} className="space-y-3 sm:space-y-4">
+                      <div className="bg-[#2c5f7c] text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg sticky top-0 z-10 shadow-md">
+                        <h3 className="font-bold text-sm sm:text-base md:text-lg flex items-center gap-2">
+                          <svg className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
                           </svg>
-                          {formatDate(dateKey)}
-                          <span className="ml-auto bg-white text-[#2c5f7c] px-3 py-1 rounded-full text-sm font-semibold">
+                          <span className="truncate">{formatDate(dateKey)}</span>
+                          <span className="ml-auto bg-white text-[#2c5f7c] px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap">
                             {groupedByDate[dateKey].length} {groupedByDate[dateKey].length === 1 ? 'Termin' : 'Termine'}
                           </span>
                         </h3>
@@ -389,15 +389,15 @@ export default function AdminDashboard() {
                       {groupedByDate[dateKey].map((appointment) => (
                 <div
                   key={appointment.id}
-                  className="border-2 border-gray-200 rounded-lg p-6 hover:border-[#2c5f7c] hover:shadow-lg transition-all duration-300 bg-white"
+                  className="border-2 border-gray-200 rounded-lg p-3 sm:p-4 md:p-6 hover:border-[#2c5f7c] hover:shadow-lg transition-all duration-300 bg-white"
                 >
                   <div className="flex justify-between items-start">
                     <div className="flex-1">
-                      <div className="flex items-center gap-4 mb-3">
-                        <span className="text-lg font-bold text-[#2c5f7c]">
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-3">
+                        <span className="text-base sm:text-lg font-bold text-[#2c5f7c]">
                           {formatTime(appointment.startTime)} - {formatTime(appointment.endTime)}
                         </span>
-                        <span className={`px-4 py-1.5 text-sm font-semibold rounded-full ${
+                        <span className={`px-3 sm:px-4 py-1 sm:py-1.5 text-xs sm:text-sm font-semibold rounded-full self-start ${
                           appointment.status === "PENDING" ? "bg-yellow-100 text-yellow-800 border border-yellow-300" :
                           appointment.status === "CONFIRMED" ? "bg-green-100 text-green-800 border border-green-300" :
                           appointment.status === "CANCELLED" ? "bg-red-100 text-red-800 border border-red-300" :
@@ -413,34 +413,34 @@ export default function AdminDashboard() {
                       </div>
 
                       <h3
-                        className="text-xl font-bold text-[#2d3748] mb-3"
+                        className="text-lg sm:text-xl font-bold text-[#2d3748] mb-2 sm:mb-3"
                         style={{fontFamily: "'Playfair Display', serif"}}
                       >
                         {appointment.user.firstName} {appointment.user.lastName}
                       </h3>
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-gray-700 bg-[#f7fafc] p-4 rounded-lg mb-4">
-                        <p className="flex items-center gap-2">
-                          <svg className="w-4 h-4 text-[#4a9d8f]" fill="currentColor" viewBox="0 0 20 20">
+                      <div className="grid grid-cols-1 gap-2 sm:gap-3 text-xs sm:text-sm text-gray-700 bg-[#f7fafc] p-3 sm:p-4 rounded-lg mb-3 sm:mb-4">
+                        <p className="flex items-start sm:items-center gap-2 break-all">
+                          <svg className="w-3 h-3 sm:w-4 sm:h-4 text-[#4a9d8f] flex-shrink-0 mt-0.5 sm:mt-0" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                             <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                           </svg>
-                          <span className="font-medium">Email:</span> {appointment.user.email}
+                          <span className="font-medium">Email:</span> <span className="break-all">{appointment.user.email}</span>
                         </p>
                         <p className="flex items-center gap-2">
-                          <svg className="w-4 h-4 text-[#4a9d8f]" fill="currentColor" viewBox="0 0 20 20">
+                          <svg className="w-3 h-3 sm:w-4 sm:h-4 text-[#4a9d8f] flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                           </svg>
                           <span className="font-medium">Telefon:</span> {appointment.user.phone}
                         </p>
                         <p className="flex items-center gap-2">
-                          <svg className="w-4 h-4 text-[#4a9d8f]" fill="currentColor" viewBox="0 0 20 20">
+                          <svg className="w-3 h-3 sm:w-4 sm:h-4 text-[#4a9d8f] flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
                           </svg>
                           <span className="font-medium">Terminart:</span> {appointment.appointmentType.name}
                         </p>
                         <p className="flex items-center gap-2">
-                          <svg className="w-4 h-4 text-[#4a9d8f]" fill="currentColor" viewBox="0 0 20 20">
+                          <svg className="w-3 h-3 sm:w-4 sm:h-4 text-[#4a9d8f] flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
                           </svg>
                           <span className="font-medium">Dauer:</span> {appointment.appointmentType.duration} Min
@@ -449,30 +449,31 @@ export default function AdminDashboard() {
 
                       {/* Action Buttons */}
                       {appointment.status === "PENDING" && (
-                        <div className="flex flex-col sm:flex-row gap-3">
+                        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                           <button
                             onClick={() => openConfirmDialog(appointment.id, "CONFIRMED")}
-                            className="flex-1 bg-[#4a9d8f] hover:bg-[#3d8378] text-white px-4 py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                            className="flex-1 bg-[#4a9d8f] hover:bg-[#3d8378] active:bg-[#3d8378] text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-1.5 sm:gap-2 text-sm sm:text-base touch-manipulation"
                           >
-                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20">
                               <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                             </svg>
                             Annehmen
                           </button>
                           <button
                             onClick={() => handleAlternativeAppointment(appointment)}
-                            className="flex-1 bg-[#2c5f7c] hover:bg-[#1f4459] text-white px-4 py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                            className="flex-1 bg-[#2c5f7c] hover:bg-[#1f4459] active:bg-[#1f4459] text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-1.5 sm:gap-2 text-sm sm:text-base touch-manipulation"
                           >
-                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20">
                               <path fillRule="evenodd" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>
-                            Alternativvorschlag
+                            <span className="hidden xs:inline">Alternativvorschlag</span>
+                            <span className="xs:hidden">Alternative</span>
                           </button>
                           <button
                             onClick={() => openConfirmDialog(appointment.id, "CANCELLED")}
-                            className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                            className="flex-1 bg-red-600 hover:bg-red-700 active:bg-red-700 text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-1.5 sm:gap-2 text-sm sm:text-base touch-manipulation"
                           >
-                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20">
                               <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
                             </svg>
                             Ablehnen
@@ -481,16 +482,16 @@ export default function AdminDashboard() {
                       )}
 
                       {appointment.status === "CONFIRMED" && (
-                        <div className="flex gap-3">
+                        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                           <button
                             onClick={() => openConfirmDialog(appointment.id, "COMPLETED")}
-                            className="flex-1 bg-[#2c5f7c] hover:bg-[#1f4459] text-white px-4 py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg"
+                            className="flex-1 bg-[#2c5f7c] hover:bg-[#1f4459] active:bg-[#1f4459] text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg text-sm sm:text-base touch-manipulation"
                           >
                             Als abgeschlossen markieren
                           </button>
                           <button
                             onClick={() => openConfirmDialog(appointment.id, "CANCELLED")}
-                            className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg"
+                            className="flex-1 bg-red-600 hover:bg-red-700 active:bg-red-700 text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg text-sm sm:text-base touch-manipulation"
                           >
                             Absagen
                           </button>
@@ -508,15 +509,15 @@ export default function AdminDashboard() {
                 appointments.map((appointment) => (
                   <div
                     key={appointment.id}
-                    className="border-2 border-gray-200 rounded-lg p-6 hover:border-[#2c5f7c] hover:shadow-lg transition-all duration-300 bg-white"
+                    className="border-2 border-gray-200 rounded-lg p-3 sm:p-4 md:p-6 hover:border-[#2c5f7c] hover:shadow-lg transition-all duration-300 bg-white"
                   >
                     <div className="flex justify-between items-start">
                       <div className="flex-1">
-                        <div className="flex items-center gap-4 mb-3">
-                          <span className="text-lg font-bold text-[#2c5f7c]">
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-3">
+                          <span className="text-base sm:text-lg font-bold text-[#2c5f7c]">
                             {formatTime(appointment.startTime)} - {formatTime(appointment.endTime)}
                           </span>
-                          <span className={`px-4 py-1.5 text-sm font-semibold rounded-full ${
+                          <span className={`px-3 sm:px-4 py-1 sm:py-1.5 text-xs sm:text-sm font-semibold rounded-full self-start ${
                             appointment.status === "PENDING" ? "bg-yellow-100 text-yellow-800 border border-yellow-300" :
                             appointment.status === "CONFIRMED" ? "bg-green-100 text-green-800 border border-green-300" :
                             appointment.status === "CANCELLED" ? "bg-red-100 text-red-800 border border-red-300" :
@@ -532,34 +533,34 @@ export default function AdminDashboard() {
                         </div>
 
                         <h3
-                          className="text-xl font-bold text-[#2d3748] mb-3"
+                          className="text-lg sm:text-xl font-bold text-[#2d3748] mb-2 sm:mb-3"
                           style={{fontFamily: "'Playfair Display', serif"}}
                         >
                           {appointment.user.firstName} {appointment.user.lastName}
                         </h3>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-gray-700 bg-[#f7fafc] p-4 rounded-lg mb-4">
-                          <p className="flex items-center gap-2">
-                            <svg className="w-4 h-4 text-[#4a9d8f]" fill="currentColor" viewBox="0 0 20 20">
+                        <div className="grid grid-cols-1 gap-2 sm:gap-3 text-xs sm:text-sm text-gray-700 bg-[#f7fafc] p-3 sm:p-4 rounded-lg mb-3 sm:mb-4">
+                          <p className="flex items-start sm:items-center gap-2 break-all">
+                            <svg className="w-3 h-3 sm:w-4 sm:h-4 text-[#4a9d8f] flex-shrink-0 mt-0.5 sm:mt-0" fill="currentColor" viewBox="0 0 20 20">
                               <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                               <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                             </svg>
-                            <span className="font-medium">Email:</span> {appointment.user.email}
+                            <span className="font-medium">Email:</span> <span className="break-all">{appointment.user.email}</span>
                           </p>
                           <p className="flex items-center gap-2">
-                            <svg className="w-4 h-4 text-[#4a9d8f]" fill="currentColor" viewBox="0 0 20 20">
+                            <svg className="w-3 h-3 sm:w-4 sm:h-4 text-[#4a9d8f] flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                               <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                             </svg>
                             <span className="font-medium">Telefon:</span> {appointment.user.phone}
                           </p>
                           <p className="flex items-center gap-2">
-                            <svg className="w-4 h-4 text-[#4a9d8f]" fill="currentColor" viewBox="0 0 20 20">
+                            <svg className="w-3 h-3 sm:w-4 sm:h-4 text-[#4a9d8f] flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
                             </svg>
                             <span className="font-medium">Terminart:</span> {appointment.appointmentType.name}
                           </p>
                           <p className="flex items-center gap-2">
-                            <svg className="w-4 h-4 text-[#4a9d8f]" fill="currentColor" viewBox="0 0 20 20">
+                            <svg className="w-3 h-3 sm:w-4 sm:h-4 text-[#4a9d8f] flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
                             </svg>
                             <span className="font-medium">Dauer:</span> {appointment.appointmentType.duration} Min
@@ -568,30 +569,31 @@ export default function AdminDashboard() {
 
                         {/* Action Buttons */}
                         {appointment.status === "PENDING" && (
-                          <div className="flex flex-col sm:flex-row gap-3">
+                          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                             <button
                               onClick={() => openConfirmDialog(appointment.id, "CONFIRMED")}
-                              className="flex-1 bg-[#4a9d8f] hover:bg-[#3d8378] text-white px-4 py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                              className="flex-1 bg-[#4a9d8f] hover:bg-[#3d8378] active:bg-[#3d8378] text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-1.5 sm:gap-2 text-sm sm:text-base touch-manipulation"
                             >
-                              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20">
                                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                               </svg>
                               Annehmen
                             </button>
                             <button
                               onClick={() => handleAlternativeAppointment(appointment)}
-                              className="flex-1 bg-[#2c5f7c] hover:bg-[#1f4459] text-white px-4 py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                              className="flex-1 bg-[#2c5f7c] hover:bg-[#1f4459] active:bg-[#1f4459] text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-1.5 sm:gap-2 text-sm sm:text-base touch-manipulation"
                             >
-                              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20">
                                 <path fillRule="evenodd" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                               </svg>
-                              Alternativvorschlag
+                              <span className="hidden xs:inline">Alternativvorschlag</span>
+                              <span className="xs:hidden">Alternative</span>
                             </button>
                             <button
                               onClick={() => openConfirmDialog(appointment.id, "CANCELLED")}
-                              className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                              className="flex-1 bg-red-600 hover:bg-red-700 active:bg-red-700 text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-1.5 sm:gap-2 text-sm sm:text-base touch-manipulation"
                             >
-                              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20">
                                 <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
                               </svg>
                               Ablehnen
@@ -600,16 +602,16 @@ export default function AdminDashboard() {
                         )}
 
                         {appointment.status === "CONFIRMED" && (
-                          <div className="flex gap-3">
+                          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                             <button
                               onClick={() => openConfirmDialog(appointment.id, "COMPLETED")}
-                              className="flex-1 bg-[#2c5f7c] hover:bg-[#1f4459] text-white px-4 py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg"
+                              className="flex-1 bg-[#2c5f7c] hover:bg-[#1f4459] active:bg-[#1f4459] text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg text-sm sm:text-base touch-manipulation"
                             >
                               Als abgeschlossen markieren
                             </button>
                             <button
                               onClick={() => openConfirmDialog(appointment.id, "CANCELLED")}
-                              className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg"
+                              className="flex-1 bg-red-600 hover:bg-red-700 active:bg-red-700 text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg text-sm sm:text-base touch-manipulation"
                             >
                               Absagen
                             </button>
