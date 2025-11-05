@@ -6,10 +6,12 @@ Das System verwendet **Resend** als Email-Service, um automatische Benachrichtig
 
 ## Email-Typen
 
-### 1. **Neue Terminanfrage**
+### 1. **Neue Terminanfrage** ✓ AKTIVIERT
 Wird automatisch gesendet wenn ein Patient einen Termin bucht.
+- **An Patient**: Bestätigung, dass die Anfrage eingegangen ist
+- **An Praxis**: Benachrichtigung über neue Terminanfrage mit Patientendaten
 - Status: PENDING
-- Inhalt: Bestätigung, dass die Anfrage eingegangen ist
+- Implementiert in: `app/api/appointments/public/route.ts`
 
 ### 2. **Termin bestätigt**
 Wird gesendet wenn der Arzt einen Termin annimmt.

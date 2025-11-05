@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcrypt";
+import { sendNewAppointmentNotification, sendNewAppointmentNotificationToPractice } from "@/lib/email";
 
 export async function POST(request: Request) {
   try {
@@ -135,8 +136,35 @@ export async function POST(request: Request) {
       },
     });
 
-    // TODO: Send confirmation email here
-    // This would integrate with an email service like Resend, SendGrid, etc.
+    // Send email notifications
+    const emailData = {
+      patientName: `${user.firstName} ${user.lastName}`,
+      patientEmail: user.email,
+      date: appointmentDate.toLocaleDateString('de-DE', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      }),
+      time: time,
+      appointmentType: appointmentType.name,
+    };
+
+    // Send confirmation email to patient
+    try {
+      await sendNewAppointmentNotification(emailData);
+    } catch (emailError) {
+      console.error('Error sending patient notification email:', emailError);
+      // Continue even if email fails - appointment is already created
+    }
+
+    // Send notification email to practice
+    try {
+      await sendNewAppointmentNotificationToPractice(emailData);
+    } catch (emailError) {
+      console.error('Error sending practice notification email:', emailError);
+      // Continue even if email fails - appointment is already created
+    }
 
     return NextResponse.json({
       success: true,
