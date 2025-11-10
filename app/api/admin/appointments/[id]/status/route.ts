@@ -44,17 +44,21 @@ export async function PATCH(
     });
 
     // Send email notification to patient about status change
-    const appointmentDate = new Date(appointment.date).toLocaleDateString("de-DE", {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
+    const appointmentDate = appointment.date
+      ? new Date(appointment.date).toLocaleDateString("de-DE", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        })
+      : "Noch nicht festgelegt";
 
-    const appointmentTime = new Date(appointment.startTime).toLocaleTimeString("de-DE", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    const appointmentTime = appointment.startTime
+      ? new Date(appointment.startTime).toLocaleTimeString("de-DE", {
+          hour: "2-digit",
+          minute: "2-digit",
+        })
+      : "Noch nicht festgelegt";
 
     const emailData = {
       patientName: `${appointment.user.firstName} ${appointment.user.lastName}`,

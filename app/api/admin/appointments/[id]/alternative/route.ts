@@ -46,18 +46,22 @@ export async function POST(
       data: { status: "CANCELLED" },
     });
 
-    // Format dates for email
-    const originalDate = new Date(appointment.date).toLocaleDateString("de-DE", {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
+    // Format dates for email (if appointment has confirmed date/time)
+    const originalDate = appointment.date
+      ? new Date(appointment.date).toLocaleDateString("de-DE", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        })
+      : "Noch nicht festgelegt";
 
-    const originalTime = new Date(appointment.startTime).toLocaleTimeString("de-DE", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    const originalTime = appointment.startTime
+      ? new Date(appointment.startTime).toLocaleTimeString("de-DE", {
+          hour: "2-digit",
+          minute: "2-digit",
+        })
+      : "Noch nicht festgelegt";
 
     const altDate = new Date(alternativeDate).toLocaleDateString("de-DE", {
       weekday: "long",

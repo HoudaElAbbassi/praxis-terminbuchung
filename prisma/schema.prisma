@@ -65,11 +65,20 @@ model Appointment {
   id                String          @id @default(cuid())
 
   // Termin-Details
-  date              DateTime
-  startTime         DateTime
-  endTime           DateTime
+  date              DateTime?       // Optional: falls User nur Präferenzen angibt
+  startTime         DateTime?       // Optional: falls User nur Präferenzen angibt
+  endTime           DateTime?       // Optional: falls User nur Präferenzen angibt
   status            AppointmentStatus @default(PENDING)
   notes             String?
+
+  // Erweiterte Felder
+  insuranceType     InsuranceType?  // Versicherungsart
+  isFirstVisit      Boolean?        // Ersttermin oder Folgetermin
+  reasonForVisit    String?         // Grund des Besuchs
+
+  // Verfügbarkeits-Präferenzen (wenn User keine feste Zeit wählt)
+  preferredTimeSlots String?        // JSON Array: z.B. ["morning", "afternoon"]
+  preferredDays      String?        // JSON Array: z.B. ["MONDAY", "WEDNESDAY"]
 
   // Relationen
   userId            String
@@ -93,6 +102,12 @@ enum AppointmentStatus {
   CANCELLED
   COMPLETED
   NO_SHOW
+}
+
+enum InsuranceType {
+  STATUTORY    // Gesetzlich versichert
+  PRIVATE      // Privat versichert
+  SELF_PAYER   // Selbstzahler
 }
 
 // Verfügbarkeit des Arztes

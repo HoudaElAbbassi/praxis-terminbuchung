@@ -7,8 +7,8 @@ export async function POST(request: Request) {
     const body = await request.json();
     const {
       appointmentTypeId,
-      date,
-      time,
+      preferredTimeSlots,
+      preferredDays,
       firstName,
       lastName,
       email,
@@ -16,10 +16,13 @@ export async function POST(request: Request) {
       dateOfBirth,
       address,
       notes,
+      insuranceType,
+      isFirstVisit,
+      reasonForVisit,
     } = body;
 
     // Validate required fields
-    if (!appointmentTypeId || !date || !time || !firstName || !lastName || !email || !phone) {
+    if (!appointmentTypeId || !preferredTimeSlots || !preferredDays || !firstName || !lastName || !email || !phone || !insuranceType || isFirstVisit === undefined || !reasonForVisit) {
       return NextResponse.json(
         { error: "Alle Pflichtfelder müssen ausgefüllt werden" },
         { status: 400 }
@@ -47,46 +50,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // Parse date and time
-    const appointmentDate = new Date(date);
-    const [hours, minutes] = time.split(":").map(Number);
-    const startTime = new Date(appointmentDate);
-    startTime.setHours(hours, minutes, 0, 0);
-
-    // Calculate end time
-    const endTime = new Date(startTime);
-    endTime.setMinutes(endTime.getMinutes() + appointmentType.duration);
-
-    // Check if slot is still available
-    const existingAppointments = await prisma.appointment.findMany({
-      where: {
-        date: appointmentDate,
-        status: { in: ["CONFIRMED", "PENDING"] },
-      },
-      include: {
-        appointmentType: true,
-      },
-    });
-
-    const BUFFER_TIME = 5;
-    const isSlotAvailable = !existingAppointments.some((appointment: { startTime: Date; endTime: Date }) => {
-      const appointmentStart = new Date(appointment.startTime);
-      const appointmentEnd = new Date(appointment.endTime);
-      appointmentEnd.setMinutes(appointmentEnd.getMinutes() + BUFFER_TIME);
-
-      const requestedEndWithBuffer = new Date(endTime);
-      requestedEndWithBuffer.setMinutes(requestedEndWithBuffer.getMinutes() + BUFFER_TIME);
-
-      return startTime < appointmentEnd && requestedEndWithBuffer > appointmentStart;
-    });
-
-    if (!isSlotAvailable) {
-      return NextResponse.json(
-        { error: "Dieser Termin ist leider nicht mehr verfügbar. Bitte wählen Sie einen anderen Zeitpunkt." },
-        { status: 409 }
-      );
-    }
-
     // Find or create user
     let user = await prisma.user.findUnique({
       where: { email: email.toLowerCase() },
@@ -111,14 +74,19 @@ export async function POST(request: Request) {
       });
     }
 
-    // Create appointment with PENDING status (admin needs to confirm)
+    // Create appointment request with PENDING status (admin will assign specific time)
     const appointment = await prisma.appointment.create({
       data: {
-        date: appointmentDate,
-        startTime,
-        endTime,
+        date: null, // Will be set by admin
+        startTime: null, // Will be set by admin
+        endTime: null, // Will be set by admin
         status: "PENDING",
         notes: notes || null,
+        insuranceType: insuranceType,
+        isFirstVisit: isFirstVisit === 'true' || isFirstVisit === true,
+        reasonForVisit: reasonForVisit,
+        preferredTimeSlots: preferredTimeSlots,
+        preferredDays: preferredDays,
         userId: user.id,
         appointmentTypeId: appointmentType.id,
       },
@@ -142,10 +110,12 @@ export async function POST(request: Request) {
       success: true,
       appointment: {
         id: appointment.id,
-        date: appointment.date,
-        startTime: appointment.startTime,
-        endTime: appointment.endTime,
         type: appointment.appointmentType.name,
+        preferredTimeSlots: appointment.preferredTimeSlots,
+        preferredDays: appointment.preferredDays,
+        insuranceType: appointment.insuranceType,
+        isFirstVisit: appointment.isFirstVisit,
+        reasonForVisit: appointment.reasonForVisit,
         patient: {
           name: `${appointment.user.firstName} ${appointment.user.lastName}`,
           email: appointment.user.email,

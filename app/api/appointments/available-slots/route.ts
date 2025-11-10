@@ -107,7 +107,12 @@ export async function GET(req: NextRequest) {
         slotEnd.setMinutes(slotEnd.getMinutes() + appointmentDuration);
 
         // Check if this slot conflicts with any existing appointment
-        const isAvailable = !appointments.some((appointment: { startTime: Date; endTime: Date }) => {
+        const isAvailable = !appointments.some((appointment: { startTime: Date | null; endTime: Date | null }) => {
+          // Skip appointments without confirmed times (preference-based bookings)
+          if (!appointment.startTime || !appointment.endTime) {
+            return false;
+          }
+
           const appointmentStart = new Date(appointment.startTime);
           const appointmentEnd = new Date(appointment.endTime);
 

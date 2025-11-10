@@ -22,9 +22,11 @@ export default function BuchenPage() {
   const [step, setStep] = useState(1);
   const [appointmentTypes, setAppointmentTypes] = useState<AppointmentType[]>([]);
   const [selectedType, setSelectedType] = useState<AppointmentType | null>(null);
-  const [selectedDate, setSelectedDate] = useState("");
-  const [selectedTime, setSelectedTime] = useState("");
-  const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
+
+  // Verfügbarkeits-Präferenzen
+  const [preferredTimeSlots, setPreferredTimeSlots] = useState<string[]>([]);
+  const [preferredDays, setPreferredDays] = useState<string[]>([]);
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -38,6 +40,9 @@ export default function BuchenPage() {
     dateOfBirth: "",
     address: "",
     notes: "",
+    insuranceType: "",
+    isFirstVisit: "",
+    reasonForVisit: "",
   });
 
   // Lade Terminarten
@@ -63,48 +68,7 @@ export default function BuchenPage() {
     fetchAppointmentTypes();
   }, []);
 
-  // Lade nächsten verfügbaren Termin wenn Terminart gewählt wird
-  useEffect(() => {
-    if (selectedType && step === 2 && !selectedDate) {
-      fetchNextAvailableSlot();
-    }
-  }, [selectedType, step]);
-
-  // Lade verfügbare Zeitslots wenn Datum gewählt wird
-  useEffect(() => {
-    if (selectedDate && selectedType) {
-      fetchTimeSlots();
-    }
-  }, [selectedDate, selectedType]);
-
-  const fetchNextAvailableSlot = async () => {
-    try {
-      const res = await fetch(`/api/appointments/next-available?typeId=${selectedType?.id}`);
-      const data = await res.json();
-
-      if (res.ok && data.date && data.time) {
-        // Set the next available date and time
-        setSelectedDate(data.date);
-        setSelectedTime(data.time);
-      }
-    } catch (error) {
-      console.error("Error fetching next available slot:", error);
-    }
-  };
-
-  const fetchTimeSlots = async () => {
-    try {
-      const res = await fetch(
-        `/api/appointments/available-slots?date=${selectedDate}&typeId=${selectedType?.id}`
-      );
-      const data = await res.json();
-      setTimeSlots(data);
-    } catch (error) {
-      console.error("Error fetching time slots:", error);
-    }
-  };
-
-  const handleContactChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleContactChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setContactData({ ...contactData, [e.target.name]: e.target.value });
   };
 
@@ -119,14 +83,20 @@ export default function BuchenPage() {
       return;
     }
 
+    if (preferredTimeSlots.length === 0 || preferredDays.length === 0) {
+      setError("Bitte wählen Sie mindestens ein Zeitfenster und einen Wochentag");
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const res = await fetch("/api/appointments/public", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           appointmentTypeId: selectedType?.id,
-          date: selectedDate,
-          time: selectedTime,
+          preferredTimeSlots: JSON.stringify(preferredTimeSlots),
+          preferredDays: JSON.stringify(preferredDays),
           ...contactData,
         }),
       });
@@ -145,11 +115,23 @@ export default function BuchenPage() {
     }
   };
 
-  // Get min date (today) and max date (3 months from now)
-  const today = new Date().toISOString().split("T")[0];
-  const maxDate = new Date();
-  maxDate.setMonth(maxDate.getMonth() + 3);
-  const maxDateStr = maxDate.toISOString().split("T")[0];
+  // Handler für Zeitfenster-Auswahl
+  const toggleTimeSlot = (slot: string) => {
+    if (preferredTimeSlots.includes(slot)) {
+      setPreferredTimeSlots(preferredTimeSlots.filter(s => s !== slot));
+    } else {
+      setPreferredTimeSlots([...preferredTimeSlots, slot]);
+    }
+  };
+
+  // Handler für Wochentag-Auswahl
+  const toggleDay = (day: string) => {
+    if (preferredDays.includes(day)) {
+      setPreferredDays(preferredDays.filter(d => d !== day));
+    } else {
+      setPreferredDays([...preferredDays, day]);
+    }
+  };
 
   if (success) {
     return (
@@ -177,14 +159,14 @@ export default function BuchenPage() {
               Termin erfolgreich gebucht!
             </h1>
             <p className="text-lg text-gray-600 mb-8">
-              Vielen Dank, <span className="font-semibold text-[#2c5f7c]">{contactData.firstName}</span>! Wir haben Ihren Termin erhalten und senden Ihnen eine Bestätigungsmail an <span className="font-semibold">{contactData.email}</span>.
+              Vielen Dank, <span className="font-semibold text-[#2c5f7c]">{contactData.firstName}</span>! Wir haben Ihre Terminanfrage erhalten und werden uns in Kürze bei Ihnen melden, um einen passenden Termin zu vereinbaren. Eine Bestätigungsmail wurde an <span className="font-semibold">{contactData.email}</span> gesendet.
             </p>
             <div className="bg-[#e8f4f2] border-2 border-[#4a9d8f] rounded-lg p-6 mb-8">
               <h3
                 className="font-bold text-[#2c5f7c] mb-4 text-xl"
                 style={{fontFamily: "'Playfair Display', serif"}}
               >
-                Ihre Termindetails:
+                Ihre Angaben:
               </h3>
               <div className="text-left space-y-3 text-gray-700">
                 <p className="flex items-center gap-2">
@@ -197,19 +179,26 @@ export default function BuchenPage() {
                   <svg className="w-5 h-5 text-[#4a9d8f]" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
                   </svg>
-                  <span className="font-medium">Datum:</span> {new Date(selectedDate).toLocaleDateString("de-DE", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}
+                  <span className="font-medium">Bevorzugte Tage:</span> {preferredDays.map(day => {
+                    const dayNames: {[key: string]: string} = {
+                      'MONDAY': 'Montag', 'TUESDAY': 'Dienstag', 'WEDNESDAY': 'Mittwoch',
+                      'THURSDAY': 'Donnerstag', 'FRIDAY': 'Freitag', 'SATURDAY': 'Samstag'
+                    };
+                    return dayNames[day];
+                  }).join(', ')}
                 </p>
                 <p className="flex items-center gap-2">
                   <svg className="w-5 h-5 text-[#4a9d8f]" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
                   </svg>
-                  <span className="font-medium">Uhrzeit:</span> {selectedTime} Uhr
-                </p>
-                <p className="flex items-center gap-2">
-                  <svg className="w-5 h-5 text-[#4a9d8f]" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
-                  </svg>
-                  <span className="font-medium">Dauer:</span> {selectedType?.duration} Minuten
+                  <span className="font-medium">Bevorzugte Zeiten:</span> {preferredTimeSlots.map(slot => {
+                    const slotNames: {[key: string]: string} = {
+                      'morning': 'Vormittags (8-12 Uhr)',
+                      'afternoon': 'Nachmittags (12-17 Uhr)',
+                      'evening': 'Abends (17-20 Uhr)'
+                    };
+                    return slotNames[slot];
+                  }).join(', ')}
                 </p>
               </div>
             </div>
@@ -372,14 +361,14 @@ export default function BuchenPage() {
             </div>
           )}
 
-          {/* Step 2: Datum & Zeit wählen */}
+          {/* Step 2: Verfügbarkeit angeben */}
           {step === 2 && (
             <div>
               <h2
                 className="text-xl sm:text-2xl font-bold text-[#2c5f7c] mb-4"
                 style={{fontFamily: "'Playfair Display', serif"}}
               >
-                Wählen Sie Datum und Uhrzeit
+                Wann könnten Sie zu uns kommen?
               </h2>
               <div className="bg-[#e8f4f2] border border-[#4a9d8f] rounded-lg p-4 mb-6">
                 <p className="text-gray-700 mb-2">
@@ -388,74 +377,91 @@ export default function BuchenPage() {
                   </svg>
                   Gewählte Terminart: <span className="font-bold text-[#2c5f7c]">{selectedType?.name}</span> ({selectedType?.duration} Min)
                 </p>
-                {selectedDate && selectedTime && (
-                  <p className="text-sm text-[#2c5f7c] font-semibold flex items-center gap-2 mt-3 pt-3 border-t border-[#4a9d8f]">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                    </svg>
-                    Nächster verfügbarer Termin automatisch vorgeschlagen!
-                  </p>
-                )}
+                <p className="text-sm text-gray-600 mt-2">
+                  Bitte geben Sie uns Ihre zeitlichen Präferenzen an. Wir melden uns bei Ihnen mit einem passenden Terminvorschlag.
+                </p>
               </div>
 
-              {/* Datum wählen */}
+              {/* Zeitfenster wählen */}
               <div className="mb-6">
-                <label className="block text-sm font-semibold text-[#2d3748] mb-2">
-                  Datum auswählen
+                <label className="block text-sm font-semibold text-[#2d3748] mb-3">
+                  Bevorzugte Tageszeit (mehrere auswählbar)
                 </label>
-                <input
-                  type="date"
-                  value={selectedDate}
-                  onChange={(e) => setSelectedDate(e.target.value)}
-                  min={today}
-                  max={maxDateStr}
-                  className="input-field text-gray-900"
-                />
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  {[
+                    { value: 'morning', label: 'Vormittags', desc: '8:00 - 12:00 Uhr' },
+                    { value: 'afternoon', label: 'Nachmittags', desc: '12:00 - 17:00 Uhr' },
+                    { value: 'evening', label: 'Abends', desc: '17:00 - 20:00 Uhr' }
+                  ].map((slot) => (
+                    <button
+                      key={slot.value}
+                      onClick={() => toggleTimeSlot(slot.value)}
+                      className={`p-4 border-2 rounded-lg text-left transition-all duration-200 touch-manipulation ${
+                        preferredTimeSlots.includes(slot.value)
+                          ? "border-[#2c5f7c] bg-[#2c5f7c] text-white shadow-lg"
+                          : "border-gray-300 hover:border-[#2c5f7c] hover:bg-[#e8f4f2] text-gray-900"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <div className="font-bold text-base">{slot.label}</div>
+                          <div className={`text-sm ${preferredTimeSlots.includes(slot.value) ? 'text-white opacity-90' : 'text-gray-600'}`}>
+                            {slot.desc}
+                          </div>
+                        </div>
+                        {preferredTimeSlots.includes(slot.value) && (
+                          <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                          </svg>
+                        )}
+                      </div>
+                    </button>
+                  ))}
+                </div>
               </div>
 
-              {/* Zeit wählen */}
-              {selectedDate && (
-                <div className="mb-6">
-                  <label className="block text-sm font-semibold text-[#2d3748] mb-3">
-                    Uhrzeit auswählen
-                  </label>
-                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2 sm:gap-3">
-                    {timeSlots.map((slot) => (
-                      <button
-                        key={slot.time}
-                        onClick={() => setSelectedTime(slot.time)}
-                        disabled={!slot.available}
-                        className={`py-3 sm:py-3 px-2 sm:px-3 rounded-lg border-2 text-sm sm:text-base font-semibold transition-all duration-200 relative touch-manipulation ${
-                          selectedTime === slot.time
-                            ? "border-[#2c5f7c] bg-[#2c5f7c] text-white shadow-lg scale-105"
-                            : slot.available
-                            ? "border-gray-300 hover:border-[#2c5f7c] active:border-[#2c5f7c] hover:bg-[#e8f4f2] active:bg-[#e8f4f2] text-gray-900"
-                            : "border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed opacity-50"
-                        }`}
-                      >
-                        {selectedTime === slot.time && (
-                          <svg className="w-3 h-3 sm:w-4 sm:h-4 absolute top-0.5 right-0.5 sm:top-1 sm:right-1" fill="currentColor" viewBox="0 0 20 20">
+              {/* Wochentage wählen */}
+              <div className="mb-6">
+                <label className="block text-sm font-semibold text-[#2d3748] mb-3">
+                  Bevorzugte Wochentage (mehrere auswählbar)
+                </label>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
+                  {[
+                    { value: 'MONDAY', label: 'Montag' },
+                    { value: 'TUESDAY', label: 'Dienstag' },
+                    { value: 'WEDNESDAY', label: 'Mittwoch' },
+                    { value: 'THURSDAY', label: 'Donnerstag' },
+                    { value: 'FRIDAY', label: 'Freitag' },
+                    { value: 'SATURDAY', label: 'Samstag' }
+                  ].map((day) => (
+                    <button
+                      key={day.value}
+                      onClick={() => toggleDay(day.value)}
+                      className={`py-3 px-4 rounded-lg border-2 font-semibold transition-all duration-200 relative touch-manipulation ${
+                        preferredDays.includes(day.value)
+                          ? "border-[#2c5f7c] bg-[#2c5f7c] text-white shadow-lg"
+                          : "border-gray-300 hover:border-[#2c5f7c] hover:bg-[#e8f4f2] text-gray-900"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between gap-2">
+                        <span>{day.label}</span>
+                        {preferredDays.includes(day.value) && (
+                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                           </svg>
                         )}
-                        {slot.time}
-                      </button>
-                    ))}
-                  </div>
-                  {timeSlots.length === 0 && (
-                    <p className="text-center text-gray-600 py-8 bg-gray-50 rounded-lg text-sm sm:text-base">
-                      Keine verfügbaren Zeiten für dieses Datum
-                    </p>
-                  )}
+                      </div>
+                    </button>
+                  ))}
                 </div>
-              )}
+              </div>
 
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <button
                   onClick={() => {
                     setStep(1);
-                    setSelectedDate("");
-                    setSelectedTime("");
+                    setPreferredTimeSlots([]);
+                    setPreferredDays([]);
                   }}
                   className="px-6 py-4 sm:py-3 border-2 border-gray-300 rounded-lg hover:bg-gray-50 active:bg-gray-50 font-semibold transition-all duration-300 shadow-sm hover:shadow-md touch-manipulation text-base sm:text-base"
                 >
@@ -463,7 +469,7 @@ export default function BuchenPage() {
                 </button>
                 <button
                   onClick={() => setStep(3)}
-                  disabled={!selectedDate || !selectedTime}
+                  disabled={preferredTimeSlots.length === 0 || preferredDays.length === 0}
                   className="btn-primary flex-1 py-4 sm:py-3 disabled:bg-gray-300 disabled:cursor-not-allowed disabled:shadow-none touch-manipulation text-base sm:text-base"
                 >
                   Weiter
@@ -550,6 +556,62 @@ export default function BuchenPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <div>
                   <label className="block text-sm font-semibold text-[#2d3748] mb-2">
+                    Versicherungsart *
+                  </label>
+                  <select
+                    name="insuranceType"
+                    required
+                    value={contactData.insuranceType}
+                    onChange={handleContactChange}
+                    className="input-field text-gray-900"
+                  >
+                    <option value="">Bitte wählen</option>
+                    <option value="STATUTORY">Gesetzlich versichert</option>
+                    <option value="PRIVATE">Privat versichert</option>
+                    <option value="SELF_PAYER">Selbstzahler</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-[#2d3748] mb-2">
+                    Besuchsart *
+                  </label>
+                  <select
+                    name="isFirstVisit"
+                    required
+                    value={contactData.isFirstVisit}
+                    onChange={handleContactChange}
+                    className="input-field text-gray-900"
+                  >
+                    <option value="">Bitte wählen</option>
+                    <option value="true">Ersttermin (Neuer Patient)</option>
+                    <option value="false">Folgetermin (Bestehender Patient)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="mb-6">
+                <label className="block text-sm font-semibold text-[#2d3748] mb-2">
+                  Grund des Besuchs *
+                </label>
+                <select
+                  name="reasonForVisit"
+                  required
+                  value={contactData.reasonForVisit}
+                  onChange={handleContactChange}
+                  className="input-field text-gray-900"
+                >
+                  <option value="">Bitte wählen</option>
+                  <option value="Schmerzen">Schmerzen</option>
+                  <option value="Kontrolle">Kontrolle / Vorsorge</option>
+                  <option value="Prophylaxe">Prophylaxe / Zahnreinigung</option>
+                  <option value="Beratung">Beratung</option>
+                  <option value="Sonstiges">Sonstiges</option>
+                </select>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div>
+                  <label className="block text-sm font-semibold text-[#2d3748] mb-2">
                     Geburtsdatum (optional)
                   </label>
                   <input
@@ -598,7 +660,7 @@ export default function BuchenPage() {
                 </button>
                 <button
                   onClick={() => setStep(4)}
-                  disabled={!contactData.firstName || !contactData.lastName || !contactData.email || !contactData.phone}
+                  disabled={!contactData.firstName || !contactData.lastName || !contactData.email || !contactData.phone || !contactData.insuranceType || !contactData.isFirstVisit || !contactData.reasonForVisit}
                   className="btn-primary flex-1 py-4 sm:py-3 disabled:bg-gray-300 disabled:cursor-not-allowed disabled:shadow-none touch-manipulation text-base"
                 >
                   Weiter zur Bestätigung
@@ -621,7 +683,7 @@ export default function BuchenPage() {
                   className="font-bold text-[#2c5f7c] mb-4 text-lg"
                   style={{fontFamily: "'Playfair Display', serif"}}
                 >
-                  Ihre Termindetails:
+                  Ihre Angaben im Überblick:
                 </h3>
                 <div className="space-y-3 text-gray-700">
                   <div className="grid grid-cols-2 gap-2">
@@ -642,16 +704,46 @@ export default function BuchenPage() {
                     <span>{selectedType?.name}</span>
                   </div>
                   <div className="grid grid-cols-2 gap-2">
-                    <span className="font-semibold">Datum:</span>
-                    <span>{new Date(selectedDate).toLocaleDateString("de-DE", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</span>
+                    <span className="font-semibold">Versicherung:</span>
+                    <span>
+                      {contactData.insuranceType === 'STATUTORY' && 'Gesetzlich versichert'}
+                      {contactData.insuranceType === 'PRIVATE' && 'Privat versichert'}
+                      {contactData.insuranceType === 'SELF_PAYER' && 'Selbstzahler'}
+                    </span>
                   </div>
                   <div className="grid grid-cols-2 gap-2">
-                    <span className="font-semibold">Uhrzeit:</span>
-                    <span>{selectedTime} Uhr</span>
+                    <span className="font-semibold">Besuchsart:</span>
+                    <span>{contactData.isFirstVisit === 'true' ? 'Ersttermin' : 'Folgetermin'}</span>
                   </div>
                   <div className="grid grid-cols-2 gap-2">
-                    <span className="font-semibold">Dauer:</span>
-                    <span>{selectedType?.duration} Minuten</span>
+                    <span className="font-semibold">Grund:</span>
+                    <span>{contactData.reasonForVisit}</span>
+                  </div>
+                  <div className="border-t-2 border-[#4a9d8f] my-4"></div>
+                  <div>
+                    <span className="font-semibold">Bevorzugte Tage:</span>
+                    <p className="mt-1">
+                      {preferredDays.map(day => {
+                        const dayNames: {[key: string]: string} = {
+                          'MONDAY': 'Montag', 'TUESDAY': 'Dienstag', 'WEDNESDAY': 'Mittwoch',
+                          'THURSDAY': 'Donnerstag', 'FRIDAY': 'Freitag', 'SATURDAY': 'Samstag'
+                        };
+                        return dayNames[day];
+                      }).join(', ')}
+                    </p>
+                  </div>
+                  <div>
+                    <span className="font-semibold">Bevorzugte Zeiten:</span>
+                    <p className="mt-1">
+                      {preferredTimeSlots.map(slot => {
+                        const slotNames: {[key: string]: string} = {
+                          'morning': 'Vormittags (8-12 Uhr)',
+                          'afternoon': 'Nachmittags (12-17 Uhr)',
+                          'evening': 'Abends (17-20 Uhr)'
+                        };
+                        return slotNames[slot];
+                      }).join(', ')}
+                    </p>
                   </div>
                   {contactData.notes && (
                     <>
@@ -670,7 +762,7 @@ export default function BuchenPage() {
                   <svg className="w-5 h-5 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
                   </svg>
-                  <span><strong>Hinweis:</strong> Nach der Buchung erhalten Sie eine Bestätigungs-E-Mail. Bitte erscheinen Sie 5 Minuten vor Ihrem Termin.</span>
+                  <span><strong>Hinweis:</strong> Nach dem Absenden erhalten Sie eine Bestätigungs-E-Mail. Wir melden uns schnellstmöglich bei Ihnen mit einem konkreten Terminvorschlag basierend auf Ihren Präferenzen.</span>
                 </p>
               </div>
 
@@ -695,7 +787,7 @@ export default function BuchenPage() {
                       Wird gebucht...
                     </span>
                   ) : (
-                    "Jetzt verbindlich buchen"
+                    "Terminanfrage senden"
                   )}
                 </button>
               </div>
