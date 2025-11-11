@@ -3,11 +3,11 @@ import Image from "next/image";
 
 export default function DatenschutzPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#e8f4f2] to-white py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-b from-primary-50 to-white py-12 px-4">
       <div className="max-w-4xl mx-auto">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-white bg-[#2c5f7c] hover:bg-[#1f4459] px-6 py-3 rounded-lg font-medium shadow-md hover:shadow-lg transition-all mb-8"
+          className="inline-flex items-center gap-2 text-white bg-primary-600 hover:bg-primary-700 px-6 py-3 rounded-lg font-medium shadow-md hover:shadow-lg transition-all mb-8"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />

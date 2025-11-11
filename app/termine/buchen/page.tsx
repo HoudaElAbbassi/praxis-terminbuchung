@@ -30,6 +30,7 @@ export default function BuchenPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const [privacyAccepted, setPrivacyAccepted] = useState(false);
 
   // Kontaktdaten
   const [contactData, setContactData] = useState({
@@ -77,7 +78,7 @@ export default function BuchenPage() {
     setError("");
 
     // Validierung
-    if (!contactData.firstName || !contactData.lastName || !contactData.email || !contactData.phone) {
+    if (!contactData.firstName || !contactData.lastName || !contactData.email || !contactData.phone || !contactData.address || !contactData.notes) {
       setError("Bitte füllen Sie alle Pflichtfelder aus");
       setIsLoading(false);
       return;
@@ -85,6 +86,12 @@ export default function BuchenPage() {
 
     if (preferredTimeSlots.length === 0 || preferredDays.length === 0) {
       setError("Bitte wählen Sie mindestens ein Zeitfenster und einen Wochentag");
+      setIsLoading(false);
+      return;
+    }
+
+    if (!privacyAccepted) {
+      setError("Bitte akzeptieren Sie die Datenschutzerklärung");
       setIsLoading(false);
       return;
     }
@@ -135,7 +142,7 @@ export default function BuchenPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#e8f4f2] via-white to-[#f7fafc] flex items-center justify-center px-4 py-12">
+      <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-accent-50 flex items-center justify-center px-4 py-12">
         <div className="max-w-2xl mx-auto text-center">
           <div className="card">
             <div className="flex justify-center mb-6">
@@ -153,17 +160,17 @@ export default function BuchenPage() {
               </svg>
             </div>
             <h1
-              className="text-4xl font-bold text-[#2c5f7c] mb-4"
+              className="text-4xl font-bold text-primary-600 mb-4"
               style={{fontFamily: "'Playfair Display', serif"}}
             >
               Termin erfolgreich gebucht!
             </h1>
             <p className="text-lg text-gray-600 mb-8">
-              Vielen Dank, <span className="font-semibold text-[#2c5f7c]">{contactData.firstName}</span>! Wir haben Ihre Terminanfrage erhalten und werden uns in Kürze bei Ihnen melden, um einen passenden Termin zu vereinbaren. Eine Bestätigungsmail wurde an <span className="font-semibold">{contactData.email}</span> gesendet.
+              Vielen Dank, <span className="font-semibold text-primary-600">{contactData.firstName}</span>! Wir haben Ihre Terminanfrage erhalten und werden uns in Kürze bei Ihnen melden, um einen passenden Termin zu vereinbaren. Eine Bestätigungsmail wurde an <span className="font-semibold">{contactData.email}</span> gesendet.
             </p>
             <div className="bg-[#e8f4f2] border-2 border-[#4a9d8f] rounded-lg p-6 mb-8">
               <h3
-                className="font-bold text-[#2c5f7c] mb-4 text-xl"
+                className="font-bold text-primary-600 mb-4 text-xl"
                 style={{fontFamily: "'Playfair Display', serif"}}
               >
                 Ihre Angaben:
@@ -218,13 +225,13 @@ export default function BuchenPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#e8f4f2] via-white to-[#f7fafc] py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-accent-50 py-12 px-4">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-white bg-[#2c5f7c] hover:bg-[#1f4459] px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all mb-6"
+            className="inline-flex items-center gap-2 text-white bg-primary-600 hover:bg-primary-700 px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all mb-6"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -242,7 +249,7 @@ export default function BuchenPage() {
               />
             </div>
             <h1
-              className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2c5f7c] mb-3"
+              className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-600 mb-3"
               style={{fontFamily: "'Playfair Display', serif"}}
             >
               Online-Terminbuchung
@@ -256,7 +263,7 @@ export default function BuchenPage() {
           {/* Mobile: Kompakte Anzeige */}
           <div className="sm:hidden">
             <div className="flex items-center justify-between mb-3">
-              <span className="text-sm font-semibold text-[#2c5f7c]">Schritt {step} von 4</span>
+              <span className="text-sm font-semibold text-primary-600">Schritt {step} von 4</span>
               <span className="text-xs text-gray-600">
                 {step === 1 && "Terminart"}
                 {step === 2 && "Datum & Zeit"}
@@ -265,18 +272,18 @@ export default function BuchenPage() {
               </span>
             </div>
             <div className="flex gap-1">
-              <div className={`flex-1 h-2 rounded ${step >= 1 ? "bg-[#2c5f7c]" : "bg-gray-300"}`}></div>
-              <div className={`flex-1 h-2 rounded ${step >= 2 ? "bg-[#2c5f7c]" : "bg-gray-300"}`}></div>
-              <div className={`flex-1 h-2 rounded ${step >= 3 ? "bg-[#2c5f7c]" : "bg-gray-300"}`}></div>
-              <div className={`flex-1 h-2 rounded ${step >= 4 ? "bg-[#2c5f7c]" : "bg-gray-300"}`}></div>
+              <div className={`flex-1 h-2 rounded ${step >= 1 ? "bg-primary-600" : "bg-gray-300"}`}></div>
+              <div className={`flex-1 h-2 rounded ${step >= 2 ? "bg-primary-600" : "bg-gray-300"}`}></div>
+              <div className={`flex-1 h-2 rounded ${step >= 3 ? "bg-primary-600" : "bg-gray-300"}`}></div>
+              <div className={`flex-1 h-2 rounded ${step >= 4 ? "bg-primary-600" : "bg-gray-300"}`}></div>
             </div>
           </div>
 
           {/* Desktop: Volle Anzeige */}
           <div className="hidden sm:flex justify-center">
             <div className="flex items-center space-x-4">
-              <div className={`flex items-center ${step >= 1 ? "text-[#2c5f7c]" : "text-gray-400"}`}>
-                <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold ${step >= 1 ? "bg-[#2c5f7c] text-white shadow-md" : "bg-gray-300 text-gray-600"}`}>
+              <div className={`flex items-center ${step >= 1 ? "text-primary-600" : "text-gray-400"}`}>
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold ${step >= 1 ? "bg-primary-600 text-white shadow-md" : "bg-gray-300 text-gray-600"}`}>
                   {step > 1 ? (
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
@@ -285,9 +292,9 @@ export default function BuchenPage() {
                 </div>
                 <span className="ml-3 font-semibold">Terminart</span>
               </div>
-              <div className={`w-16 h-1 rounded ${step >= 2 ? "bg-[#2c5f7c]" : "bg-gray-300"}`}></div>
-              <div className={`flex items-center ${step >= 2 ? "text-[#2c5f7c]" : "text-gray-400"}`}>
-                <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold ${step >= 2 ? "bg-[#2c5f7c] text-white shadow-md" : "bg-gray-300 text-gray-600"}`}>
+              <div className={`w-16 h-1 rounded ${step >= 2 ? "bg-primary-600" : "bg-gray-300"}`}></div>
+              <div className={`flex items-center ${step >= 2 ? "text-primary-600" : "text-gray-400"}`}>
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold ${step >= 2 ? "bg-primary-600 text-white shadow-md" : "bg-gray-300 text-gray-600"}`}>
                   {step > 2 ? (
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
@@ -296,9 +303,9 @@ export default function BuchenPage() {
                 </div>
                 <span className="ml-3 font-semibold">Datum & Zeit</span>
               </div>
-              <div className={`w-16 h-1 rounded ${step >= 3 ? "bg-[#2c5f7c]" : "bg-gray-300"}`}></div>
-              <div className={`flex items-center ${step >= 3 ? "text-[#2c5f7c]" : "text-gray-400"}`}>
-                <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold ${step >= 3 ? "bg-[#2c5f7c] text-white shadow-md" : "bg-gray-300 text-gray-600"}`}>
+              <div className={`w-16 h-1 rounded ${step >= 3 ? "bg-primary-600" : "bg-gray-300"}`}></div>
+              <div className={`flex items-center ${step >= 3 ? "text-primary-600" : "text-gray-400"}`}>
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold ${step >= 3 ? "bg-primary-600 text-white shadow-md" : "bg-gray-300 text-gray-600"}`}>
                   {step > 3 ? (
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
@@ -307,9 +314,9 @@ export default function BuchenPage() {
                 </div>
                 <span className="ml-3 font-semibold">Ihre Daten</span>
               </div>
-              <div className={`w-16 h-1 rounded ${step >= 4 ? "bg-[#2c5f7c]" : "bg-gray-300"}`}></div>
-              <div className={`flex items-center ${step >= 4 ? "text-[#2c5f7c]" : "text-gray-400"}`}>
-                <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold ${step >= 4 ? "bg-[#2c5f7c] text-white shadow-md" : "bg-gray-300 text-gray-600"}`}>
+              <div className={`w-16 h-1 rounded ${step >= 4 ? "bg-primary-600" : "bg-gray-300"}`}></div>
+              <div className={`flex items-center ${step >= 4 ? "text-primary-600" : "text-gray-400"}`}>
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold ${step >= 4 ? "bg-primary-600 text-white shadow-md" : "bg-gray-300 text-gray-600"}`}>
                   4
                 </div>
                 <span className="ml-3 font-semibold">Bestätigung</span>
@@ -332,7 +339,7 @@ export default function BuchenPage() {
           {step === 1 && (
             <div>
               <h2
-                className="text-xl sm:text-2xl font-bold text-[#2c5f7c] mb-4 sm:mb-6"
+                className="text-xl sm:text-2xl font-bold text-primary-600 mb-4 sm:mb-6"
                 style={{fontFamily: "'Playfair Display', serif"}}
               >
                 Wählen Sie eine Terminart
@@ -345,10 +352,10 @@ export default function BuchenPage() {
                       setSelectedType(type);
                       setStep(2);
                     }}
-                    className="p-4 sm:p-6 border-2 border-gray-200 rounded-lg hover:border-[#2c5f7c] active:border-[#2c5f7c] hover:bg-[#e8f4f2] active:bg-[#e8f4f2] transition-all duration-300 text-left group shadow-sm hover:shadow-md touch-manipulation"
+                    className="p-4 sm:p-6 border-2 border-gray-200 rounded-lg hover:border-primary-600 active:border-primary-600 hover:bg-primary-50 active:bg-primary-50 transition-all duration-300 text-left group shadow-sm hover:shadow-md touch-manipulation"
                   >
                     <h3
-                      className="text-lg sm:text-xl font-bold text-gray-900 mb-2 group-hover:text-[#2c5f7c]"
+                      className="text-lg sm:text-xl font-bold text-gray-900 mb-2 group-hover:text-primary-600"
                       style={{fontFamily: "'Playfair Display', serif"}}
                     >
                       {type.name}
@@ -365,7 +372,7 @@ export default function BuchenPage() {
           {step === 2 && (
             <div>
               <h2
-                className="text-xl sm:text-2xl font-bold text-[#2c5f7c] mb-4"
+                className="text-xl sm:text-2xl font-bold text-primary-600 mb-4"
                 style={{fontFamily: "'Playfair Display', serif"}}
               >
                 Wann könnten Sie zu uns kommen?
@@ -375,7 +382,7 @@ export default function BuchenPage() {
                   <svg className="w-5 h-5 inline-block mr-2 text-[#4a9d8f]" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
                   </svg>
-                  Gewählte Terminart: <span className="font-bold text-[#2c5f7c]">{selectedType?.name}</span> ({selectedType?.duration} Min)
+                  Gewählte Terminart: <span className="font-bold text-primary-600">{selectedType?.name}</span> ({selectedType?.duration} Min)
                 </p>
                 <p className="text-sm text-gray-600 mt-2">
                   Bitte geben Sie uns Ihre zeitlichen Präferenzen an. Wir melden uns bei Ihnen mit einem passenden Terminvorschlag.
@@ -398,8 +405,8 @@ export default function BuchenPage() {
                       onClick={() => toggleTimeSlot(slot.value)}
                       className={`p-4 border-2 rounded-lg text-left transition-all duration-200 touch-manipulation ${
                         preferredTimeSlots.includes(slot.value)
-                          ? "border-[#2c5f7c] bg-[#2c5f7c] text-white shadow-lg"
-                          : "border-gray-300 hover:border-[#2c5f7c] hover:bg-[#e8f4f2] text-gray-900"
+                          ? "border-primary-600 bg-primary-600 text-white shadow-lg"
+                          : "border-gray-300 hover:border-primary-600 hover:bg-primary-50 text-gray-900"
                       }`}
                     >
                       <div className="flex items-center justify-between">
@@ -439,8 +446,8 @@ export default function BuchenPage() {
                       onClick={() => toggleDay(day.value)}
                       className={`py-3 px-4 rounded-lg border-2 font-semibold transition-all duration-200 relative touch-manipulation ${
                         preferredDays.includes(day.value)
-                          ? "border-[#2c5f7c] bg-[#2c5f7c] text-white shadow-lg"
-                          : "border-gray-300 hover:border-[#2c5f7c] hover:bg-[#e8f4f2] text-gray-900"
+                          ? "border-primary-600 bg-primary-600 text-white shadow-lg"
+                          : "border-gray-300 hover:border-primary-600 hover:bg-primary-50 text-gray-900"
                       }`}
                     >
                       <div className="flex items-center justify-between gap-2">
@@ -482,7 +489,7 @@ export default function BuchenPage() {
           {step === 3 && (
             <div>
               <h2
-                className="text-xl sm:text-2xl font-bold text-[#2c5f7c] mb-4"
+                className="text-xl sm:text-2xl font-bold text-primary-600 mb-4"
                 style={{fontFamily: "'Playfair Display', serif"}}
               >
                 Ihre Kontaktdaten
@@ -634,46 +641,69 @@ export default function BuchenPage() {
                 </select>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <div>
-                  <label className="block text-sm font-semibold text-[#2d3748] mb-2">
-                    Geburtsdatum (optional)
-                  </label>
-                  <input
-                    type="date"
-                    name="dateOfBirth"
-                    value={contactData.dateOfBirth}
-                    onChange={handleContactChange}
-                    className="input-field text-gray-900"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-[#2d3748] mb-2">
-                    Adresse (optional)
-                  </label>
-                  <input
-                    type="text"
-                    name="address"
-                    value={contactData.address}
-                    onChange={handleContactChange}
-                    placeholder="Musterstraße 123, 12345 Stadt"
-                    className="input-field text-gray-900"
-                  />
-                </div>
+              <div className="mb-6">
+                <label className="block text-sm font-semibold text-[#2d3748] mb-2">
+                  Geburtsdatum (optional)
+                </label>
+                <input
+                  type="date"
+                  name="dateOfBirth"
+                  value={contactData.dateOfBirth}
+                  onChange={handleContactChange}
+                  className="input-field text-gray-900"
+                />
               </div>
 
               <div className="mb-6">
                 <label className="block text-sm font-semibold text-[#2d3748] mb-2">
-                  Notizen (optional)
+                  Adresse *
                 </label>
+                <input
+                  type="text"
+                  name="address"
+                  required
+                  value={contactData.address}
+                  onChange={handleContactChange}
+                  placeholder="Musterstraße 123, 12345 Stadt"
+                  className="input-field text-gray-900"
+                />
+              </div>
+
+              <div className="mb-6">
+                <label className="block text-sm font-semibold text-[#2d3748] mb-2">
+                  Warum möchten Sie einen Termin? *
+                </label>
+                <p className="text-sm text-gray-600 mb-2">
+                  Bitte beschreiben Sie kurz Ihr Anliegen und warum Sie einen Termin benötigen. Dies hilft uns, Sie bestmöglich vorzubereiten.
+                </p>
                 <textarea
                   name="notes"
+                  required
                   value={contactData.notes}
                   onChange={handleContactChange}
-                  rows={3}
+                  rows={4}
                   className="input-field text-gray-900"
-                  placeholder="Besondere Anmerkungen oder Wünsche..."
+                  placeholder="Beispiel: Ich habe Schmerzen beim Gehen und möchte eine Untersuchung meiner Beingefäße..."
                 />
+              </div>
+
+              <div className="mb-6 bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
+                <label className="flex items-start cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={privacyAccepted}
+                    onChange={(e) => setPrivacyAccepted(e.target.checked)}
+                    className="mt-1 mr-3 h-5 w-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                    required
+                  />
+                  <span className="text-sm text-gray-800">
+                    Ich habe die{" "}
+                    <Link href="/datenschutz" target="_blank" className="text-primary-600 hover:text-primary-700 font-semibold underline">
+                      Datenschutzerklärung
+                    </Link>{" "}
+                    zur Kenntnis genommen und bin damit einverstanden, dass meine Daten zur Bearbeitung meiner Terminanfrage gespeichert und verarbeitet werden. *
+                  </span>
+                </label>
               </div>
 
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
@@ -685,7 +715,7 @@ export default function BuchenPage() {
                 </button>
                 <button
                   onClick={() => setStep(4)}
-                  disabled={!contactData.firstName || !contactData.lastName || !contactData.email || !contactData.phone || !contactData.insuranceType || !contactData.isFirstVisit || !contactData.reasonForVisit}
+                  disabled={!contactData.firstName || !contactData.lastName || !contactData.email || !contactData.phone || !contactData.address || !contactData.notes || !contactData.insuranceType || !contactData.isFirstVisit || !contactData.reasonForVisit || !privacyAccepted}
                   className="btn-primary flex-1 py-4 sm:py-3 disabled:bg-gray-300 disabled:cursor-not-allowed disabled:shadow-none touch-manipulation text-base"
                 >
                   Weiter zur Bestätigung
@@ -698,14 +728,14 @@ export default function BuchenPage() {
           {step === 4 && (
             <div>
               <h2
-                className="text-xl sm:text-2xl font-bold text-[#2c5f7c] mb-4 sm:mb-6"
+                className="text-xl sm:text-2xl font-bold text-primary-600 mb-4 sm:mb-6"
                 style={{fontFamily: "'Playfair Display', serif"}}
               >
                 Zusammenfassung
               </h2>
               <div className="bg-[#e8f4f2] border-2 border-[#4a9d8f] p-6 rounded-lg mb-6">
                 <h3
-                  className="font-bold text-[#2c5f7c] mb-4 text-lg"
+                  className="font-bold text-primary-600 mb-4 text-lg"
                   style={{fontFamily: "'Playfair Display', serif"}}
                 >
                   Ihre Angaben im Überblick:
