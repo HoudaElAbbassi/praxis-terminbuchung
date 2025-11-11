@@ -119,7 +119,7 @@ export default function PhilosophiePage() {
             {/* CTA Section */}
             <div className="mt-12 sm:mt-16 text-center">
               <div className="bg-gradient-to-br from-primary-600 to-primary-800 rounded-xl sm:rounded-2xl p-6 sm:p-8 lg:p-12 text-white">
-                <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4" style={{fontFamily: "'Playfair Display', serif"}}>
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-white mb-3 sm:mb-4" style={{fontFamily: "'Playfair Display', serif"}}>
                   Lassen Sie sich von uns beraten
                 </h2>
                 <p className="text-base sm:text-lg text-primary-50 mb-5 sm:mb-6 px-2">
@@ -144,7 +144,7 @@ export default function PhilosophiePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
               <div>
-                <h3 className="text-base sm:text-lg font-bold mb-3 sm:mb-4" style={{fontFamily: "'Playfair Display', serif"}}>
+                <h3 className="text-base sm:text-lg font-extrabold text-white mb-3 sm:mb-4" style={{fontFamily: "'Playfair Display', serif"}}>
                   Praxis für Gefäßmedizin
                 </h3>
                 <p className="text-sm sm:text-base text-gray-300 leading-relaxed">
@@ -152,7 +152,7 @@ export default function PhilosophiePage() {
                 </p>
               </div>
               <div>
-                <h3 className="text-base sm:text-lg font-bold mb-3 sm:mb-4" style={{fontFamily: "'Playfair Display', serif"}}>
+                <h3 className="text-base sm:text-lg font-extrabold text-white mb-3 sm:mb-4" style={{fontFamily: "'Playfair Display', serif"}}>
                   Kontakt
                 </h3>
                 <ul className="space-y-1 sm:space-y-2 text-sm sm:text-base text-gray-300">
@@ -162,7 +162,7 @@ export default function PhilosophiePage() {
                 </ul>
               </div>
               <div className="sm:col-span-2 md:col-span-1">
-                <h3 className="text-base sm:text-lg font-bold mb-3 sm:mb-4" style={{fontFamily: "'Playfair Display', serif"}}>
+                <h3 className="text-base sm:text-lg font-extrabold text-white mb-3 sm:mb-4" style={{fontFamily: "'Playfair Display', serif"}}>
                   Quick Links
                 </h3>
                 <ul className="space-y-1 sm:space-y-2 text-sm sm:text-base text-gray-300">
