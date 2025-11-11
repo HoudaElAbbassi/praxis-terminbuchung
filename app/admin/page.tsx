@@ -227,7 +227,7 @@ export default function AdminDashboard() {
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
             <div className="flex items-center gap-3 sm:gap-4">
               <Image
-                src="/images/logo.jpeg"
+                src="/images/logoklein.jpeg"
                 alt="Praxis Logo"
                 width={50}
                 height={50}
