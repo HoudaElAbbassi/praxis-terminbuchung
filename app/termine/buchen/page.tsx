@@ -601,11 +601,36 @@ export default function BuchenPage() {
                   className="input-field text-gray-900"
                 >
                   <option value="">Bitte wählen</option>
-                  <option value="Schmerzen">Schmerzen</option>
-                  <option value="Kontrolle">Kontrolle / Vorsorge</option>
-                  <option value="Prophylaxe">Prophylaxe / Zahnreinigung</option>
-                  <option value="Beratung">Beratung</option>
-                  <option value="Sonstiges">Sonstiges</option>
+                  <optgroup label="Diagnostik">
+                    <option value="Farbduplexsonographie">Farbduplexsonographie</option>
+                    <option value="LRR-Messung">LRR-Messung (Laufband)</option>
+                    <option value="Gefäßuntersuchung">Allgemeine Gefäßuntersuchung</option>
+                  </optgroup>
+                  <optgroup label="Venenerkrankungen">
+                    <option value="Besenreiser">Besenreiser</option>
+                    <option value="Beinschwellungen">Beinschwellungen</option>
+                    <option value="Krampfadern">Krampfadern / Varizen</option>
+                    <option value="Venenthrombose">Verdacht auf Venenthrombose</option>
+                  </optgroup>
+                  <optgroup label="Arterielle Erkrankungen">
+                    <option value="pAVK">pAVK / Schaufensterkrankheit</option>
+                    <option value="Carotisstenose">Carotisstenose (Halsschlagader)</option>
+                    <option value="Aneurysma">Aneurysma-Kontrolle</option>
+                  </optgroup>
+                  <optgroup label="Lymphatische Erkrankungen">
+                    <option value="Lymphödem">Lymphödem</option>
+                    <option value="Lipödem">Lipödem</option>
+                  </optgroup>
+                  <optgroup label="Therapie / Operation">
+                    <option value="Krampfadertherapie">Minimalinvasive Krampfadertherapie</option>
+                    <option value="Schaumverödung">Schaumverödung</option>
+                    <option value="Mikrosklerotherapie">Mikrosklerotherapie</option>
+                  </optgroup>
+                  <optgroup label="Sonstiges">
+                    <option value="Kontrolle">Kontroll-Termin</option>
+                    <option value="Beratung">Beratung / Zweitmeinung</option>
+                    <option value="Sonstiges">Sonstiges</option>
+                  </optgroup>
                 </select>
               </div>
 
