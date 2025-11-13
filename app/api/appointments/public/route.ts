@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcrypt";
+import { sendNewAppointmentNotification, sendNewAppointmentNotificationToPractice } from "@/lib/email";
 
 export async function POST(request: Request) {
   try {
@@ -103,8 +104,28 @@ export async function POST(request: Request) {
       },
     });
 
-    // TODO: Send confirmation email here
-    // This would integrate with an email service like Resend, SendGrid, etc.
+    // Send email notifications
+    const preferredTimeSlotsText = Array.isArray(appointment.preferredTimeSlots)
+      ? appointment.preferredTimeSlots.join(", ")
+      : (appointment.preferredTimeSlots || "Keine Präferenz angegeben");
+
+    const preferredDaysText = Array.isArray(appointment.preferredDays)
+      ? appointment.preferredDays.join(", ")
+      : (appointment.preferredDays || "Keine Präferenz angegeben");
+
+    const emailData = {
+      patientName: `${appointment.user.firstName} ${appointment.user.lastName}`,
+      patientEmail: appointment.user.email,
+      date: `Präferenz: ${preferredDaysText}`,
+      time: preferredTimeSlotsText,
+      appointmentType: `${appointment.appointmentType.name} (${appointment.isFirstVisit ? 'Ersttermin' : 'Folgetermin'})`,
+    };
+
+    // Send confirmation email to patient
+    await sendNewAppointmentNotification(emailData);
+
+    // Send notification to practice
+    await sendNewAppointmentNotificationToPractice(emailData);
 
     return NextResponse.json({
       success: true,
