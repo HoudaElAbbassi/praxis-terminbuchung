@@ -54,12 +54,6 @@ export default function Navigation() {
                 {link.label}
               </Link>
             ))}
-            <Link
-              href="/auth/login"
-              className="text-gray-800 hover:text-primary-600 transition-colors font-semibold"
-            >
-              Login
-            </Link>
           </div>
 
           {/* Mobile Hamburger Button */}
@@ -98,13 +92,6 @@ export default function Navigation() {
                   {link.label}
                 </Link>
               ))}
-              <Link
-                href="/auth/login"
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-4 py-3 rounded-lg font-semibold text-gray-800 hover:bg-gray-50"
-              >
-                Login
-              </Link>
             </div>
           </div>
         )}
