@@ -300,20 +300,104 @@ Bitte bringen Sie zum ersten Termin Ihre Versichertenkarte mit.`,
 
   emergency: {
     id: 'emergency',
-    trigger: ['emergency', 'notfall', 'akut'],
-    response: `🚨 **Medizinischer Notfall?**
+    trigger: ['emergency', 'notfall', 'akut', 'dringend'],
+    response: `⚠️ **Notfall oder dringender Termin?**
 
-Bei akuten medizinischen Notfällen wenden Sie sich bitte SOFORT an:
+Bitte wählen Sie die passende Option:`,
+    quickReplies: [
+      { label: '🚨 Medizinischer Notfall', value: 'medical_emergency' },
+      { label: '⚡ Dringender Termin benötigt', value: 'urgent_appointment' },
+      { label: '« Zurück zum Menü', value: 'main_menu' },
+    ],
+  },
+
+  medical_emergency: {
+    id: 'medical_emergency',
+    trigger: 'medical_emergency',
+    response: `🚨 **Bei lebensbedrohlichen Situationen:**
+
+Wenden Sie sich bitte SOFORT an:
 
 🚑 **Notruf:** 112
 📞 **Ärztlicher Bereitschaftsdienst:** 116 117
 
-**Unsere Praxis ist KEINE Notaufnahme.**
+**Beispiele für Notfälle:**
+• Plötzliche starke Schmerzen
+• Starke Blutungen
+• Bewusstlosigkeit
+• Atemnot
 
-Für nicht-dringende Anliegen können Sie gerne einen Termin buchen.`,
+**Unsere Praxis ist KEINE Notaufnahme!**`,
     quickReplies: [
-      { label: 'Termin buchen', value: 'appointment' },
+      { label: 'Doch kein Notfall - Termin buchen', value: 'urgent_appointment' },
       { label: '« Zurück zum Menü', value: 'main_menu' },
+    ],
+  },
+
+  urgent_appointment: {
+    id: 'urgent_appointment',
+    trigger: 'urgent_appointment',
+    response: `⚡ **Dringender Termin benötigt**
+
+Wir verstehen, dass Ihr Anliegen dringend ist.
+
+Für einen kurzfristigen Termin haben Sie folgende Möglichkeiten:`,
+    quickReplies: [
+      {
+        label: '📞 SOFORT anrufen',
+        value: 'call_practice',
+      },
+      {
+        label: '🌐 Dringenden Termin online anfragen',
+        value: 'urgent_online',
+      },
+      { label: '« Zurück', value: 'emergency' },
+    ],
+  },
+
+  call_practice: {
+    id: 'call_practice',
+    trigger: 'call_practice',
+    response: `📞 **Rufen Sie uns JETZT an:**
+
+**Telefon:** [TELEFONNUMMER EINFÜGEN]
+
+**Sprechzeiten:**
+Montag - Freitag: 8:00 - 18:00 Uhr
+
+Schildern Sie am Telefon, dass es dringend ist. Wir finden eine Lösung für Sie!
+
+⚠️ **Außerhalb der Sprechzeiten:**
+Ärztlicher Bereitschaftsdienst: **116 117**`,
+    quickReplies: [
+      { label: 'Doch lieber online anfragen', value: 'urgent_online' },
+      { label: '« Zurück zum Menü', value: 'main_menu' },
+    ],
+  },
+
+  urgent_online: {
+    id: 'urgent_online',
+    trigger: 'urgent_online',
+    response: `🌐 **Dringenden Termin online anfragen**
+
+Bei der Online-Terminbuchung können Sie:
+
+✅ **"Dringender Termin"** als Grund angeben
+✅ Ihre **bevorzugten Zeiten** (auch kurzfristig) auswählen
+✅ Ihr Anliegen genau beschreiben
+
+Unser Praxisteam wird Ihre Anfrage **prioritär bearbeiten** und sich schnellstmöglich bei Ihnen melden!
+
+**Bearbeitungszeit:** In der Regel innerhalb von 1-2 Stunden während der Sprechzeiten.`,
+    quickReplies: [
+      {
+        label: '→ Zur dringenden Terminanfrage',
+        value: 'book_urgent',
+        action: 'navigate',
+        href: '/termine/buchen',
+      },
+      { label: 'Doch lieber anrufen', value: 'call_practice' },
+      { label: '« Zurück', value: 'urgent_appointment' },
     ],
   },
 
@@ -384,6 +468,9 @@ export function findFlowByTrigger(input: string): ChatFlow {
   }
 
   // Keyword-basierte Matches
+  if (normalizedInput.includes('notfall') || normalizedInput.includes('akut') || normalizedInput.includes('dringend') || normalizedInput.includes('sofort')) {
+    return CHAT_FLOWS.emergency;
+  }
   if (normalizedInput.includes('termin') || normalizedInput.includes('buchung')) {
     return CHAT_FLOWS.appointment;
   }
@@ -393,10 +480,7 @@ export function findFlowByTrigger(input: string): ChatFlow {
   if (normalizedInput.includes('öffnung') || normalizedInput.includes('zeit')) {
     return CHAT_FLOWS.opening_hours;
   }
-  if (normalizedInput.includes('notfall') || normalizedInput.includes('akut')) {
-    return CHAT_FLOWS.emergency;
-  }
-  if (normalizedInput.includes('kontakt') || normalizedInput.includes('telefon')) {
+  if (normalizedInput.includes('kontakt') || normalizedInput.includes('telefon') || normalizedInput.includes('anruf')) {
     return CHAT_FLOWS.contact;
   }
 
