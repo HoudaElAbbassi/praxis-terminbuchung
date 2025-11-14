@@ -32,6 +32,8 @@ export async function GET(req: NextRequest) {
               lastName: true,
               email: true,
               phone: true,
+              address: true,
+              dateOfBirth: true,
             },
           },
           appointmentType: true,
@@ -43,18 +45,30 @@ export async function GET(req: NextRequest) {
 
       return NextResponse.json(appointments);
     } else {
-      // If no date provided, show upcoming appointments (from today onwards)
+      // If no date provided, show:
+      // 1. PENDING appointments without a date (new appointment requests)
+      // 2. Upcoming appointments with dates (from today onwards)
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
       const appointments = await prisma.appointment.findMany({
         where: {
-          date: {
-            gte: today,
-          },
-          status: {
-            in: ["PENDING", "CONFIRMED", "COMPLETED"],
-          },
+          OR: [
+            // PENDING appointments without a date (waiting for admin to set time)
+            {
+              status: "PENDING",
+              date: null,
+            },
+            // Appointments with dates >= today
+            {
+              date: {
+                gte: today,
+              },
+              status: {
+                in: ["PENDING", "CONFIRMED", "COMPLETED"],
+              },
+            },
+          ],
         },
         include: {
           user: {
@@ -63,14 +77,18 @@ export async function GET(req: NextRequest) {
               lastName: true,
               email: true,
               phone: true,
+              address: true,
+              dateOfBirth: true,
             },
           },
           appointmentType: true,
         },
-        orderBy: {
-          startTime: "asc",
-        },
-        take: 50, // Limit to 50 upcoming appointments
+        orderBy: [
+          // PENDING appointments without dates first
+          { date: "asc" }, // null dates will come first
+          { startTime: "asc" },
+        ],
+        take: 50, // Limit to 50 appointments
       });
 
       return NextResponse.json(appointments);
