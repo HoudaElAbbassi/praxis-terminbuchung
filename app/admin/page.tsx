@@ -6,18 +6,27 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import AlternativeAppointmentModal from "@/components/AlternativeAppointmentModal";
+import SetAppointmentTimeModal from "@/components/SetAppointmentTimeModal";
 
 type Appointment = {
   id: string;
-  date: string;
-  startTime: string;
-  endTime: string;
+  date: string | null;
+  startTime: string | null;
+  endTime: string | null;
   status: string;
+  preferredDays: string | null;
+  preferredTimeSlots: string | null;
+  insuranceType: string | null;
+  isFirstVisit: boolean | null;
+  reasonForVisit: string | null;
+  notes: string | null;
   user: {
     firstName: string;
     lastName: string;
     email: string;
     phone: string;
+    address: string | null;
+    dateOfBirth: string | null;
   };
   appointmentType: {
     name: string;
@@ -33,6 +42,7 @@ export default function AdminDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({ total: 0, today: 0, upcoming: 0 });
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSetTimeModalOpen, setIsSetTimeModalOpen] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
   const [confirmDialog, setConfirmDialog] = useState<{
     isOpen: boolean;
@@ -187,6 +197,41 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleSetAppointmentTime = (appointment: Appointment) => {
+    setSelectedAppointment(appointment);
+    setIsSetTimeModalOpen(true);
+  };
+
+  const handleSubmitSetTime = async (data: { date: string; time: string }) => {
+    if (!selectedAppointment) return;
+
+    try {
+      const res = await fetch(`/api/admin/appointments/${selectedAppointment.id}/set-time`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          date: data.date,
+          time: data.time,
+        }),
+      });
+
+      const result = await res.json();
+
+      if (res.ok) {
+        alert("Termin erfolgreich festgelegt und E-Mail versendet!");
+        fetchAppointments();
+        fetchStats();
+        setIsSetTimeModalOpen(false);
+        setSelectedAppointment(null);
+      } else {
+        alert(result.error || "Fehler beim Festlegen des Termins");
+      }
+    } catch (error) {
+      console.error("Error setting appointment time:", error);
+      alert("Fehler beim Festlegen des Termins");
+    }
+  };
+
   if (status === "loading" || isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#e8f4f2] via-white to-[#f7fafc]">
@@ -217,6 +262,52 @@ export default function AdminDashboard() {
       month: "long",
       day: "numeric",
     });
+  };
+
+  const translateDays = (days: string | null): string => {
+    if (!days) return "Keine Angabe";
+    try {
+      const parsed = JSON.parse(days);
+      const daysArray = Array.isArray(parsed) ? parsed : [parsed];
+      const translations: Record<string, string> = {
+        MONDAY: "Montag",
+        TUESDAY: "Dienstag",
+        WEDNESDAY: "Mittwoch",
+        THURSDAY: "Donnerstag",
+        FRIDAY: "Freitag",
+        SATURDAY: "Samstag",
+        SUNDAY: "Sonntag"
+      };
+      return daysArray.map(day => translations[day] || day).join(", ");
+    } catch {
+      return days;
+    }
+  };
+
+  const translateTimeSlots = (slots: string | null): string => {
+    if (!slots) return "Keine Angabe";
+    try {
+      const parsed = JSON.parse(slots);
+      const slotsArray = Array.isArray(parsed) ? parsed : [parsed];
+      const translations: Record<string, string> = {
+        morning: "Vormittag (8:00 - 12:00)",
+        afternoon: "Nachmittag (12:00 - 16:00)",
+        evening: "Abend (16:00 - 20:00)"
+      };
+      return slotsArray.map(slot => translations[slot] || slot).join(", ");
+    } catch {
+      return slots;
+    }
+  };
+
+  const translateInsuranceType = (type: string | null): string => {
+    if (!type) return "Keine Angabe";
+    const translations: Record<string, string> = {
+      STATUTORY: "Gesetzlich versichert",
+      PRIVATE: "Privat versichert",
+      SELF_PAYER: "Selbstzahler"
+    };
+    return translations[type] || type;
   };
 
   return (
@@ -366,7 +457,7 @@ export default function AdminDashboard() {
                 (() => {
                   const groupedByDate: { [key: string]: Appointment[] } = {};
                   appointments.forEach(apt => {
-                    const dateKey = apt.date;
+                    const dateKey = apt.date || 'pending';
                     if (!groupedByDate[dateKey]) {
                       groupedByDate[dateKey] = [];
                     }
@@ -380,7 +471,7 @@ export default function AdminDashboard() {
                           <svg className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
                           </svg>
-                          <span className="truncate">{formatDate(dateKey)}</span>
+                          <span className="truncate">{dateKey === 'pending' ? '⏳ Ausstehende Terminanfragen (ohne festes Datum)' : formatDate(dateKey)}</span>
                           <span className="ml-auto bg-white text-[#2c5f7c] px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap">
                             {groupedByDate[dateKey].length} {groupedByDate[dateKey].length === 1 ? 'Termin' : 'Termine'}
                           </span>
@@ -394,9 +485,23 @@ export default function AdminDashboard() {
                   <div className="flex justify-between items-start">
                     <div className="flex-1">
                       <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-3">
-                        <span className="text-base sm:text-lg font-bold text-[#2c5f7c]">
-                          {formatTime(appointment.startTime)} - {formatTime(appointment.endTime)}
-                        </span>
+                        {appointment.status === "PENDING" && !appointment.startTime ? (
+                          <div className="flex flex-col gap-1">
+                            <span className="text-xs text-gray-600 font-medium">Terminpräferenzen:</span>
+                            <div className="flex flex-wrap gap-2">
+                              <span className="text-sm font-semibold text-[#2c5f7c] bg-blue-50 px-2 py-1 rounded">
+                                📅 {translateDays(appointment.preferredDays)}
+                              </span>
+                              <span className="text-sm font-semibold text-[#4a9d8f] bg-green-50 px-2 py-1 rounded">
+                                🕐 {translateTimeSlots(appointment.preferredTimeSlots)}
+                              </span>
+                            </div>
+                          </div>
+                        ) : (
+                          <span className="text-base sm:text-lg font-bold text-[#2c5f7c]">
+                            {appointment.startTime && appointment.endTime ? `${formatTime(appointment.startTime)} - ${formatTime(appointment.endTime)}` : 'Zeit wird festgelegt'}
+                          </span>
+                        )}
                         <span className={`px-3 sm:px-4 py-1 sm:py-1.5 text-xs sm:text-sm font-semibold rounded-full self-start ${
                           appointment.status === "PENDING" ? "bg-yellow-100 text-yellow-800 border border-yellow-300" :
                           appointment.status === "CONFIRMED" ? "bg-green-100 text-green-800 border border-green-300" :
@@ -445,29 +550,48 @@ export default function AdminDashboard() {
                           </svg>
                           <span className="font-medium">Dauer:</span> {appointment.appointmentType.duration} Min
                         </p>
+                        <p className="flex items-center gap-2">
+                          <svg className="w-3 h-3 sm:w-4 sm:h-4 text-[#4a9d8f] flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clipRule="evenodd" />
+                          </svg>
+                          <span className="font-medium">Versicherung:</span> {translateInsuranceType(appointment.insuranceType)}
+                        </p>
+                        <p className="flex items-center gap-2">
+                          <svg className="w-3 h-3 sm:w-4 sm:h-4 text-[#4a9d8f] flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+                            <path fillRule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clipRule="evenodd" />
+                          </svg>
+                          <span className="font-medium">Art:</span> {appointment.isFirstVisit ? '🆕 Ersttermin' : '🔄 Folgetermin'}
+                        </p>
+                        {appointment.reasonForVisit && (
+                          <p className="flex items-start gap-2">
+                            <svg className="w-3 h-3 sm:w-4 sm:h-4 text-[#4a9d8f] flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
+                            </svg>
+                            <span className="font-medium">Grund:</span> <span>{appointment.reasonForVisit}</span>
+                          </p>
+                        )}
+                        {appointment.notes && (
+                          <p className="flex items-start gap-2">
+                            <svg className="w-3 h-3 sm:w-4 sm:h-4 text-[#4a9d8f] flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H6z" clipRule="evenodd" />
+                            </svg>
+                            <span className="font-medium">Notizen:</span> <span>{appointment.notes}</span>
+                          </p>
+                        )}
                       </div>
 
                       {/* Action Buttons */}
                       {appointment.status === "PENDING" && (
                         <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                           <button
-                            onClick={() => openConfirmDialog(appointment.id, "CONFIRMED")}
+                            onClick={() => handleSetAppointmentTime(appointment)}
                             className="flex-1 bg-[#4a9d8f] hover:bg-[#3d8378] active:bg-[#3d8378] text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-1.5 sm:gap-2 text-sm sm:text-base touch-manipulation"
                           >
                             <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                              <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
                             </svg>
-                            Annehmen
-                          </button>
-                          <button
-                            onClick={() => handleAlternativeAppointment(appointment)}
-                            className="flex-1 bg-[#2c5f7c] hover:bg-[#1f4459] active:bg-[#1f4459] text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-1.5 sm:gap-2 text-sm sm:text-base touch-manipulation"
-                          >
-                            <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                            <span className="hidden xs:inline">Alternativvorschlag</span>
-                            <span className="xs:hidden">Alternative</span>
+                            Termin festlegen
                           </button>
                           <button
                             onClick={() => openConfirmDialog(appointment.id, "CANCELLED")}
@@ -514,9 +638,23 @@ export default function AdminDashboard() {
                     <div className="flex justify-between items-start">
                       <div className="flex-1">
                         <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-3">
-                          <span className="text-base sm:text-lg font-bold text-[#2c5f7c]">
-                            {formatTime(appointment.startTime)} - {formatTime(appointment.endTime)}
-                          </span>
+                          {appointment.status === "PENDING" && !appointment.startTime ? (
+                            <div className="flex flex-col gap-1">
+                              <span className="text-xs text-gray-600 font-medium">Terminpräferenzen:</span>
+                              <div className="flex flex-wrap gap-2">
+                                <span className="text-sm font-semibold text-[#2c5f7c] bg-blue-50 px-2 py-1 rounded">
+                                  📅 {translateDays(appointment.preferredDays)}
+                                </span>
+                                <span className="text-sm font-semibold text-[#4a9d8f] bg-green-50 px-2 py-1 rounded">
+                                  🕐 {translateTimeSlots(appointment.preferredTimeSlots)}
+                                </span>
+                              </div>
+                            </div>
+                          ) : (
+                            <span className="text-base sm:text-lg font-bold text-[#2c5f7c]">
+                              {appointment.startTime && appointment.endTime ? `${formatTime(appointment.startTime)} - ${formatTime(appointment.endTime)}` : 'Zeit wird festgelegt'}
+                            </span>
+                          )}
                           <span className={`px-3 sm:px-4 py-1 sm:py-1.5 text-xs sm:text-sm font-semibold rounded-full self-start ${
                             appointment.status === "PENDING" ? "bg-yellow-100 text-yellow-800 border border-yellow-300" :
                             appointment.status === "CONFIRMED" ? "bg-green-100 text-green-800 border border-green-300" :
@@ -565,29 +703,48 @@ export default function AdminDashboard() {
                             </svg>
                             <span className="font-medium">Dauer:</span> {appointment.appointmentType.duration} Min
                           </p>
+                          <p className="flex items-center gap-2">
+                            <svg className="w-3 h-3 sm:w-4 sm:h-4 text-[#4a9d8f] flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clipRule="evenodd" />
+                            </svg>
+                            <span className="font-medium">Versicherung:</span> {translateInsuranceType(appointment.insuranceType)}
+                          </p>
+                          <p className="flex items-center gap-2">
+                            <svg className="w-3 h-3 sm:w-4 sm:h-4 text-[#4a9d8f] flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+                              <path fillRule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clipRule="evenodd" />
+                            </svg>
+                            <span className="font-medium">Art:</span> {appointment.isFirstVisit ? '🆕 Ersttermin' : '🔄 Folgetermin'}
+                          </p>
+                          {appointment.reasonForVisit && (
+                            <p className="flex items-start gap-2">
+                              <svg className="w-3 h-3 sm:w-4 sm:h-4 text-[#4a9d8f] flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
+                              </svg>
+                              <span className="font-medium">Grund:</span> <span>{appointment.reasonForVisit}</span>
+                            </p>
+                          )}
+                          {appointment.notes && (
+                            <p className="flex items-start gap-2">
+                              <svg className="w-3 h-3 sm:w-4 sm:h-4 text-[#4a9d8f] flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H6z" clipRule="evenodd" />
+                              </svg>
+                              <span className="font-medium">Notizen:</span> <span>{appointment.notes}</span>
+                            </p>
+                          )}
                         </div>
 
                         {/* Action Buttons */}
                         {appointment.status === "PENDING" && (
                           <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                             <button
-                              onClick={() => openConfirmDialog(appointment.id, "CONFIRMED")}
+                              onClick={() => handleSetAppointmentTime(appointment)}
                               className="flex-1 bg-[#4a9d8f] hover:bg-[#3d8378] active:bg-[#3d8378] text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-1.5 sm:gap-2 text-sm sm:text-base touch-manipulation"
                             >
                               <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
                               </svg>
-                              Annehmen
-                            </button>
-                            <button
-                              onClick={() => handleAlternativeAppointment(appointment)}
-                              className="flex-1 bg-[#2c5f7c] hover:bg-[#1f4459] active:bg-[#1f4459] text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-1.5 sm:gap-2 text-sm sm:text-base touch-manipulation"
-                            >
-                              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                              </svg>
-                              <span className="hidden xs:inline">Alternativvorschlag</span>
-                              <span className="xs:hidden">Alternative</span>
+                              Termin festlegen
                             </button>
                             <button
                               onClick={() => openConfirmDialog(appointment.id, "CANCELLED")}
@@ -637,8 +794,24 @@ export default function AdminDashboard() {
           }}
           onSubmit={handleSubmitAlternative}
           appointmentId={selectedAppointment.id}
-          currentDate={selectedAppointment.date}
-          currentTime={formatTime(selectedAppointment.startTime)}
+          currentDate={selectedAppointment.date || ''}
+          currentTime={selectedAppointment.startTime ? formatTime(selectedAppointment.startTime) : ''}
+        />
+      )}
+
+      {/* Set Appointment Time Modal */}
+      {selectedAppointment && (
+        <SetAppointmentTimeModal
+          isOpen={isSetTimeModalOpen}
+          onClose={() => {
+            setIsSetTimeModalOpen(false);
+            setSelectedAppointment(null);
+          }}
+          onSubmit={handleSubmitSetTime}
+          appointmentId={selectedAppointment.id}
+          preferredDays={selectedAppointment.preferredDays}
+          preferredTimeSlots={selectedAppointment.preferredTimeSlots}
+          patientName={`${selectedAppointment.user.firstName} ${selectedAppointment.user.lastName}`}
         />
       )}
 
