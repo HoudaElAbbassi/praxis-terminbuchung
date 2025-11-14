@@ -69,10 +69,18 @@ export async function PATCH(
       doctorName: "Dr. med. Abdelkarim Alyandouzi",
     };
 
-    if (status === "CONFIRMED") {
-      await sendAppointmentConfirmedEmail(emailData);
-    } else if (status === "CANCELLED") {
-      await sendAppointmentRejectedEmail(emailData);
+    // Send email notifications (non-blocking)
+    try {
+      if (status === "CONFIRMED") {
+        await sendAppointmentConfirmedEmail(emailData);
+        console.log('✅ Appointment confirmation email sent successfully');
+      } else if (status === "CANCELLED") {
+        await sendAppointmentRejectedEmail(emailData);
+        console.log('✅ Appointment cancellation email sent successfully');
+      }
+    } catch (emailError) {
+      console.error('⚠️ Failed to send status change email:', emailError);
+      // Continue - status change is still valid even if email fails
     }
 
     return NextResponse.json(appointment);

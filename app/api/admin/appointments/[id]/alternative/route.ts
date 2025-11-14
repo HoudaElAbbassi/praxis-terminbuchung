@@ -70,27 +70,35 @@ export async function POST(
       day: "numeric",
     });
 
-    // Send alternative appointment email
-    const emailResult = await sendAlternativeAppointmentEmail({
-      patientName: `${appointment.user.firstName} ${appointment.user.lastName}`,
-      patientEmail: appointment.user.email,
-      date: originalDate,
-      time: originalTime,
-      appointmentType: appointment.appointmentType.name,
-      alternativeDate: altDate,
-      alternativeTime: alternativeTime,
-      reason: reason,
-    });
+    // Send alternative appointment email (non-blocking)
+    let emailSent = false;
+    try {
+      const emailResult = await sendAlternativeAppointmentEmail({
+        patientName: `${appointment.user.firstName} ${appointment.user.lastName}`,
+        patientEmail: appointment.user.email,
+        date: originalDate,
+        time: originalTime,
+        appointmentType: appointment.appointmentType.name,
+        alternativeDate: altDate,
+        alternativeTime: alternativeTime,
+        reason: reason,
+      });
 
-    if (!emailResult.success) {
-      console.error("Failed to send alternative appointment email:", emailResult.error);
-      // Don't fail the request if email fails, but log it
+      if (emailResult.success) {
+        console.log('✅ Alternative appointment email sent successfully');
+        emailSent = true;
+      } else {
+        console.error("⚠️ Failed to send alternative appointment email:", emailResult.error);
+      }
+    } catch (emailError) {
+      console.error("⚠️ Error sending alternative appointment email:", emailError);
+      // Continue - alternative suggestion is still valid even if email fails
     }
 
     return NextResponse.json({
       success: true,
-      message: "Alternative appointment suggested and email sent",
-      emailSent: emailResult.success,
+      message: "Alternative appointment suggested",
+      emailSent: emailSent,
     });
   } catch (error) {
     console.error("Error suggesting alternative appointment:", error);

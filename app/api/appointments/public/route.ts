@@ -121,11 +121,22 @@ export async function POST(request: Request) {
       appointmentType: `${appointment.appointmentType.name} (${appointment.isFirstVisit ? 'Ersttermin' : 'Folgetermin'})`,
     };
 
-    // Send confirmation email to patient
-    await sendNewAppointmentNotification(emailData);
+    // Send email notifications (non-blocking - appointment succeeds even if emails fail)
+    try {
+      await sendNewAppointmentNotification(emailData);
+      console.log('✅ Patient notification email sent successfully');
+    } catch (emailError) {
+      console.error('⚠️ Failed to send patient notification email:', emailError);
+      // Continue - appointment is still valid even if email fails
+    }
 
-    // Send notification to practice
-    await sendNewAppointmentNotificationToPractice(emailData);
+    try {
+      await sendNewAppointmentNotificationToPractice(emailData);
+      console.log('✅ Practice notification email sent successfully');
+    } catch (emailError) {
+      console.error('⚠️ Failed to send practice notification email:', emailError);
+      // Continue - appointment is still valid even if email fails
+    }
 
     return NextResponse.json({
       success: true,

@@ -100,23 +100,34 @@ export async function POST(req: NextRequest) {
       minute: "2-digit",
     });
 
-    // Send email notification to patient
-    await sendNewAppointmentNotification({
-      patientName: `${appointment.user.firstName} ${appointment.user.lastName}`,
-      patientEmail: appointment.user.email,
-      date: formattedDate,
-      time: formattedTime,
-      appointmentType: appointment.appointmentType.name,
-    });
+    // Send email notifications (non-blocking - appointment succeeds even if emails fail)
+    try {
+      await sendNewAppointmentNotification({
+        patientName: `${appointment.user.firstName} ${appointment.user.lastName}`,
+        patientEmail: appointment.user.email,
+        date: formattedDate,
+        time: formattedTime,
+        appointmentType: appointment.appointmentType.name,
+      });
+      console.log('✅ Patient notification email sent successfully');
+    } catch (emailError) {
+      console.error('⚠️ Failed to send patient notification email:', emailError);
+      // Continue - appointment is still valid even if email fails
+    }
 
-    // Send email notification to practice
-    await sendNewAppointmentNotificationToPractice({
-      patientName: `${appointment.user.firstName} ${appointment.user.lastName}`,
-      patientEmail: appointment.user.email,
-      date: formattedDate,
-      time: formattedTime,
-      appointmentType: appointment.appointmentType.name,
-    });
+    try {
+      await sendNewAppointmentNotificationToPractice({
+        patientName: `${appointment.user.firstName} ${appointment.user.lastName}`,
+        patientEmail: appointment.user.email,
+        date: formattedDate,
+        time: formattedTime,
+        appointmentType: appointment.appointmentType.name,
+      });
+      console.log('✅ Practice notification email sent successfully');
+    } catch (emailError) {
+      console.error('⚠️ Failed to send practice notification email:', emailError);
+      // Continue - appointment is still valid even if email fails
+    }
 
     return NextResponse.json(appointment, { status: 201 });
   } catch (error) {
