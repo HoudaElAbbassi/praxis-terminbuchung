@@ -44,7 +44,8 @@ export async function sendAppointmentConfirmedEmail(data: AppointmentEmailData) 
             <style>
               body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
               .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-              .header { background: linear-gradient(135deg, #2c5f7c 0%, #4a9d8f 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+              .header { background: linear-gradient(135deg, #006BA6 0%, #005a8c 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+              .header h1 { color: white; margin: 0; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
               .content { background: #f7fafc; padding: 30px; border-radius: 0 0 10px 10px; }
               .appointment-details { background: white; padding: 20px; border-radius: 8px; border-left: 4px solid #2c5f7c; margin: 20px 0; }
               .button { display: inline-block; padding: 12px 30px; background: #2c5f7c; color: white; text-decoration: none; border-radius: 6px; margin: 20px 0; }
@@ -54,7 +55,7 @@ export async function sendAppointmentConfirmedEmail(data: AppointmentEmailData) 
           <body>
             <div class="container">
               <div class="header">
-                <h1 style="margin: 0;">✓ Termin bestätigt</h1>
+                <h1>✓ Termin bestätigt</h1>
               </div>
               <div class="content">
                 <p>Sehr geehrte/r ${data.patientName},</p>
@@ -115,6 +116,7 @@ export async function sendAppointmentRejectedEmail(data: AppointmentEmailData) {
               body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
               .container { max-width: 600px; margin: 0 auto; padding: 20px; }
               .header { background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+              .header h1 { color: white; margin: 0; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
               .content { background: #f7fafc; padding: 30px; border-radius: 0 0 10px 10px; }
               .appointment-details { background: white; padding: 20px; border-radius: 8px; border-left: 4px solid #dc2626; margin: 20px 0; }
               .button { display: inline-block; padding: 12px 30px; background: #2c5f7c; color: white; text-decoration: none; border-radius: 6px; margin: 20px 0; }
@@ -124,7 +126,7 @@ export async function sendAppointmentRejectedEmail(data: AppointmentEmailData) {
           <body>
             <div class="container">
               <div class="header">
-                <h1 style="margin: 0;">Terminabsage</h1>
+                <h1>Terminabsage</h1>
               </div>
               <div class="content">
                 <p>Sehr geehrte/r ${data.patientName},</p>
@@ -187,6 +189,7 @@ export async function sendAlternativeAppointmentEmail(data: AppointmentEmailData
               body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
               .container { max-width: 600px; margin: 0 auto; padding: 20px; }
               .header { background: linear-gradient(135deg, #4a9d8f 0%, #2c5f7c 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+              .header h1 { color: white; margin: 0; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
               .content { background: #f7fafc; padding: 30px; border-radius: 0 0 10px 10px; }
               .appointment-box { background: white; padding: 20px; border-radius: 8px; margin: 20px 0; }
               .original { border-left: 4px solid #dc2626; }
@@ -198,7 +201,7 @@ export async function sendAlternativeAppointmentEmail(data: AppointmentEmailData
           <body>
             <div class="container">
               <div class="header">
-                <h1 style="margin: 0;">📅 Alternativtermin vorgeschlagen</h1>
+                <h1>📅 Alternativtermin vorgeschlagen</h1>
               </div>
               <div class="content">
                 <p>Sehr geehrte/r ${data.patientName},</p>
@@ -265,7 +268,8 @@ export async function sendNewAppointmentNotificationToPractice(data: Appointment
             <style>
               body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
               .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-              .header { background: linear-gradient(135deg, #2c5f7c 0%, #4a9d8f 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+              .header { background: linear-gradient(135deg, #006BA6 0%, #005a8c 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+              .header h1 { color: white; margin: 0; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
               .content { background: #f7fafc; padding: 30px; border-radius: 0 0 10px 10px; }
               .appointment-details { background: white; padding: 20px; border-radius: 8px; border-left: 4px solid #4a9d8f; margin: 20px 0; }
               .patient-info { background: white; padding: 20px; border-radius: 8px; border-left: 4px solid #2c5f7c; margin: 20px 0; }
@@ -275,7 +279,7 @@ export async function sendNewAppointmentNotificationToPractice(data: Appointment
           <body>
             <div class="container">
               <div class="header">
-                <h1 style="margin: 0;">🔔 Neue Terminanfrage</h1>
+                <h1>🔔 Neue Terminanfrage</h1>
               </div>
               <div class="content">
                 <p><strong>Es liegt eine neue Terminanfrage vor, die bestätigt werden muss.</strong></p>
@@ -334,7 +338,8 @@ export async function sendNewAppointmentNotification(data: AppointmentEmailData)
             <style>
               body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
               .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-              .header { background: linear-gradient(135deg, #2c5f7c 0%, #4a9d8f 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+              .header { background: linear-gradient(135deg, #006BA6 0%, #005a8c 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+              .header h1 { color: white; margin: 0; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
               .content { background: #f7fafc; padding: 30px; border-radius: 0 0 10px 10px; }
               .appointment-details { background: white; padding: 20px; border-radius: 8px; border-left: 4px solid #4a9d8f; margin: 20px 0; }
               .footer { text-align: center; margin-top: 30px; color: #666; font-size: 14px; }
@@ -343,7 +348,7 @@ export async function sendNewAppointmentNotification(data: AppointmentEmailData)
           <body>
             <div class="container">
               <div class="header">
-                <h1 style="margin: 0;">📋 Terminanfrage erhalten</h1>
+                <h1>📋 Terminanfrage erhalten</h1>
               </div>
               <div class="content">
                 <p>Sehr geehrte/r ${data.patientName},</p>
