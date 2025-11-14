@@ -287,9 +287,9 @@ export async function sendNewAppointmentNotificationToPractice(data: Appointment
                 </div>
 
                 <div class="appointment-details">
-                  <h3 style="color: #4a9d8f; margin-top: 0;">Gewünschter Termin:</h3>
-                  <p><strong>Datum:</strong> ${data.date}</p>
-                  <p><strong>Uhrzeit:</strong> ${data.time} Uhr</p>
+                  <h3 style="color: #4a9d8f; margin-top: 0;">Terminpräferenzen:</h3>
+                  <p><strong>Bevorzugte Tage:</strong> ${data.date}</p>
+                  <p><strong>Bevorzugte Uhrzeit:</strong> ${data.time}</p>
                   <p><strong>Terminart:</strong> ${data.appointmentType}</p>
                 </div>
 
@@ -351,9 +351,9 @@ export async function sendNewAppointmentNotification(data: AppointmentEmailData)
                 <p>vielen Dank für Ihre Terminanfrage. Wir haben Ihre Anfrage erhalten und werden diese zeitnah prüfen.</p>
 
                 <div class="appointment-details">
-                  <h3 style="color: #4a9d8f; margin-top: 0;">Gewünschter Termin:</h3>
-                  <p><strong>Datum:</strong> ${data.date}</p>
-                  <p><strong>Uhrzeit:</strong> ${data.time} Uhr</p>
+                  <h3 style="color: #4a9d8f; margin-top: 0;">Terminpräferenzen:</h3>
+                  <p><strong>Bevorzugte Tage:</strong> ${data.date}</p>
+                  <p><strong>Bevorzugte Uhrzeit:</strong> ${data.time}</p>
                   <p><strong>Terminart:</strong> ${data.appointmentType}</p>
                 </div>
 

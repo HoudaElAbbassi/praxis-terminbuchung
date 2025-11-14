@@ -104,19 +104,51 @@ export async function POST(request: Request) {
       },
     });
 
-    // Send email notifications
-    const preferredTimeSlotsText = Array.isArray(appointment.preferredTimeSlots)
-      ? appointment.preferredTimeSlots.join(", ")
-      : (appointment.preferredTimeSlots || "Keine Präferenz angegeben");
+    // Send email notifications with formatted preferences
+    // Helper function to translate and format preferences
+    const translateDays = (days: string | null): string => {
+      if (!days) return "Keine Präferenz";
+      try {
+        const parsed = JSON.parse(days);
+        const daysArray = Array.isArray(parsed) ? parsed : [parsed];
+        const translations: Record<string, string> = {
+          MONDAY: "Montag",
+          TUESDAY: "Dienstag",
+          WEDNESDAY: "Mittwoch",
+          THURSDAY: "Donnerstag",
+          FRIDAY: "Freitag",
+          SATURDAY: "Samstag",
+          SUNDAY: "Sonntag"
+        };
+        return daysArray.map(day => translations[day] || day).join(", ");
+      } catch {
+        return days;
+      }
+    };
 
-    const preferredDaysText = Array.isArray(appointment.preferredDays)
-      ? appointment.preferredDays.join(", ")
-      : (appointment.preferredDays || "Keine Präferenz angegeben");
+    const translateTimeSlots = (slots: string | null): string => {
+      if (!slots) return "Keine Präferenz";
+      try {
+        const parsed = JSON.parse(slots);
+        const slotsArray = Array.isArray(parsed) ? parsed : [parsed];
+        const translations: Record<string, string> = {
+          morning: "Vormittag (8:00 - 12:00)",
+          afternoon: "Nachmittag (12:00 - 16:00)",
+          evening: "Abend (16:00 - 20:00)"
+        };
+        return slotsArray.map(slot => translations[slot] || slot).join(", ");
+      } catch {
+        return slots;
+      }
+    };
+
+    const preferredDaysText = translateDays(appointment.preferredDays);
+    const preferredTimeSlotsText = translateTimeSlots(appointment.preferredTimeSlots);
 
     const emailData = {
       patientName: `${appointment.user.firstName} ${appointment.user.lastName}`,
       patientEmail: appointment.user.email,
-      date: `Präferenz: ${preferredDaysText}`,
+      date: preferredDaysText,
       time: preferredTimeSlotsText,
       appointmentType: `${appointment.appointmentType.name} (${appointment.isFirstVisit ? 'Ersttermin' : 'Folgetermin'})`,
     };
