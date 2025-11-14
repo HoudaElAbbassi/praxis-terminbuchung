@@ -1,10 +1,19 @@
-import { Resend } from 'resend';
+import nodemailer from 'nodemailer';
 
-// Initialize Resend with API key (or empty string for build time)
-const resend = new Resend(process.env.RESEND_API_KEY || 'dummy-key-for-build');
+// Create reusable transporter for Strato SMTP
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST || 'smtp.strato.de',
+  port: parseInt(process.env.SMTP_PORT || '587'),
+  secure: process.env.SMTP_SECURE === 'true', // true for 465, false for other ports
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASSWORD,
+  },
+});
 
 // Default sender email
-const FROM_EMAIL = process.env.EMAIL_FROM || 'noreply@praxis-remscheid.de';
+const FROM_EMAIL = process.env.EMAIL_FROM || 'info@praxis-remscheid.de';
+const FROM_NAME = 'Praxis für Gefäßmedizin Remscheid';
 
 export interface AppointmentEmailData {
   patientName: string;
@@ -23,8 +32,8 @@ export interface AppointmentEmailData {
  */
 export async function sendAppointmentConfirmedEmail(data: AppointmentEmailData) {
   try {
-    await resend.emails.send({
-      from: FROM_EMAIL,
+    await transporter.sendMail({
+      from: `${FROM_NAME} <${FROM_EMAIL}>`,
       to: data.patientEmail,
       subject: 'Terminbestätigung - Praxis für Gefäßmedizin Remscheid',
       html: `
@@ -93,8 +102,8 @@ export async function sendAppointmentConfirmedEmail(data: AppointmentEmailData) 
  */
 export async function sendAppointmentRejectedEmail(data: AppointmentEmailData) {
   try {
-    await resend.emails.send({
-      from: FROM_EMAIL,
+    await transporter.sendMail({
+      from: `${FROM_NAME} <${FROM_EMAIL}>`,
       to: data.patientEmail,
       subject: 'Terminabsage - Praxis für Gefäßmedizin Remscheid',
       html: `
@@ -165,8 +174,8 @@ export async function sendAlternativeAppointmentEmail(data: AppointmentEmailData
   }
 
   try {
-    await resend.emails.send({
-      from: FROM_EMAIL,
+    await transporter.sendMail({
+      from: `${FROM_NAME} <${FROM_EMAIL}>`,
       to: data.patientEmail,
       subject: 'Alternativvorschlag für Ihren Termin - Praxis für Gefäßmedizin Remscheid',
       html: `
@@ -241,11 +250,11 @@ export async function sendAlternativeAppointmentEmail(data: AppointmentEmailData
  * Send email notification to practice staff when new appointment is booked
  */
 export async function sendNewAppointmentNotificationToPractice(data: AppointmentEmailData) {
-  const PRACTICE_EMAIL = 'info@gefaessmedizinremscheid.de';
+  const PRACTICE_EMAIL = process.env.PRACTICE_EMAIL || 'info@gefaessmedizinremscheid.de';
 
   try {
-    await resend.emails.send({
-      from: FROM_EMAIL,
+    await transporter.sendMail({
+      from: `${FROM_NAME} <${FROM_EMAIL}>`,
       to: PRACTICE_EMAIL,
       subject: `Neue Terminanfrage von ${data.patientName}`,
       html: `
@@ -313,8 +322,8 @@ export async function sendNewAppointmentNotificationToPractice(data: Appointment
  */
 export async function sendNewAppointmentNotification(data: AppointmentEmailData) {
   try {
-    await resend.emails.send({
-      from: FROM_EMAIL,
+    await transporter.sendMail({
+      from: `${FROM_NAME} <${FROM_EMAIL}>`,
       to: data.patientEmail,
       subject: 'Terminanfrage erhalten - Praxis für Gefäßmedizin Remscheid',
       html: `
