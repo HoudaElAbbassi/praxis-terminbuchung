@@ -118,7 +118,7 @@ export async function PATCH(
         date: formattedDate,
         time: formattedTime,
         appointmentType: updatedAppointment.appointmentType.name,
-        doctorName: "Dr. med. Abdelkarim Alyandouzi",
+        doctorName: "Abdelkarim Alyandouzi",
       });
       console.log('✅ Appointment confirmation email sent successfully');
     } catch (emailError) {

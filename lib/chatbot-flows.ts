@@ -99,7 +99,7 @@ Einen Moment bitte...`,
 
 Bitte kontaktieren Sie uns telefonisch oder per E-Mail:
 
-📞 **Telefon:** [TELEFONNUMMER EINFÜGEN]
+📞 **Telefon:** 02191 6917400
 ✉️ **E-Mail:** info@praxis-remscheid.de
 
 **Sprechzeiten:**
@@ -242,7 +242,7 @@ Nach Vereinbarung
     response: `🚗 **Anfahrt & Parken:**
 
 **Adresse:**
-[ADRESSE EINFÜGEN]
+Ärztehaus Remscheid
 Remscheid
 
 **Parkmöglichkeiten:**
@@ -360,7 +360,7 @@ Für einen kurzfristigen Termin haben Sie folgende Möglichkeiten:`,
     trigger: 'call_practice',
     response: `📞 **Rufen Sie uns JETZT an:**
 
-**Telefon:** [TELEFONNUMMER EINFÜGEN]
+**Telefon:** 02191 6917400
 
 **Sprechzeiten:**
 Montag - Freitag: 8:00 - 18:00 Uhr
@@ -409,14 +409,14 @@ Unser Praxisteam wird Ihre Anfrage **prioritär bearbeiten** und sich schnellstm
     trigger: 'contact',
     response: `📞 **Kontaktmöglichkeiten:**
 
-**Telefon:** [TELEFONNUMMER EINFÜGEN]
+**Telefon:** 02191 6917400
 **E-Mail:** info@praxis-remscheid.de
 
 **Sprechzeiten:**
 Mo-Fr: 8:00 - 18:00 Uhr
 
 **Adresse:**
-[ADRESSE EINFÜGEN]
+Ärztehaus Remscheid
 Remscheid
 
 Sie können uns auch über unser Kontaktformular erreichen.`,

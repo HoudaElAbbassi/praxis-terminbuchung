@@ -10,10 +10,9 @@ export default function Footer() {
             <h3 className="text-lg font-semibold mb-4">Kontakt</h3>
             <p className="text-gray-300 text-sm">
               Praxis für Gefäßmedizin Remscheid<br />
-              Dr. med. Abdelkarim Alyandouzi<br />
-              [Straße und Hausnummer] [BITTE ANPASSEN]<br />
+              Abdelkarim Alyandouzi<br />
               Ärztehaus Remscheid<br />
-              [PLZ] Remscheid [BITTE ANPASSEN]
+              Remscheid
             </p>
             <p className="text-gray-300 text-sm mt-3">
               Tel: 02191 6917400<br />

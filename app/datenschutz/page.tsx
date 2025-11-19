@@ -92,10 +92,9 @@ export default function DatenschutzPage() {
                   <p className="mb-2 font-semibold">Verantwortlicher im Sinne der Datenschutz-Grundverordnung:</p>
                   <div className="bg-primary-50 p-6 rounded-lg border-l-4 border-primary-500 mb-4">
                     <p className="font-semibold">Praxis für Gefäßmedizin Remscheid</p>
-                    <p>Dr. med. Abdelkarim Alyandouzi</p>
-                    <p>[Straße und Hausnummer]</p>
+                    <p>Abdelkarim Alyandouzi</p>
                     <p>Ärztehaus Remscheid</p>
-                    <p>[PLZ] Remscheid</p>
+                    <p>Remscheid</p>
                     <p className="mt-3">
                       <strong>Telefon:</strong> 02191 6917400<br />
                       <strong>Fax:</strong> 02191 4694938<br />
@@ -319,7 +318,7 @@ export default function DatenschutzPage() {
                   </p>
                   <div className="bg-primary-50 p-6 rounded-lg border-l-4 border-primary-500">
                     <p className="font-semibold">Praxis für Gefäßmedizin Remscheid</p>
-                    <p>Dr. med. Abdelkarim Alyandouzi</p>
+                    <p>Abdelkarim Alyandouzi</p>
                     <p className="mt-3">
                       <strong>Telefon:</strong> 02191 6917400<br />
                       <strong>E-Mail:</strong> info@praxis-remscheid.de

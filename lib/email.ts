@@ -83,7 +83,7 @@ export async function sendAppointmentConfirmedEmail(data: AppointmentEmailData) 
 
                 <div class="footer">
                   <p>Praxis für Gefäßmedizin Remscheid<br>
-                  Dr. med. Abdelkarim Alyandouzi</p>
+                  Abdelkarim Alyandouzi</p>
                 </div>
               </div>
             </div>
@@ -152,7 +152,7 @@ export async function sendAppointmentRejectedEmail(data: AppointmentEmailData) {
 
                 <div class="footer">
                   <p>Praxis für Gefäßmedizin Remscheid<br>
-                  Dr. med. Abdelkarim Alyandouzi</p>
+                  Abdelkarim Alyandouzi</p>
                 </div>
               </div>
             </div>
@@ -374,7 +374,7 @@ export async function sendNewAppointmentNotification(data: AppointmentEmailData)
 
                 <div class="footer">
                   <p>Praxis für Gefäßmedizin Remscheid<br>
-                  Dr. med. Abdelkarim Alyandouzi</p>
+                  Abdelkarim Alyandouzi</p>
                 </div>
               </div>
             </div>

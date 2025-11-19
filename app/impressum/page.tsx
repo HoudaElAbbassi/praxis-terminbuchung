@@ -31,10 +31,9 @@ export default function ImpressumPage() {
             <section>
               <h2 className="text-2xl font-semibold text-gray-900 mb-3">Angaben gemäß § 5 TMG</h2>
               <p className="font-medium text-lg">Praxis für Gefäßmedizin Remscheid</p>
-              <p>Inhaber: Dr. med. Abdelkarim Alyandouzi</p>
-              <p>[Straße und Hausnummer] [BITTE ANPASSEN]</p>
+              <p>Inhaber: Abdelkarim Alyandouzi</p>
               <p>Ärztehaus Remscheid</p>
-              <p>[PLZ] Remscheid [BITTE ANPASSEN]</p>
+              <p>Remscheid</p>
             </section>
 
             <section>
@@ -88,7 +87,7 @@ export default function ImpressumPage() {
               <p>
                 Umsatzsteuer-Identifikationsnummer gemäß §27a Umsatzsteuergesetz:
               </p>
-              <p>[DE XXXXXXXXX] [BITTE ANPASSEN - falls vorhanden]</p>
+              <p>Auf Anfrage</p>
             </section>
 
             <section>
@@ -96,11 +95,10 @@ export default function ImpressumPage() {
               <p>
                 Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:
               </p>
-              <p className="mt-2">Dr. med. Abdelkarim Alyandouzi</p>
+              <p className="mt-2">Abdelkarim Alyandouzi</p>
               <p>Praxis für Gefäßmedizin Remscheid</p>
-              <p>[Straße und Hausnummer] [BITTE ANPASSEN]</p>
               <p>Ärztehaus Remscheid</p>
-              <p>[PLZ] Remscheid [BITTE ANPASSEN]</p>
+              <p>Remscheid</p>
             </section>
 
             <section>
