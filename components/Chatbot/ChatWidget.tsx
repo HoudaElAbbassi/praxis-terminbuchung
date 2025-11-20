@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useChatbot } from '@/hooks/useChatbot';
 import ChatWindow from './ChatWindow';
 
@@ -14,13 +15,26 @@ export default function ChatWidget() {
     handleQuickReply,
   } = useChatbot();
 
+  // Animation nur für 3 Sekunden beim ersten Laden
+  const [showAnimation, setShowAnimation] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowAnimation(false);
+    }, 3000); // Nach 3 Sekunden Animation stoppen
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <>
       {/* Floating Chat Button */}
       {!isOpen && (
         <button
           onClick={openChat}
-          className="fixed bottom-6 right-6 w-16 h-16 bg-gradient-to-br from-[#2c5f7c] to-[#4a9d8f] text-white rounded-full shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 flex items-center justify-center z-50 group animate-bounce"
+          className={`fixed bottom-6 right-6 w-16 h-16 bg-gradient-to-br from-[#2c5f7c] to-[#4a9d8f] text-white rounded-full shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 flex items-center justify-center z-50 group ${
+            showAnimation ? 'animate-bounce' : ''
+          }`}
           aria-label="Chat öffnen"
         >
           {/* Icon */}
@@ -38,8 +52,10 @@ export default function ChatWidget() {
             />
           </svg>
 
-          {/* Pulse Animation */}
-          <span className="absolute inline-flex h-full w-full rounded-full bg-[#4a9d8f] opacity-75 animate-ping" />
+          {/* Pulse Animation - nur die ersten 3 Sekunden */}
+          {showAnimation && (
+            <span className="absolute inline-flex h-full w-full rounded-full bg-[#4a9d8f] opacity-75 animate-ping" />
+          )}
         </button>
       )}
 
