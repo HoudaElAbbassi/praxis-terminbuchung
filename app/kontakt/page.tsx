@@ -89,8 +89,16 @@ export default function KontaktPage() {
                       <h3 className="font-bold text-gray-900 mb-3">Sprechzeiten</h3>
                       <div className="space-y-2 text-sm">
                         <div className="flex justify-between">
-                          <span className="text-gray-700 font-medium">Montag - Freitag:</span>
-                          <span className="text-gray-700">8:00 - 18:00 Uhr</span>
+                          <span className="text-gray-700 font-medium">Montag und Mittwoch:</span>
+                          <span className="text-gray-700">8:00 - 16:00 Uhr</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-700 font-medium">Dienstag und Donnerstag:</span>
+                          <span className="text-gray-700">10:00 - 18:00 Uhr</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-700 font-medium">Freitag:</span>
+                          <span className="text-gray-700">8:00 - 12:00 Uhr</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-gray-700 font-medium">Samstag - Sonntag:</span>
@@ -123,8 +131,8 @@ export default function KontaktPage() {
                     <div>
                       <h3 className="font-bold text-gray-900 mb-2">Adresse</h3>
                       <p className="text-gray-700 leading-relaxed">
-                        [Straße und Hausnummer]<br />
-                        [PLZ] Remscheid
+                        Freiheitsstraße 203<br />
+                        42853 Remscheid
                       </p>
                     </div>
                   </div>
@@ -228,7 +236,8 @@ export default function KontaktPage() {
                 <ul className="space-y-1 sm:space-y-2 text-sm sm:text-base text-gray-300">
                   <li>Tel: 02191 6917400</li>
                   <li>Fax: 02191 4694938</li>
-                  <li>Remscheid</li>
+                  <li>Freiheitsstraße 203</li>
+                  <li>42853 Remscheid</li>
                 </ul>
               </div>
               <div className="sm:col-span-2 md:col-span-1">

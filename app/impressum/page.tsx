@@ -32,8 +32,8 @@ export default function ImpressumPage() {
               <h2 className="text-2xl font-semibold text-gray-900 mb-3">Angaben gemäß § 5 TMG</h2>
               <p className="font-medium text-lg">Praxis für Gefäßmedizin Remscheid</p>
               <p>Inhaber: Abdelkarim Alyandouzi</p>
-              <p>Ärztehaus Remscheid</p>
-              <p>Remscheid</p>
+              <p>Freiheitsstraße 203</p>
+              <p>42853 Remscheid</p>
             </section>
 
             <section>
@@ -97,8 +97,8 @@ export default function ImpressumPage() {
               </p>
               <p className="mt-2">Abdelkarim Alyandouzi</p>
               <p>Praxis für Gefäßmedizin Remscheid</p>
-              <p>Ärztehaus Remscheid</p>
-              <p>Remscheid</p>
+              <p>Freiheitsstraße 203</p>
+              <p>42853 Remscheid</p>
             </section>
 
             <section>

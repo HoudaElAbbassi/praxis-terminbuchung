@@ -11,8 +11,8 @@ export default function Footer() {
             <p className="text-gray-300 text-sm">
               Praxis für Gefäßmedizin Remscheid<br />
               Abdelkarim Alyandouzi<br />
-              Ärztehaus Remscheid<br />
-              Remscheid
+              Freiheitsstraße 203<br />
+              42853 Remscheid
             </p>
             <p className="text-gray-300 text-sm mt-3">
               Tel: 02191 6917400<br />
@@ -23,13 +23,12 @@ export default function Footer() {
 
           {/* Öffnungszeiten */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Öffnungszeiten</h3>
+            <h3 className="text-lg font-semibold mb-4">Sprechzeiten</h3>
             <p className="text-gray-300 text-sm">
-              Termine nach Vereinbarung<br />
-              <br />
-              Kontaktieren Sie uns telefonisch<br />
-              oder nutzen Sie unser<br />
-              Online-Buchungssystem
+              Montag und Mittwoch: 8-16 Uhr<br />
+              Dienstag und Donnerstag: 10-18 Uhr<br />
+              Freitag: 8-12 Uhr<br />
+              Samstag-Sonntag: Geschlossen
             </p>
           </div>
 

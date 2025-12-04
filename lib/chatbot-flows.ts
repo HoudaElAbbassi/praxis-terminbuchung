@@ -103,7 +103,9 @@ Bitte kontaktieren Sie uns telefonisch oder per E-Mail:
 ✉️ **E-Mail:** info@praxis-remscheid.de
 
 **Sprechzeiten:**
-Montag - Freitag: 8:00 - 18:00 Uhr`,
+Montag und Mittwoch: 8:00 - 16:00 Uhr
+Dienstag und Donnerstag: 10:00 - 18:00 Uhr
+Freitag: 8:00 - 12:00 Uhr`,
     quickReplies: [
       { label: 'Doch lieber online buchen', value: 'book_online' },
       { label: '« Zurück zum Menü', value: 'main_menu' },
@@ -410,14 +412,18 @@ Unser Praxisteam wird Ihre Anfrage **prioritär bearbeiten** und sich schnellstm
     response: `📞 **Kontaktmöglichkeiten:**
 
 **Telefon:** 02191 6917400
+**Fax:** 02191 4694938
 **E-Mail:** info@praxis-remscheid.de
 
 **Sprechzeiten:**
-Mo-Fr: 8:00 - 18:00 Uhr
+Montag und Mittwoch: 8:00 - 16:00 Uhr
+Dienstag und Donnerstag: 10:00 - 18:00 Uhr
+Freitag: 8:00 - 12:00 Uhr
+Samstag-Sonntag: Geschlossen
 
 **Adresse:**
-Ärztehaus Remscheid
-Remscheid
+Freiheitsstraße 203
+42853 Remscheid
 
 Sie können uns auch über unser Kontaktformular erreichen.`,
     quickReplies: [

@@ -329,7 +329,8 @@ export default function LeistungenPage() {
                 <ul className="space-y-1 sm:space-y-2 text-sm sm:text-base text-gray-300">
                   <li>Tel: 02191 6917400</li>
                   <li>Fax: 02191 4694938</li>
-                  <li>Remscheid</li>
+                  <li>Freiheitsstraße 203</li>
+                  <li>42853 Remscheid</li>
                 </ul>
               </div>
               <div className="sm:col-span-2 md:col-span-1">

@@ -93,8 +93,8 @@ export default function DatenschutzPage() {
                   <div className="bg-primary-50 p-6 rounded-lg border-l-4 border-primary-500 mb-4">
                     <p className="font-semibold">Praxis für Gefäßmedizin Remscheid</p>
                     <p>Abdelkarim Alyandouzi</p>
-                    <p>Ärztehaus Remscheid</p>
-                    <p>Remscheid</p>
+                    <p>Freiheitsstraße 203</p>
+                    <p>42853 Remscheid</p>
                     <p className="mt-3">
                       <strong>Telefon:</strong> 02191 6917400<br />
                       <strong>Fax:</strong> 02191 4694938<br />
@@ -378,7 +378,8 @@ export default function DatenschutzPage() {
                 <ul className="space-y-1 sm:space-y-2 text-sm sm:text-base text-gray-300">
                   <li>Tel: 02191 6917400</li>
                   <li>Fax: 02191 4694938</li>
-                  <li>Remscheid</li>
+                  <li>Freiheitsstraße 203</li>
+                  <li>42853 Remscheid</li>
                 </ul>
               </div>
               <div className="sm:col-span-2 md:col-span-1">
