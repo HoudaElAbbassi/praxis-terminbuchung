@@ -138,32 +138,18 @@ export default function KontaktPage() {
                   </div>
                 </div>
 
-                {/* Google Maps Placeholder */}
+                {/* Google Maps */}
                 <div className="bg-gray-100 rounded-xl overflow-hidden shadow-sm border border-gray-200" style={{height: '400px'}}>
-                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary-50 to-accent-50">
-                    <div className="text-center p-8">
-                      <svg className="w-16 h-16 text-primary-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                      </svg>
-                      <p className="text-gray-700">
-                        Hier wird die Google Maps Karte angezeigt<br />
-                        <span className="text-sm">(Koordinaten oder Adresse erforderlich)</span>
-                      </p>
-                    </div>
-                  </div>
-                  {/*
-                  Uncomment and replace with actual address when ready:
                   <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d..."
+                    src="https://maps.google.com/maps?q=Freiheitsstra%C3%9Fe+203,+42853+Remscheid&t=&z=15&ie=UTF8&iwloc=&output=embed"
                     width="100%"
                     height="100%"
                     style={{border: 0}}
                     allowFullScreen
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
+                    title="Praxis für Gefäßmedizin Remscheid - Anfahrt"
                   />
-                  */}
                 </div>
 
                 {/* Parking Info */}
@@ -176,6 +162,21 @@ export default function KontaktPage() {
                       <h4 className="font-bold text-gray-900 mb-2">Parkmöglichkeiten</h4>
                       <p className="text-gray-700 text-sm leading-relaxed">
                         Parkplätze befinden sich direkt vor der Praxis. Die Praxis ist barrierefrei zugänglich.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Access Info */}
+                <div className="mt-4 bg-accent-50 rounded-xl shadow-sm border border-accent-200 p-6">
+                  <div className="flex items-start">
+                    <svg className="w-6 h-6 text-accent-600 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <div>
+                      <h4 className="font-bold text-gray-900 mb-2">Wichtiger Hinweis zum Zugang</h4>
+                      <p className="text-gray-700 text-sm leading-relaxed">
+                        Bitte benutzen Sie den <strong>kleinen Aufzug</strong>, um zur Praxis zu gelangen. Der große Aufzug führt nicht zu unseren Praxisräumen.
                       </p>
                     </div>
                   </div>
