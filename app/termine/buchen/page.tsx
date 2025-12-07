@@ -610,7 +610,7 @@ export default function BuchenPage() {
                   <option value="">Bitte wählen</option>
                   <optgroup label="Diagnostik">
                     <option value="Farbduplexsonographie">Farbduplexsonographie</option>
-                    <option value="LRR-Messung">LRR-Messung (Laufband)</option>
+                    <option value="Laufband-Messung">Laufband-Messung</option>
                     <option value="Gefäßuntersuchung">Allgemeine Gefäßuntersuchung</option>
                   </optgroup>
                   <optgroup label="Venenerkrankungen">

@@ -37,6 +37,13 @@ export const MAIN_MENU: ChatFlow = {
   trigger: 'START',
   response: `👋 Hallo! Ich bin der digitale Assistent der Praxis für Gefäßmedizin Remscheid.
 
+⚠️ **Wichtiger Hinweis:**
+Ich bin eine KI und kein Arzt. Dieser Chat dient ausschließlich der Information.
+
+🚨 **Bei Notfällen:**
+• **Lebensbedrohliche Zustände** (Herzinfarkt, Schlaganfall, schwere Unfälle, Atemnot): **Sofort 112 anrufen!**
+• **Akute Beschwerden außerhalb der Sprechzeiten** (hohes Fieber, starke Schmerzen): **116 117** (Ärztlicher Bereitschaftsdienst)
+
 Wie kann ich Ihnen helfen?`,
   quickReplies: [
     { label: '📅 Termin buchen', value: 'appointment' },
