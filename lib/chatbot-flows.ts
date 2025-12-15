@@ -38,11 +38,9 @@ export const MAIN_MENU: ChatFlow = {
   response: `👋 Hallo! Ich bin der digitale Assistent der Praxis für Gefäßmedizin Remscheid.
 
 ⚠️ **Wichtiger Hinweis:**
-Ich bin eine KI und kein Arzt. Dieser Chat dient ausschließlich der Information.
+Bitte beachten Sie, dass ich nur eine KI bin und kein Arzt. Bei lebensbedrohlichen Zuständen (z.B. Herzinfarkt, Schlaganfall, schwere Unfälle, Atemnot) wählen Sie bitte umgehend die **112**, um den Rettungsdienst zu alarmieren.
 
-🚨 **Bei Notfällen:**
-• **Lebensbedrohliche Zustände** (Herzinfarkt, Schlaganfall, schwere Unfälle, Atemnot): **Sofort 112 anrufen!**
-• **Akute Beschwerden außerhalb der Sprechzeiten** (hohes Fieber, starke Schmerzen): **116 117** (Ärztlicher Bereitschaftsdienst)
+Für akute, aber nicht lebensbedrohliche Probleme außerhalb der Sprechzeiten (z.B. hohes Fieber, Magenprobleme), die nicht bis zum nächsten Tag warten können, ist der ärztliche Bereitschaftsdienst unter der Nummer **116 117** die richtige Anlaufstelle.
 
 Wie kann ich Ihnen helfen?`,
   quickReplies: [

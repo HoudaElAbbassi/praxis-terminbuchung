@@ -65,7 +65,8 @@ export default function LeistungenPage() {
               <div className="flex items-center mb-4 sm:mb-6">
                 <div className="w-12 h-12 sm:w-14 sm:h-14 bg-blue-500 rounded-xl flex items-center justify-center mr-3 sm:mr-4 flex-shrink-0">
                   <svg className="w-6 h-6 sm:w-7 sm:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m0-16c-2 2-4 2-6 0m6 0c2 2 4 2 6 0m-6 16c-2-2-4-2-6 0m6 0c2-2 4-2 6 0M6 8c-1 1-2 1-3 0m3 0c1 1 2 1 3 0M6 16c-1-1-2-1-3 0m3 0c1-1 2-1 3 0m9-8c-1 1-2 1-3 0m3 0c1 1 2 1 3 0m-3 8c-1-1-2-1-3 0m3 0c1-1 2-1 3 0" />
+                    {/* Venen-Symbol: Geschwungenes Blutgefäß mit Ventilen */}
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 4c0 4 2 6 6 6s6-2 6-6M6 20c0-4 2-6 6-6s6 2 6 6M12 10v4M9 12h6M9 16h6" />
                   </svg>
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-bold text-gray-900" style={{fontFamily: "'Playfair Display', serif"}}>
