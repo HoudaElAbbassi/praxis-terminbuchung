@@ -30,7 +30,6 @@ export default function BuchenClient({ initialAppointmentTypes }: BuchenClientPr
   // Verfügbarkeits-Präferenzen
   const [preferredTimeSlots, setPreferredTimeSlots] = useState<string[]>([]);
   const [preferredDays, setPreferredDays] = useState<string[]>([]);
-  const [urgency, setUrgency] = useState<string>("NORMAL");
   const [specialRemarks, setSpecialRemarks] = useState("");
 
   const [isLoading, setIsLoading] = useState(false);
@@ -87,7 +86,6 @@ export default function BuchenClient({ initialAppointmentTypes }: BuchenClientPr
           appointmentTypeId: selectedType?.id,
           preferredTimeSlots: JSON.stringify(preferredTimeSlots),
           preferredDays: JSON.stringify(preferredDays),
-          urgency,
           specialRemarks,
           ...contactData,
         }),
@@ -148,10 +146,10 @@ export default function BuchenClient({ initialAppointmentTypes }: BuchenClientPr
               className="text-4xl font-bold text-primary-600 mb-4"
               style={{fontFamily: "'Playfair Display', serif"}}
             >
-              Termin erfolgreich gebucht!
+              Terminanfrage erfolgreich gesendet!
             </h1>
             <p className="text-lg text-gray-600 mb-8">
-              Vielen Dank, <span className="font-semibold text-primary-600">{contactData.firstName}</span>! Wir haben Ihre Terminanfrage erhalten und werden uns in Kürze bei Ihnen melden, um einen passenden Termin zu vereinbaren. Eine Bestätigungsmail wurde an <span className="font-semibold">{contactData.email}</span> gesendet.
+              Vielen Dank, <span className="font-semibold text-primary-600">{contactData.firstName}</span>! Wir haben Ihre Terminanfrage erhalten und werden Ihnen zeitnah einen konkreten Terminvorschlag per E-Mail zusenden. Eine Bestätigungsmail wurde an <span className="font-semibold">{contactData.email}</span> gesendet.
             </p>
             <div className="bg-[#e8f4f2] border-2 border-[#4a9d8f] rounded-lg p-6 mb-8">
               <h3
@@ -442,39 +440,6 @@ export default function BuchenClient({ initialAppointmentTypes }: BuchenClientPr
                             <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                           </svg>
                         )}
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Dringlichkeit */}
-              <div className="mb-6">
-                <label className="block text-sm font-semibold text-[#2d3748] mb-3">
-                  Dringlichkeit *
-                </label>
-                <p className="text-xs text-gray-600 mb-3">
-                  Wie dringend benötigen Sie einen Termin?
-                </p>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  {[
-                    { value: 'URGENT', label: 'Dringend', icon: '🔴', desc: 'Ich benötige zeitnah einen Termin' },
-                    { value: 'NORMAL', label: 'Normal', icon: '🟡', desc: 'Reguläre Terminvergabe' },
-                    { value: 'FLEXIBLE', label: 'Flexibel', icon: '🟢', desc: 'Ich bin zeitlich flexibel' }
-                  ].map((urg) => (
-                    <button
-                      key={urg.value}
-                      onClick={() => setUrgency(urg.value)}
-                      className={`p-4 border-2 rounded-lg text-left transition-all duration-200 touch-manipulation ${
-                        urgency === urg.value
-                          ? "border-primary-600 bg-primary-600 text-white shadow-lg"
-                          : "border-gray-300 hover:border-primary-600 hover:bg-primary-50 text-gray-900"
-                      }`}
-                    >
-                      <div className="text-2xl mb-2">{urg.icon}</div>
-                      <div className="font-bold text-base">{urg.label}</div>
-                      <div className={`text-xs mt-1 ${urgency === urg.value ? 'text-white opacity-90' : 'text-gray-600'}`}>
-                        {urg.desc}
                       </div>
                     </button>
                   ))}
