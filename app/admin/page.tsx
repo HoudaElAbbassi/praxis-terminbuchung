@@ -7,6 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 import AlternativeAppointmentModal from "@/components/AlternativeAppointmentModal";
 import SetAppointmentTimeModal from "@/components/SetAppointmentTimeModal";
+import SendProposalModal from "@/components/SendProposalModal";
 
 type Appointment = {
   id: string;
@@ -16,6 +17,8 @@ type Appointment = {
   status: string;
   preferredDays: string | null;
   preferredTimeSlots: string | null;
+  urgency: string | null;
+  specialRemarks: string | null;
   insuranceType: string | null;
   isFirstVisit: boolean | null;
   reasonForVisit: string | null;
@@ -43,6 +46,7 @@ export default function AdminDashboard() {
   const [stats, setStats] = useState({ total: 0, today: 0, upcoming: 0 });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSetTimeModalOpen, setIsSetTimeModalOpen] = useState(false);
+  const [isSendProposalModalOpen, setIsSendProposalModalOpen] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
   const [confirmDialog, setConfirmDialog] = useState<{
     isOpen: boolean;
@@ -229,6 +233,41 @@ export default function AdminDashboard() {
     } catch (error) {
       console.error("Error setting appointment time:", error);
       alert("Fehler beim Festlegen des Termins");
+    }
+  };
+
+  const handleSendProposal = (appointment: Appointment) => {
+    setSelectedAppointment(appointment);
+    setIsSendProposalModalOpen(true);
+  };
+
+  const handleSubmitProposal = async (data: { date: string; time: string }) => {
+    if (!selectedAppointment) return;
+
+    try {
+      const res = await fetch(`/api/admin/appointments/${selectedAppointment.id}/send-proposal`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          proposedDate: data.date,
+          proposedTime: data.time,
+        }),
+      });
+
+      const result = await res.json();
+
+      if (res.ok) {
+        alert("Terminvorschlag erfolgreich versendet!");
+        fetchAppointments();
+        fetchStats();
+        setIsSendProposalModalOpen(false);
+        setSelectedAppointment(null);
+      } else {
+        alert(result.error || "Fehler beim Senden des Vorschlags");
+      }
+    } catch (error) {
+      console.error("Error sending proposal:", error);
+      alert("Fehler beim Senden des Vorschlags");
     }
   };
 
@@ -504,12 +543,14 @@ export default function AdminDashboard() {
                         )}
                         <span className={`px-3 sm:px-4 py-1 sm:py-1.5 text-xs sm:text-sm font-semibold rounded-full self-start ${
                           appointment.status === "PENDING" ? "bg-yellow-100 text-yellow-800 border border-yellow-300" :
+                          appointment.status === "PROPOSAL_SENT" ? "bg-purple-100 text-purple-800 border border-purple-300" :
                           appointment.status === "CONFIRMED" ? "bg-green-100 text-green-800 border border-green-300" :
                           appointment.status === "CANCELLED" ? "bg-red-100 text-red-800 border border-red-300" :
                           appointment.status === "COMPLETED" ? "bg-blue-100 text-blue-800 border border-blue-300" :
                           "bg-gray-100 text-gray-800 border border-gray-300"
                         }`}>
                           {appointment.status === "PENDING" ? "⏳ Ausstehend" :
+                           appointment.status === "PROPOSAL_SENT" ? "📧 Vorschlag gesendet" :
                            appointment.status === "CONFIRMED" ? "✓ Bestätigt" :
                            appointment.status === "CANCELLED" ? "✗ Abgesagt" :
                            appointment.status === "COMPLETED" ? "✓ Abgeschlossen" :
@@ -581,27 +622,62 @@ export default function AdminDashboard() {
                         )}
                       </div>
 
+                      {/* Dringlichkeit Badge */}
+                      {appointment.urgency && (
+                        <div className="mb-3">
+                          <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold ${
+                            appointment.urgency === 'URGENT' ? 'bg-red-100 text-red-800 border border-red-300' :
+                            appointment.urgency === 'FLEXIBLE' ? 'bg-green-100 text-green-800 border border-green-300' :
+                            'bg-yellow-100 text-yellow-800 border border-yellow-300'
+                          }`}>
+                            {appointment.urgency === 'URGENT' ? '🔴 Dringend' :
+                             appointment.urgency === 'FLEXIBLE' ? '🟢 Flexibel' :
+                             '🟡 Normal'}
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Besondere Anmerkungen */}
+                      {appointment.specialRemarks && (
+                        <div className="bg-purple-50 border-l-4 border-purple-400 p-3 rounded mb-3">
+                          <p className="text-sm font-semibold text-purple-800 mb-1">Besondere Anmerkungen:</p>
+                          <p className="text-sm text-gray-700">{appointment.specialRemarks}</p>
+                        </div>
+                      )}
+
                       {/* Action Buttons */}
                       {appointment.status === "PENDING" && (
-                        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                        <div className="flex flex-col gap-2">
                           <button
-                            onClick={() => handleSetAppointmentTime(appointment)}
-                            className="flex-1 bg-[#4a9d8f] hover:bg-[#3d8378] active:bg-[#3d8378] text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-1.5 sm:gap-2 text-sm sm:text-base touch-manipulation"
+                            onClick={() => handleSendProposal(appointment)}
+                            className="w-full bg-purple-600 hover:bg-purple-700 active:bg-purple-700 text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-1.5 sm:gap-2 text-sm sm:text-base touch-manipulation"
                           >
                             <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
+                              <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                              <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                             </svg>
-                            Termin festlegen
+                            Terminvorschlag senden
                           </button>
-                          <button
-                            onClick={() => openConfirmDialog(appointment.id, "CANCELLED")}
-                            className="flex-1 bg-red-600 hover:bg-red-700 active:bg-red-700 text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-1.5 sm:gap-2 text-sm sm:text-base touch-manipulation"
-                          >
-                            <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                            </svg>
-                            Ablehnen
-                          </button>
+                          <div className="flex flex-col sm:flex-row gap-2">
+                            <button
+                              onClick={() => handleSetAppointmentTime(appointment)}
+                              className="flex-1 bg-[#4a9d8f] hover:bg-[#3d8378] active:bg-[#3d8378] text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-1.5 sm:gap-2 text-sm sm:text-base touch-manipulation"
+                            >
+                              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
+                              </svg>
+                              Direkt festlegen
+                            </button>
+                            <button
+                              onClick={() => openConfirmDialog(appointment.id, "CANCELLED")}
+                              className="flex-1 bg-red-600 hover:bg-red-700 active:bg-red-700 text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-1.5 sm:gap-2 text-sm sm:text-base touch-manipulation"
+                            >
+                              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                              </svg>
+                              Ablehnen
+                            </button>
+                          </div>
                         </div>
                       )}
 
@@ -811,6 +887,24 @@ export default function AdminDashboard() {
           appointmentId={selectedAppointment.id}
           preferredDays={selectedAppointment.preferredDays}
           preferredTimeSlots={selectedAppointment.preferredTimeSlots}
+          patientName={`${selectedAppointment.user.firstName} ${selectedAppointment.user.lastName}`}
+        />
+      )}
+
+      {/* Send Proposal Modal */}
+      {selectedAppointment && (
+        <SendProposalModal
+          isOpen={isSendProposalModalOpen}
+          onClose={() => {
+            setIsSendProposalModalOpen(false);
+            setSelectedAppointment(null);
+          }}
+          onSubmit={handleSubmitProposal}
+          appointmentId={selectedAppointment.id}
+          preferredDays={selectedAppointment.preferredDays}
+          preferredTimeSlots={selectedAppointment.preferredTimeSlots}
+          urgency={selectedAppointment.urgency}
+          specialRemarks={selectedAppointment.specialRemarks}
           patientName={`${selectedAppointment.user.firstName} ${selectedAppointment.user.lastName}`}
         />
       )}

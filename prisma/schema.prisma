@@ -80,12 +80,18 @@ model Appointment {
   preferredTimeSlots String?        // JSON Array: z.B. ["morning", "afternoon"]
   preferredDays      String?        // JSON Array: z.B. ["MONDAY", "WEDNESDAY"]
 
+  // Neue Felder für Terminvorschlag-Workflow
+  urgency           UrgencyLevel?   @default(NORMAL)
+  specialRemarks    String?         // Freitext für besondere Wünsche/Einschränkungen
+
   // Relationen
   userId            String
   user              User            @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   appointmentTypeId String
   appointmentType   AppointmentType @relation(fields: [appointmentTypeId], references: [id])
+
+  proposals         AppointmentProposal[]
 
   // Timestamps
   createdAt         DateTime        @default(now())
@@ -97,8 +103,9 @@ model Appointment {
 }
 
 enum AppointmentStatus {
-  PENDING
-  CONFIRMED
+  PENDING           // Initiale Wunsch-Einreichung
+  PROPOSAL_SENT     // Admin hat Vorschlag gesendet, wartet auf Antwort
+  CONFIRMED         // Patient hat Vorschlag angenommen
   CANCELLED
   COMPLETED
   NO_SHOW
@@ -146,4 +153,49 @@ model Settings {
   updatedAt     DateTime  @updatedAt
 
   @@index([key])
+}
+
+// Terminvorschlag-Modell
+model AppointmentProposal {
+  id                String              @id @default(cuid())
+  appointmentId     String              @unique
+  appointment       Appointment         @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+
+  // Vorschlag-Details
+  proposedDate      DateTime
+  proposedStartTime DateTime
+  proposedEndTime   DateTime
+  status            ProposalStatus      @default(PENDING)
+
+  // Token für Patienten-Antwort
+  token             String              @unique @default(cuid())
+
+  // Patienten-Antwort
+  patientResponse   String?             // "ACCEPTED" oder "REJECTED"
+  rejectionReason   String?             // Ablehnungsgrund des Patienten
+  respondedAt       DateTime?
+
+  // Admin-Erinnerungs-Tracking
+  reminderSentAt    DateTime?
+  reminderCount     Int                 @default(0)
+
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+
+  @@index([token])
+  @@index([status])
+  @@index([appointmentId])
+}
+
+enum ProposalStatus {
+  PENDING           // Wartet auf Patienten-Antwort
+  ACCEPTED          // Patient hat angenommen
+  REJECTED          // Patient hat abgelehnt
+  SUPERSEDED        // Wenn Admin neuen Vorschlag sendet
+}
+
+enum UrgencyLevel {
+  URGENT
+  NORMAL
+  FLEXIBLE
 }

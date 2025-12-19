@@ -388,3 +388,447 @@ export async function sendNewAppointmentNotification(data: AppointmentEmailData)
     return { success: false, error };
   }
 }
+
+// ============================================
+// NEUE E-MAIL-VORLAGEN FÜR TERMINVORSCHLÄGE
+// ============================================
+
+interface ProposalEmailData extends AppointmentEmailData {
+  token: string;
+  baseUrl?: string;
+}
+
+/**
+ * Sendet Terminvorschlag an Patient
+ */
+export async function sendAppointmentProposalEmail(data: ProposalEmailData) {
+  const { patientName, patientEmail, date, time, appointmentType, token, baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000' } = data;
+
+  const acceptUrl = `${baseUrl}/termine/antworten/${token}?action=accept`;
+  const rejectUrl = `${baseUrl}/termine/antworten/${token}?action=reject`;
+
+  try {
+    await transporter.sendMail({
+      from: process.env.EMAIL_FROM || 'Praxis für Gefäßmedizin Remscheid <info@praxis-remscheid.de>',
+      to: patientEmail,
+      subject: 'Terminvorschlag - Praxis für Gefäßmedizin Remscheid',
+      html: `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          </head>
+          <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f7fafc;">
+            <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+              <!-- Header -->
+              <div style="background: linear-gradient(135deg, #4a9d8f 0%, #2c5f7c 100%); padding: 40px 20px; text-align: center;">
+                <h1 style="color: #ffffff; margin: 0; font-size: 28px;">📅 Terminvorschlag</h1>
+              </div>
+
+              <!-- Content -->
+              <div style="padding: 40px 30px;">
+                <p style="font-size: 16px; line-height: 1.6; color: #2d3748; margin-bottom: 20px;">
+                  Sehr geehrte/r ${patientName},
+                </p>
+
+                <p style="font-size: 16px; line-height: 1.6; color: #2d3748; margin-bottom: 30px;">
+                  wir haben Ihre Terminanfrage erhalten und möchten Ihnen folgenden Termin vorschlagen:
+                </p>
+
+                <!-- Vorschlag Box -->
+                <div style="background-color: #e8f4f2; border-left: 4px solid #4a9d8f; padding: 20px; margin: 30px 0; border-radius: 4px;">
+                  <div style="margin-bottom: 15px;">
+                    <strong style="color: #2c5f7c; font-size: 14px; text-transform: uppercase;">Datum:</strong>
+                    <p style="margin: 5px 0; font-size: 18px; color: #2d3748; font-weight: bold;">${date}</p>
+                  </div>
+                  <div style="margin-bottom: 15px;">
+                    <strong style="color: #2c5f7c; font-size: 14px; text-transform: uppercase;">Uhrzeit:</strong>
+                    <p style="margin: 5px 0; font-size: 18px; color: #2d3748; font-weight: bold;">${time} Uhr</p>
+                  </div>
+                  <div>
+                    <strong style="color: #2c5f7c; font-size: 14px; text-transform: uppercase;">Terminart:</strong>
+                    <p style="margin: 5px 0; font-size: 16px; color: #2d3748;">${appointmentType}</p>
+                  </div>
+                </div>
+
+                <p style="font-size: 16px; line-height: 1.6; color: #2d3748; margin-bottom: 30px;">
+                  Bitte teilen Sie uns mit, ob Sie diesen Termin wahrnehmen können:
+                </p>
+
+                <!-- Action Buttons -->
+                <div style="text-align: center; margin: 40px 0;">
+                  <a href="${acceptUrl}" style="display: inline-block; background-color: #10b981; color: #ffffff; padding: 15px 40px; text-decoration: none; border-radius: 8px; font-size: 16px; font-weight: bold; margin: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                    ✅ Termin annehmen
+                  </a>
+                  <a href="${rejectUrl}" style="display: inline-block; background-color: #6b7280; color: #ffffff; padding: 15px 40px; text-decoration: none; border-radius: 8px; font-size: 16px; font-weight: bold; margin: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                    ❌ Termin ablehnen
+                  </a>
+                </div>
+
+                <p style="font-size: 14px; line-height: 1.6; color: #718096; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+                  <strong>Wichtig:</strong> Bitte antworten Sie innerhalb von 3 Tagen auf diesen Vorschlag. Falls Sie den Termin nicht wahrnehmen können, geben Sie uns gerne einen Grund an, damit wir Ihnen einen passenden Alternativtermin anbieten können.
+                </p>
+
+                <!-- Contact Info -->
+                <div style="margin-top: 30px; padding: 20px; background-color: #f7fafc; border-radius: 8px;">
+                  <p style="margin: 0; font-size: 14px; color: #4a5568;">
+                    <strong>Bei Fragen erreichen Sie uns:</strong><br>
+                    📞 Telefon: 02191 123456<br>
+                    📧 E-Mail: ${process.env.PRACTICE_EMAIL || 'info@gefaessmedizinremscheid.de'}
+                  </p>
+                </div>
+              </div>
+
+              <!-- Footer -->
+              <div style="background-color: #2d3748; padding: 20px; text-align: center;">
+                <p style="color: #cbd5e0; font-size: 12px; margin: 0;">
+                  Praxis für Gefäßmedizin Remscheid<br>
+                  Diese E-Mail wurde automatisch generiert.
+                </p>
+              </div>
+            </div>
+          </body>
+        </html>
+      `,
+    });
+    console.log(`✅ Proposal email sent to ${patientEmail}`);
+    return { success: true };
+  } catch (error) {
+    console.error('Error sending proposal email:', error);
+    return { success: false, error };
+  }
+}
+
+/**
+ * Sendet Bestätigung an Patient nach Annahme
+ */
+export async function sendProposalAcceptanceConfirmation(data: AppointmentEmailData) {
+  const { patientName, patientEmail, date, time, appointmentType, doctorName = 'Dr. med. Mustermann' } = data;
+
+  try {
+    await transporter.sendMail({
+      from: process.env.EMAIL_FROM || 'Praxis für Gefäßmedizin Remscheid <info@praxis-remscheid.de>',
+      to: patientEmail,
+      subject: 'Terminbestätigung - Praxis für Gefäßmedizin Remscheid',
+      html: `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          </head>
+          <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f7fafc;">
+            <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+              <!-- Header -->
+              <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 40px 20px; text-align: center;">
+                <h1 style="color: #ffffff; margin: 0; font-size: 28px;">✅ Termin bestätigt!</h1>
+              </div>
+
+              <!-- Content -->
+              <div style="padding: 40px 30px;">
+                <p style="font-size: 16px; line-height: 1.6; color: #2d3748; margin-bottom: 20px;">
+                  Sehr geehrte/r ${patientName},
+                </p>
+
+                <p style="font-size: 16px; line-height: 1.6; color: #2d3748; margin-bottom: 30px;">
+                  vielen Dank für Ihre Rückmeldung. Ihr Termin ist hiermit bestätigt:
+                </p>
+
+                <!-- Bestätigter Termin -->
+                <div style="background-color: #d1fae5; border-left: 4px solid #10b981; padding: 20px; margin: 30px 0; border-radius: 4px;">
+                  <div style="margin-bottom: 15px;">
+                    <strong style="color: #065f46; font-size: 14px; text-transform: uppercase;">Datum:</strong>
+                    <p style="margin: 5px 0; font-size: 18px; color: #2d3748; font-weight: bold;">${date}</p>
+                  </div>
+                  <div style="margin-bottom: 15px;">
+                    <strong style="color: #065f46; font-size: 14px; text-transform: uppercase;">Uhrzeit:</strong>
+                    <p style="margin: 5px 0; font-size: 18px; color: #2d3748; font-weight: bold;">${time} Uhr</p>
+                  </div>
+                  <div style="margin-bottom: 15px;">
+                    <strong style="color: #065f46; font-size: 14px; text-transform: uppercase;">Terminart:</strong>
+                    <p style="margin: 5px 0; font-size: 16px; color: #2d3748;">${appointmentType}</p>
+                  </div>
+                  <div>
+                    <strong style="color: #065f46; font-size: 14px; text-transform: uppercase;">Arzt:</strong>
+                    <p style="margin: 5px 0; font-size: 16px; color: #2d3748;">${doctorName}</p>
+                  </div>
+                </div>
+
+                <!-- Wichtige Hinweise -->
+                <div style="background-color: #fff7ed; border-left: 4px solid #f59e0b; padding: 20px; margin: 30px 0; border-radius: 4px;">
+                  <h3 style="margin: 0 0 15px 0; color: #92400e; font-size: 16px;">📋 Wichtige Hinweise:</h3>
+                  <ul style="margin: 0; padding-left: 20px; color: #78350f; font-size: 14px; line-height: 1.8;">
+                    <li>Bitte erscheinen Sie 10 Minuten vor Terminbeginn</li>
+                    <li>Bringen Sie Ihre Versichertenkarte mit</li>
+                    <li>Bei Verspätung oder Verhinderung rufen Sie uns bitte rechtzeitig an</li>
+                  </ul>
+                </div>
+
+                <!-- Contact Info -->
+                <div style="margin-top: 30px; padding: 20px; background-color: #f7fafc; border-radius: 8px;">
+                  <p style="margin: 0; font-size: 14px; color: #4a5568;">
+                    <strong>Bei Fragen oder Terminabsage:</strong><br>
+                    📞 Telefon: 02191 123456<br>
+                    📧 E-Mail: ${process.env.PRACTICE_EMAIL || 'info@gefaessmedizinremscheid.de'}
+                  </p>
+                </div>
+              </div>
+
+              <!-- Footer -->
+              <div style="background-color: #2d3748; padding: 20px; text-align: center;">
+                <p style="color: #cbd5e0; font-size: 12px; margin: 0;">
+                  Praxis für Gefäßmedizin Remscheid<br>
+                  Wir freuen uns auf Ihren Besuch!
+                </p>
+              </div>
+            </div>
+          </body>
+        </html>
+      `,
+    });
+    console.log(`✅ Acceptance confirmation sent to ${patientEmail}`);
+    return { success: true };
+  } catch (error) {
+    console.error('Error sending acceptance confirmation:', error);
+    return { success: false, error };
+  }
+}
+
+/**
+ * Benachrichtigt Admin über Annahme des Vorschlags
+ */
+export async function sendProposalAcceptedEmailToAdmin(data: AppointmentEmailData) {
+  const { patientName, patientEmail, date, time, appointmentType } = data;
+  const adminEmail = process.env.ADMIN_EMAIL || process.env.PRACTICE_EMAIL || 'info@gefaessmedizinremscheid.de';
+
+  try {
+    await transporter.sendMail({
+      from: process.env.EMAIL_FROM || 'Praxis für Gefäßmedizin Remscheid <info@praxis-remscheid.de>',
+      to: adminEmail,
+      subject: `✅ Terminvorschlag angenommen - ${patientName}`,
+      html: `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          </head>
+          <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f7fafc;">
+            <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+              <!-- Header -->
+              <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 30px 20px; text-align: center;">
+                <h1 style="color: #ffffff; margin: 0; font-size: 24px;">✅ Terminvorschlag angenommen</h1>
+              </div>
+
+              <!-- Content -->
+              <div style="padding: 30px;">
+                <p style="font-size: 16px; line-height: 1.6; color: #2d3748; margin-bottom: 20px;">
+                  <strong>${patientName}</strong> hat den Terminvorschlag angenommen:
+                </p>
+
+                <div style="background-color: #d1fae5; border-left: 4px solid #10b981; padding: 20px; margin: 20px 0; border-radius: 4px;">
+                  <p style="margin: 5px 0; color: #2d3748;"><strong>Patient:</strong> ${patientName}</p>
+                  <p style="margin: 5px 0; color: #2d3748;"><strong>E-Mail:</strong> ${patientEmail}</p>
+                  <p style="margin: 5px 0; color: #2d3748;"><strong>Datum:</strong> ${date}</p>
+                  <p style="margin: 5px 0; color: #2d3748;"><strong>Uhrzeit:</strong> ${time} Uhr</p>
+                  <p style="margin: 5px 0; color: #2d3748;"><strong>Terminart:</strong> ${appointmentType}</p>
+                </div>
+
+                <p style="font-size: 14px; color: #718096; margin-top: 20px;">
+                  Der Termin wurde automatisch bestätigt und der Patient wurde benachrichtigt.
+                </p>
+              </div>
+            </div>
+          </body>
+        </html>
+      `,
+    });
+    console.log(`✅ Admin notified about accepted proposal for ${patientName}`);
+    return { success: true };
+  } catch (error) {
+    console.error('Error sending admin notification:', error);
+    return { success: false, error };
+  }
+}
+
+interface RejectionEmailData extends AppointmentEmailData {
+  rejectionReason?: string;
+}
+
+/**
+ * Benachrichtigt Admin über Ablehnung des Vorschlags
+ */
+export async function sendProposalRejectedEmailToAdmin(data: RejectionEmailData) {
+  const { patientName, patientEmail, date, time, appointmentType, rejectionReason } = data;
+  const adminEmail = process.env.ADMIN_EMAIL || process.env.PRACTICE_EMAIL || 'info@gefaessmedizinremscheid.de';
+
+  try {
+    await transporter.sendMail({
+      from: process.env.EMAIL_FROM || 'Praxis für Gefäßmedizin Remscheid <info@praxis-remscheid.de>',
+      to: adminEmail,
+      subject: `❌ Terminvorschlag abgelehnt - ${patientName}`,
+      html: `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          </head>
+          <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f7fafc;">
+            <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+              <!-- Header -->
+              <div style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); padding: 30px 20px; text-align: center;">
+                <h1 style="color: #ffffff; margin: 0; font-size: 24px;">❌ Terminvorschlag abgelehnt</h1>
+              </div>
+
+              <!-- Content -->
+              <div style="padding: 30px;">
+                <p style="font-size: 16px; line-height: 1.6; color: #2d3748; margin-bottom: 20px;">
+                  <strong>${patientName}</strong> hat den Terminvorschlag abgelehnt:
+                </p>
+
+                <div style="background-color: #fee2e2; border-left: 4px solid #ef4444; padding: 20px; margin: 20px 0; border-radius: 4px;">
+                  <p style="margin: 5px 0; color: #2d3748;"><strong>Patient:</strong> ${patientName}</p>
+                  <p style="margin: 5px 0; color: #2d3748;"><strong>E-Mail:</strong> ${patientEmail}</p>
+                  <p style="margin: 5px 0; color: #2d3748;"><strong>Abgelehnter Termin:</strong> ${date}, ${time} Uhr</p>
+                  <p style="margin: 5px 0; color: #2d3748;"><strong>Terminart:</strong> ${appointmentType}</p>
+                </div>
+
+                ${rejectionReason ? `
+                <div style="background-color: #fef3c7; border-left: 4px solid #f59e0b; padding: 20px; margin: 20px 0; border-radius: 4px;">
+                  <p style="margin: 0; color: #92400e;"><strong>Ablehnungsgrund:</strong></p>
+                  <p style="margin: 10px 0 0 0; color: #78350f;">${rejectionReason}</p>
+                </div>
+                ` : ''}
+
+                <p style="font-size: 14px; color: #718096; margin-top: 20px;">
+                  Bitte kontaktieren Sie den Patienten oder senden Sie einen neuen Terminvorschlag über das Admin-Dashboard.
+                </p>
+              </div>
+            </div>
+          </body>
+        </html>
+      `,
+    });
+    console.log(`✅ Admin notified about rejected proposal for ${patientName}`);
+    return { success: true };
+  } catch (error) {
+    console.error('Error sending admin rejection notification:', error);
+    return { success: false, error };
+  }
+}
+
+interface ReminderProposal {
+  id: string;
+  token: string;
+  createdAt: Date;
+  appointment: {
+    user: {
+      firstName: string;
+      lastName: string;
+      email: string;
+    };
+    appointmentType: {
+      name: string;
+    };
+    urgency?: string | null;
+  };
+}
+
+/**
+ * Sendet Erinnerung an Admin über ausstehende Vorschläge
+ */
+export async function sendAdminProposalReminder(proposals: ReminderProposal[]) {
+  const adminEmail = process.env.ADMIN_EMAIL || process.env.PRACTICE_EMAIL || 'info@gefaessmedizinremscheid.de';
+
+  const urgentCount = proposals.filter(p => p.appointment.urgency === 'URGENT').length;
+  const normalCount = proposals.filter(p => p.appointment.urgency === 'NORMAL').length;
+  const flexibleCount = proposals.filter(p => p.appointment.urgency === 'FLEXIBLE').length;
+
+  const proposalsList = proposals.map(p => {
+    const daysSince = Math.floor((Date.now() - new Date(p.createdAt).getTime()) / (1000 * 60 * 60 * 24));
+    const urgencyIcon = p.appointment.urgency === 'URGENT' ? '🔴' : p.appointment.urgency === 'FLEXIBLE' ? '🟢' : '🟡';
+
+    return `
+      <tr>
+        <td style="padding: 10px; border-bottom: 1px solid #e2e8f0;">
+          ${urgencyIcon} ${p.appointment.user.firstName} ${p.appointment.user.lastName}
+        </td>
+        <td style="padding: 10px; border-bottom: 1px solid #e2e8f0;">${p.appointment.appointmentType.name}</td>
+        <td style="padding: 10px; border-bottom: 1px solid #e2e8f0;">${daysSince} Tage</td>
+      </tr>
+    `;
+  }).join('');
+
+  try {
+    await transporter.sendMail({
+      from: process.env.EMAIL_FROM || 'Praxis für Gefäßmedizin Remscheid <info@praxis-remscheid.de>',
+      to: adminEmail,
+      subject: `⏰ Erinnerung: ${proposals.length} ausstehende Terminvorschläge`,
+      html: `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          </head>
+          <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f7fafc;">
+            <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+              <!-- Header -->
+              <div style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); padding: 30px 20px; text-align: center;">
+                <h1 style="color: #ffffff; margin: 0; font-size: 24px;">⏰ Ausstehende Terminvorschläge</h1>
+              </div>
+
+              <!-- Content -->
+              <div style="padding: 30px;">
+                <p style="font-size: 16px; line-height: 1.6; color: #2d3748; margin-bottom: 20px;">
+                  Sie haben <strong>${proposals.length}</strong> Terminvorschläge, die noch auf eine Antwort warten:
+                </p>
+
+                <!-- Statistik -->
+                <div style="display: flex; gap: 10px; margin: 20px 0;">
+                  <div style="flex: 1; background-color: #fee2e2; padding: 15px; border-radius: 8px; text-align: center;">
+                    <div style="font-size: 24px; font-weight: bold; color: #dc2626;">${urgentCount}</div>
+                    <div style="font-size: 12px; color: #991b1b;">🔴 Dringend</div>
+                  </div>
+                  <div style="flex: 1; background-color: #fef3c7; padding: 15px; border-radius: 8px; text-align: center;">
+                    <div style="font-size: 24px; font-weight: bold; color: #d97706;">${normalCount}</div>
+                    <div style="font-size: 12px; color: #92400e;">🟡 Normal</div>
+                  </div>
+                  <div style="flex: 1; background-color: #d1fae5; padding: 15px; border-radius: 8px; text-align: center;">
+                    <div style="font-size: 24px; font-weight: bold; color: #059669;">${flexibleCount}</div>
+                    <div style="font-size: 12px; color: #065f46;">🟢 Flexibel</div>
+                  </div>
+                </div>
+
+                <!-- Liste -->
+                <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                  <thead>
+                    <tr style="background-color: #f7fafc;">
+                      <th style="padding: 10px; text-align: left; border-bottom: 2px solid #cbd5e0;">Patient</th>
+                      <th style="padding: 10px; text-align: left; border-bottom: 2px solid #cbd5e0;">Terminart</th>
+                      <th style="padding: 10px; text-align: left; border-bottom: 2px solid #cbd5e0;">Wartezeit</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${proposalsList}
+                  </tbody>
+                </table>
+
+                <p style="font-size: 14px; color: #718096; margin-top: 20px;">
+                  Bitte prüfen Sie das Admin-Dashboard und kontaktieren Sie die Patienten bei Bedarf.
+                </p>
+              </div>
+            </div>
+          </body>
+        </html>
+      `,
+    });
+    console.log(`✅ Admin reminder sent for ${proposals.length} pending proposals`);
+    return { success: true };
+  } catch (error) {
+    console.error('Error sending admin reminder:', error);
+    return { success: false, error };
+  }
+}
