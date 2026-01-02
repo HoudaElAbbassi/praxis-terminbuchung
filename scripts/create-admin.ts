@@ -1,77 +1,68 @@
-import { PrismaClient } from "@prisma/client";
-import bcrypt from "bcrypt";
-import * as readline from "readline";
+import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
+async function createAdmin() {
+  try {
+    // WICHTIG: Ändern Sie diese Werte!
+    const email = 'admin@praxis-remscheid.de';
+    const password = 'Admin123!'; // Ändern Sie dieses Passwort!
+    const firstName = 'Admin';
+    const lastName = 'Praxis';
+    const phone = '02191 6917400';
 
-function question(query: string): Promise<string> {
-  return new Promise((resolve) => {
-    rl.question(query, resolve);
-  });
-}
+    console.log('🔍 Prüfe, ob Admin bereits existiert...');
 
-async function main() {
-  console.log("🔐 Neuen Admin-Benutzer erstellen\n");
+    // Prüfen, ob User bereits existiert
+    const existingUser = await prisma.user.findUnique({
+      where: { email },
+    });
 
-  const email = await question("Email-Adresse: ");
-  const password = await question("Passwort: ");
-  const firstName = await question("Vorname: ");
-  const lastName = await question("Nachname: ");
-  const phone = await question("Telefonnummer: ");
-
-  // Prüfen, ob Benutzer bereits existiert
-  const existingUser = await prisma.user.findUnique({
-    where: { email: email.toLowerCase() },
-  });
-
-  if (existingUser) {
-    console.log("\n❌ Ein Benutzer mit dieser Email existiert bereits!");
-    console.log("\nMöchten Sie die Rolle zu ADMIN ändern? (j/n)");
-    const answer = await question("> ");
-
-    if (answer.toLowerCase() === "j" || answer.toLowerCase() === "y") {
-      await prisma.user.update({
-        where: { email: email.toLowerCase() },
-        data: { role: "ADMIN" },
-      });
-      console.log("\n✅ Benutzer wurde zum Admin befördert!");
+    if (existingUser) {
+      if (existingUser.role === 'ADMIN') {
+        console.log('ℹ️  Admin-Account existiert bereits:', email);
+        console.log('💡 Wenn Sie das Passwort zurücksetzen möchten, löschen Sie den User erst.');
+        return;
+      } else {
+        // User existiert, aber ist kein Admin - mache ihn zum Admin
+        console.log('📝 User existiert als PATIENT - ändere zu ADMIN...');
+        const updatedUser = await prisma.user.update({
+          where: { email },
+          data: { role: 'ADMIN' },
+        });
+        console.log('✅ User zu Admin gemacht:', updatedUser.email);
+        return;
+      }
     }
-  } else {
-    // Neuen Admin-Benutzer erstellen
+
+    console.log('🔐 Hash Passwort...');
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    console.log('👤 Erstelle Admin-Account...');
     const admin = await prisma.user.create({
       data: {
-        email: email.toLowerCase(),
+        email,
         password: hashedPassword,
         firstName,
         lastName,
         phone,
-        role: "ADMIN",
+        role: 'ADMIN',
       },
     });
 
-    console.log("\n✅ Admin-Benutzer erfolgreich erstellt!");
-    console.log("\nLogin-Daten:");
-    console.log(`  Email: ${admin.email}`);
-    console.log(`  Passwort: ${password}`);
-    console.log(`  Rolle: ${admin.role}`);
+    console.log('✅ Admin erfolgreich erstellt!');
+    console.log('📧 Email:', admin.email);
+    console.log('🔑 Passwort:', password);
+    console.log('');
+    console.log('⚠️  WICHTIG: Ändern Sie das Passwort nach dem ersten Login!');
+    console.log('🌐 Login unter: http://localhost:3000/auth/login');
+  } catch (error) {
+    console.error('❌ Fehler beim Erstellen des Admins:', error);
+  } finally {
+    await prisma.$disconnect();
   }
-
-  rl.close();
-  await prisma.$disconnect();
 }
 
-main()
-  .catch((e) => {
-    console.error("\n❌ Fehler:", e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+// Script ausführen
+createAdmin();

@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 async function main() {
   console.log("🔐 Erstelle neuen Admin-Benutzer...\n");
 
-  const email = "praxis@admin.de";
+  const email = "praxis@gefaessmedizinremscheid.de";
   const password = "Praxis2024!";
   const firstName = "Praxis";
   const lastName = "Administrator";

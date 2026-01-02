@@ -47,15 +47,6 @@ export default function LeistungenPage() {
                       <p className="text-gray-700">Hochmoderne Ultraschalltechnologie zur Beurteilung des Blutflusses und der Gefäßstruktur</p>
                     </div>
                   </div>
-                  <div className="flex items-start">
-                    <svg className="w-5 h-5 text-primary-600 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <div>
-                      <h4 className="font-semibold text-gray-900 mb-1">Laufband-Messung</h4>
-                      <p className="text-gray-700">Laufbanduntersuchung zur genauen Beurteilung der Durchblutungssituation</p>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>

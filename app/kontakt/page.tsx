@@ -131,7 +131,7 @@ export default function KontaktPage() {
                     <div>
                       <h3 className="font-bold text-gray-900 mb-2">Adresse</h3>
                       <p className="text-gray-700 leading-relaxed">
-                        Freiheitsstraße 203<br />
+                        Freiheitsstraße 203 (3. Etage)<br />
                         42853 Remscheid
                       </p>
                     </div>
@@ -176,7 +176,7 @@ export default function KontaktPage() {
                     <div>
                       <h4 className="font-bold text-gray-900 mb-2">Wichtiger Hinweis zum Zugang</h4>
                       <p className="text-gray-700 text-sm leading-relaxed">
-                        Bitte benutzen Sie den <strong>kleinen Aufzug</strong>, um zur Praxis zu gelangen. Der große Aufzug führt nicht zu unseren Praxisräumen.
+                        Bitte benutzen Sie den <strong>kleinen Aufzug</strong>, um zur Praxis in der 3. Etage im Gebäude zu gelangen. Der große Aufzug führt nicht zu unseren Praxisräumen. Alles ist jedoch entsprechend ausgeschildert.
                       </p>
                     </div>
                   </div>
@@ -237,7 +237,7 @@ export default function KontaktPage() {
                 <ul className="space-y-1 sm:space-y-2 text-sm sm:text-base text-gray-300">
                   <li>Tel: 02191 6917400</li>
                   <li>Fax: 02191 4694938</li>
-                  <li>Freiheitsstraße 203</li>
+                  <li>Freiheitsstraße 203 (3. Etage)</li>
                   <li>42853 Remscheid</li>
                 </ul>
               </div>
