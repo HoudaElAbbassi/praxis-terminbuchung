@@ -34,3 +34,9 @@ yarn-error.log*
 next-env.d.ts
 
 /lib/generated/prisma
+scripts/create-admin.ts
+
+# Admin scripts with credentials (use .example.ts templates instead)
+scripts/create-admin.ts
+scripts/create-new-admin.ts
+scripts/create-quick-admin.ts
