@@ -229,9 +229,14 @@ export default function EinstellungenPage() {
           <h2 className="text-2xl font-semibold text-gray-900 mb-4">Öffnungszeiten</h2>
           <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
             <p className="text-blue-900 font-medium mb-2">Aktuelle Öffnungszeiten:</p>
-            <p className="text-blue-800">Täglich: 08:00 - 16:00 Uhr</p>
+            <div className="text-blue-800 space-y-1">
+              <p>Montag und Mittwoch: 8:00 - 15:30 Uhr</p>
+              <p>Dienstag und Donnerstag: 10:00 - 17:30 Uhr</p>
+              <p>Freitag: 8:00 - 12:00 Uhr</p>
+              <p>Samstag-Sonntag: Geschlossen</p>
+            </div>
             <p className="text-blue-600 text-sm mt-2">
-              Hinweis: Öffnungszeiten sind aktuell fest konfiguriert (8-16 Uhr, Mo-Fr).
+              Hinweis: Öffnungszeiten sind aktuell fest konfiguriert.
               Erweiterungen können später hinzugefügt werden.
             </p>
           </div>

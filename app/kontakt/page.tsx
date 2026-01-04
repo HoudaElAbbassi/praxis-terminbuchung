@@ -90,11 +90,11 @@ export default function KontaktPage() {
                       <div className="space-y-2 text-sm">
                         <div className="flex justify-between">
                           <span className="text-gray-700 font-medium">Montag und Mittwoch:</span>
-                          <span className="text-gray-700">8:00 - 16:00 Uhr</span>
+                          <span className="text-gray-700">8:00 - 15:30 Uhr</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-gray-700 font-medium">Dienstag und Donnerstag:</span>
-                          <span className="text-gray-700">10:00 - 18:00 Uhr</span>
+                          <span className="text-gray-700">10:00 - 17:30 Uhr</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-gray-700 font-medium">Freitag:</span>
