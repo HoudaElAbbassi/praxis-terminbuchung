@@ -11,16 +11,28 @@ export default function Home() {
       <section className="relative bg-gradient-to-br from-primary-50 via-white to-accent-50 py-12 sm:py-16 lg:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-5xl mx-auto">
-            {/* Logo */}
-            <div className="flex justify-center mb-8 lg:mb-12">
-              <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary-500/10 to-accent-500/10 rounded-full blur-3xl"></div>
+            {/* Logo Layout - Links: Logoklein, Rechts: LogoText */}
+            <div className="flex items-center justify-between mb-8 lg:mb-12 px-4 sm:px-8">
+              {/* Logoklein links */}
+              <div className="flex-shrink-0">
                 <Image
-                  src="/images/logo.jpeg"
+                  src="/images/logoklein.jpeg"
+                  alt="Praxis Logo"
+                  width={120}
+                  height={120}
+                  className="rounded-full shadow-lg ring-2 ring-white/50 w-20 h-20 sm:w-28 sm:h-28 lg:w-[120px] lg:h-[120px] hover:scale-105 transition-all duration-300"
+                  priority
+                />
+              </div>
+
+              {/* LogoText rechts */}
+              <div className="flex-shrink-0">
+                <Image
+                  src="/images/LogoText.png"
                   alt="Praxis für Gefäßmedizin Remscheid"
-                  width={250}
-                  height={250}
-                  className="relative rounded-full opacity-100 hover:scale-105 transition-all duration-500 shadow-2xl ring-4 ring-white/50 w-48 h-48 sm:w-64 sm:h-64 lg:w-[250px] lg:h-[250px]"
+                  width={300}
+                  height={100}
+                  className="w-40 sm:w-56 lg:w-[300px] h-auto hover:scale-105 transition-all duration-300"
                   priority
                 />
               </div>
