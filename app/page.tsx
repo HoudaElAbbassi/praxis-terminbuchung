@@ -11,21 +11,9 @@ export default function Home() {
       <section className="relative bg-gradient-to-br from-primary-50 via-white to-accent-50 py-12 sm:py-16 lg:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-5xl mx-auto">
-            {/* Logo Layout - Links: Logoklein, Rechts: LogoText */}
+            {/* Logo Layout - Links: LogoText, Rechts: Logoklein */}
             <div className="flex items-center justify-between mb-8 lg:mb-12 px-4 sm:px-8">
-              {/* Logoklein links */}
-              <div className="flex-shrink-0">
-                <Image
-                  src="/images/logoklein.jpeg"
-                  alt="Praxis Logo"
-                  width={120}
-                  height={120}
-                  className="rounded-full shadow-lg ring-2 ring-white/50 w-20 h-20 sm:w-28 sm:h-28 lg:w-[120px] lg:h-[120px] hover:scale-105 transition-all duration-300"
-                  priority
-                />
-              </div>
-
-              {/* LogoText rechts */}
+              {/* LogoText links */}
               <div className="flex-shrink-0">
                 <Image
                   src="/images/LogoText.png"
@@ -33,6 +21,18 @@ export default function Home() {
                   width={300}
                   height={100}
                   className="w-40 sm:w-56 lg:w-[300px] h-auto hover:scale-105 transition-all duration-300"
+                  priority
+                />
+              </div>
+
+              {/* Logoklein rechts */}
+              <div className="flex-shrink-0">
+                <Image
+                  src="/images/logoklein.jpeg"
+                  alt="Praxis Logo"
+                  width={120}
+                  height={120}
+                  className="rounded-full shadow-lg ring-2 ring-white/50 w-20 h-20 sm:w-28 sm:h-28 lg:w-[120px] lg:h-[120px] hover:scale-105 transition-all duration-300"
                   priority
                 />
               </div>
