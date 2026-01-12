@@ -68,6 +68,10 @@ h1, h2, h3, h4, h5, h6 {
 
   .input-field {
     @apply w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-[#2c5f7c] focus:outline-none transition-colors duration-200;
+    /* Safari-specific fixes */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
   }
 
   .section-header {
@@ -80,5 +84,99 @@ h1, h2, h3, h4, h5, h6 {
 
   .section-subtitle {
     @apply text-lg text-gray-600;
+  }
+}
+
+/* Browser-specific fixes for Chrome, Firefox, and Safari */
+@layer base {
+  /* Safari date input fixes */
+  input[type="date"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    min-height: 44px; /* iOS minimum touch target */
+  }
+
+  /* Safari iOS fixes for buttons */
+  button {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  /* Prevent zoom on input focus in iOS Safari */
+  @media screen and (max-width: 768px) {
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="date"],
+    textarea,
+    select {
+      font-size: 16px !important; /* Prevents zoom on iOS */
+    }
+  }
+
+  /* Fix for Safari flexbox rendering */
+  .flex {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+  }
+
+  /* Smooth scrolling for all browsers */
+  * {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Fix for select dropdown in Safari */
+  select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.7rem center;
+    background-size: 1.5rem;
+    padding-right: 2.5rem;
+  }
+
+  /* Fix for checkbox styling in Safari */
+  input[type="checkbox"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 2px solid #cbd5e0;
+    border-radius: 0.25rem;
+    background-color: white;
+    cursor: pointer;
+    position: relative;
+  }
+
+  input[type="checkbox"]:checked {
+    background-color: #2c5f7c;
+    border-color: #2c5f7c;
+  }
+
+  input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    left: 0.25rem;
+    top: 0.05rem;
+    width: 0.35rem;
+    height: 0.65rem;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+
+  /* Firefox-specific fixes */
+  @-moz-document url-prefix() {
+    select {
+      padding-right: 1.5rem;
+    }
   }
 }

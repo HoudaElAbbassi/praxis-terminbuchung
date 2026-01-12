@@ -40,6 +40,7 @@ export default function KontaktPage() {
                     </div>
                     <div>
                       <h3 className="font-bold text-gray-900 mb-1 text-sm sm:text-base">Praxis für Gefäßmedizin</h3>
+                      <p className="text-primary-600 text-sm sm:text-base font-semibold">Dr. med. Abdelkarim Alyandouzi</p>
                       <p className="text-gray-800 text-sm sm:text-base font-medium">Remscheid</p>
                     </div>
                   </div>
@@ -55,7 +56,7 @@ export default function KontaktPage() {
                     </div>
                     <div>
                       <h3 className="font-bold text-gray-900 mb-1">Telefon</h3>
-                      <a href="tel:021916917400" className="text-primary-600 hover:underline text-lg">
+                      <a href="tel:021916917400" className="text-primary-600 hover:underline text-base">
                         02191 6917400
                       </a>
                     </div>
@@ -72,7 +73,7 @@ export default function KontaktPage() {
                     </div>
                     <div>
                       <h3 className="font-bold text-gray-900 mb-1">Fax</h3>
-                      <p className="text-gray-700">02191 4694938</p>
+                      <p className="text-gray-700 text-base">02191 4694938</p>
                     </div>
                   </div>
                 </div>
@@ -90,11 +91,11 @@ export default function KontaktPage() {
                       <div className="space-y-2 text-sm">
                         <div className="flex justify-between">
                           <span className="text-gray-700 font-medium">Montag und Mittwoch:</span>
-                          <span className="text-gray-700">8:00 - 15:30 Uhr</span>
+                          <span className="text-gray-700">8:00 - 15:00 Uhr</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-gray-700 font-medium">Dienstag und Donnerstag:</span>
-                          <span className="text-gray-700">10:00 - 17:30 Uhr</span>
+                          <span className="text-gray-700">10:00 - 17:00 Uhr</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-gray-700 font-medium">Freitag:</span>
@@ -138,6 +139,21 @@ export default function KontaktPage() {
                   </div>
                 </div>
 
+                {/* Access Info */}
+                <div className="mb-6 bg-accent-50 rounded-xl shadow-sm border border-accent-200 p-6">
+                  <div className="flex items-start">
+                    <svg className="w-6 h-6 text-accent-600 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <div>
+                      <h4 className="font-bold text-gray-900 mb-2">Wichtiger Hinweis zum Zugang</h4>
+                      <p className="text-gray-700 text-sm leading-relaxed">
+                        Bitte benutzen Sie den <strong>kleinen Aufzug</strong>, um zur Praxis in der 3. Etage im Gebäude zu gelangen. Der große Aufzug führt nicht zu unseren Praxisräumen. Alles ist jedoch entsprechend ausgeschildert.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
                 {/* Google Maps */}
                 <div className="bg-gray-100 rounded-xl overflow-hidden shadow-sm border border-gray-200" style={{height: '400px'}}>
                   <iframe
@@ -162,21 +178,6 @@ export default function KontaktPage() {
                       <h4 className="font-bold text-gray-900 mb-2">Parkmöglichkeiten</h4>
                       <p className="text-gray-700 text-sm leading-relaxed">
                         Parkplätze befinden sich direkt vor der Praxis. Die Praxis ist barrierefrei zugänglich.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Access Info */}
-                <div className="mt-4 bg-accent-50 rounded-xl shadow-sm border border-accent-200 p-6">
-                  <div className="flex items-start">
-                    <svg className="w-6 h-6 text-accent-600 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <div>
-                      <h4 className="font-bold text-gray-900 mb-2">Wichtiger Hinweis zum Zugang</h4>
-                      <p className="text-gray-700 text-sm leading-relaxed">
-                        Bitte benutzen Sie den <strong>kleinen Aufzug</strong>, um zur Praxis in der 3. Etage im Gebäude zu gelangen. Der große Aufzug führt nicht zu unseren Praxisräumen. Alles ist jedoch entsprechend ausgeschildert.
                       </p>
                     </div>
                   </div>

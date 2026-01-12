@@ -1,0 +1,25 @@
+# Browsers that we support
+# Hauptzielgruppe: Chrome, Firefox, Safari
+
+# Chrome (Desktop & Mobile)
+last 3 Chrome versions
+Chrome >= 90
+
+# Firefox (Desktop & Mobile)
+last 3 Firefox versions
+Firefox >= 88
+
+# Safari (Desktop & iOS)
+last 3 Safari versions
+Safari >= 13
+iOS >= 13
+
+# Edge (Chromium-based)
+last 2 Edge versions
+
+# Samsung Internet (Android)
+last 2 Samsung versions
+
+# Exclude dead browsers
+not dead
+not IE 11

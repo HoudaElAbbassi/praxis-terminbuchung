@@ -108,8 +108,8 @@ Bitte kontaktieren Sie uns telefonisch oder per E-Mail:
 ✉️ **E-Mail:** info@praxis-remscheid.de
 
 **Sprechzeiten:**
-Montag und Mittwoch: 8:00 - 15:30 Uhr
-Dienstag und Donnerstag: 10:00 - 17:30 Uhr
+Montag und Mittwoch: 8:00 - 15:00 Uhr
+Dienstag und Donnerstag: 10:00 - 17:00 Uhr
 Freitag: 8:00 - 12:00 Uhr`,
     quickReplies: [
       { label: 'Doch lieber online buchen', value: 'book_online' },
@@ -231,10 +231,10 @@ Wählen Sie ein Thema:`,
     response: `🕐 **Unsere Sprechzeiten:**
 
 **Montag und Mittwoch:**
-8:00 - 15:30 Uhr
+8:00 - 15:00 Uhr
 
 **Dienstag und Donnerstag:**
-10:00 - 17:30 Uhr
+10:00 - 17:00 Uhr
 
 **Freitag:**
 8:00 - 12:00 Uhr
@@ -376,8 +376,8 @@ Für einen kurzfristigen Termin haben Sie folgende Möglichkeiten:`,
 **Telefon:** 02191 6917400
 
 **Sprechzeiten:**
-Montag und Mittwoch: 8:00 - 15:30 Uhr
-Dienstag und Donnerstag: 10:00 - 17:30 Uhr
+Montag und Mittwoch: 8:00 - 15:00 Uhr
+Dienstag und Donnerstag: 10:00 - 17:00 Uhr
 Freitag: 8:00 - 12:00 Uhr
 
 Schildern Sie am Telefon, dass es dringend ist. Wir finden eine Lösung für Sie!
@@ -429,8 +429,8 @@ Unser Praxisteam wird Ihre Anfrage **prioritär bearbeiten** und sich schnellstm
 **E-Mail:** info@praxis-remscheid.de
 
 **Sprechzeiten:**
-Montag und Mittwoch: 8:00 - 15:30 Uhr
-Dienstag und Donnerstag: 10:00 - 17:30 Uhr
+Montag und Mittwoch: 8:00 - 15:00 Uhr
+Dienstag und Donnerstag: 10:00 - 17:00 Uhr
 Freitag: 8:00 - 12:00 Uhr
 Samstag-Sonntag: Geschlossen
 

@@ -651,7 +651,12 @@ export default function BuchenClient({ initialAppointmentTypes }: BuchenClientPr
                   name="dateOfBirth"
                   value={contactData.dateOfBirth}
                   onChange={handleContactChange}
+                  placeholder="TT.MM.JJJJ"
                   className="input-field text-gray-900"
+                  style={{
+                    WebkitAppearance: 'none',
+                    MozAppearance: 'textfield',
+                  }}
                 />
               </div>
 
