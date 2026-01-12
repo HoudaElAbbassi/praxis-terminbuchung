@@ -14,7 +14,7 @@ export default function Home() {
             {/* Logo Layout - Links: LogoText, Rechts: Logoklein */}
             <div className="flex items-center justify-between mb-8 lg:mb-12 px-4 sm:px-8">
               {/* LogoText links */}
-              <div className="flex-shrink-0">
+              <div className="flex-shrink-0 bg-white/60 backdrop-blur-sm rounded-lg p-2 sm:p-3 shadow-sm">
                 <Image
                   src="/images/LogoText.png"
                   alt="Praxis für Gefäßmedizin Remscheid"
@@ -22,6 +22,7 @@ export default function Home() {
                   height={100}
                   className="w-40 sm:w-56 lg:w-[300px] h-auto hover:scale-105 transition-all duration-300"
                   priority
+                  style={{ mixBlendMode: 'multiply' }}
                 />
               </div>
 
