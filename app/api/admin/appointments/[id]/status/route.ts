@@ -66,7 +66,7 @@ export async function PATCH(
       date: appointmentDate,
       time: appointmentTime,
       appointmentType: appointment.appointmentType.name,
-      doctorName: "Dr. med. Abdelkarim Alyandouzi",
+      doctorName: "Abdelkarim Alyandouzi",
     };
 
     // Send email notifications (non-blocking)

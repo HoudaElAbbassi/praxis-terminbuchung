@@ -126,7 +126,7 @@ const accentColor = '#4a9d8f'; // Deine Akzent-Farbe
 // Praxis-Daten anpassen
 const practiceInfo = {
   name: 'Praxis für Gefäßmedizin Remscheid',
-  doctor: 'Dr. med. Abdelkarim Alyandouzi',
+  doctor: 'Abdelkarim Alyandouzi',
   phone: '02191 6917400',
   email: 'info@praxis-remscheid.de',
 };

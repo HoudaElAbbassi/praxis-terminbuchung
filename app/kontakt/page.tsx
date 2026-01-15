@@ -40,7 +40,7 @@ export default function KontaktPage() {
                     </div>
                     <div>
                       <h3 className="font-bold text-gray-900 mb-1 text-sm sm:text-base">Praxis für Gefäßmedizin</h3>
-                      <p className="text-primary-600 text-sm sm:text-base font-semibold">Dr. med. Abdelkarim Alyandouzi</p>
+                      <p className="text-primary-600 text-sm sm:text-base font-semibold">Abdelkarim Alyandouzi</p>
                       <p className="text-gray-800 text-sm sm:text-base font-medium">Remscheid</p>
                     </div>
                   </div>

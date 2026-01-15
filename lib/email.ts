@@ -233,7 +233,7 @@ export async function sendAlternativeAppointmentEmail(data: AppointmentEmailData
 
                 <div class="footer">
                   <p>Praxis für Gefäßmedizin Remscheid<br>
-                  Dr. med. Abdelkarim Alyandouzi<br>
+                  Abdelkarim Alyandouzi<br>
                   📞 02191 6917400</p>
                 </div>
               </div>

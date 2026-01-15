@@ -95,7 +95,7 @@ async function testEmail() {
 
                 <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd; color: #666; font-size: 14px;">
                   Praxis für Gefäßmedizin Remscheid<br>
-                  Dr. med. Abdelkarim Alyandouzi
+                  Abdelkarim Alyandouzi
                 </p>
               </div>
             </div>
