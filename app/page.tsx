@@ -12,28 +12,28 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-5xl mx-auto">
             {/* Logo Layout - Links: LogoText, Rechts: Logoklein */}
-            <div className="flex items-center justify-between gap-4 mb-8 lg:mb-12 px-2 sm:px-4 lg:px-8">
+            <div className="flex items-center justify-between mb-8 lg:mb-12 px-4 sm:px-8">
               {/* LogoText links */}
-              <div className="flex-shrink-0 bg-white/60 backdrop-blur-sm rounded-lg p-2 sm:p-3 lg:p-4 shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-primary-400 hover:scale-105">
+              <div className="flex-shrink-0 bg-white/60 backdrop-blur-sm rounded-lg p-2 sm:p-3 shadow-sm">
                 <Image
                   src="/images/LogoText.png"
                   alt="Praxis für Gefäßmedizin Remscheid"
-                  width={400}
-                  height={133}
-                  className="w-32 sm:w-48 md:w-64 lg:w-80 xl:w-[400px] h-auto"
+                  width={300}
+                  height={100}
+                  className="w-40 sm:w-56 lg:w-[300px] h-auto hover:scale-105 transition-all duration-300"
                   priority
                   style={{ mixBlendMode: 'multiply' }}
                 />
               </div>
 
               {/* Logoklein rechts */}
-              <div className="flex-shrink-0 rounded-full shadow-lg hover:shadow-2xl transition-all duration-300 ring-2 ring-white/50 hover:ring-primary-400 hover:ring-4 hover:scale-110">
+              <div className="flex-shrink-0">
                 <Image
                   src="/images/logoklein.jpeg"
                   alt="Praxis Logo"
-                  width={180}
-                  height={180}
-                  className="rounded-full w-16 h-16 sm:w-24 sm:h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 xl:w-[180px] xl:h-[180px]"
+                  width={120}
+                  height={120}
+                  className="rounded-full shadow-lg ring-2 ring-white/50 w-20 h-20 sm:w-28 sm:h-28 lg:w-[120px] lg:h-[120px] hover:scale-105 transition-all duration-300"
                   priority
                 />
               </div>
