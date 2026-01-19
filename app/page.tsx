@@ -9,37 +9,37 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-primary-50 via-white to-accent-50 py-12 sm:py-16 lg:py-24">
-        <div className="w-full px-2 sm:px-4 lg:px-6">
-          <div className="text-center w-full">
-            {/* Logo Layout - Links: LogoText, Rechts: Logoklein */}
-            <div className="flex items-center justify-between mb-8 lg:mb-12">
-              {/* LogoText links */}
-              <div className="flex-shrink-0 bg-white/60 backdrop-blur-sm rounded-lg p-2 sm:p-3 shadow-sm">
-                <Image
-                  src="/images/LogoText.png"
-                  alt="Praxis für Gefäßmedizin Remscheid"
-                  width={550}
-                  height={183}
-                  className="w-48 sm:w-72 md:w-96 lg:w-[450px] xl:w-[550px] h-auto hover:scale-105 transition-all duration-300"
-                  priority
-                  style={{ mixBlendMode: 'multiply' }}
-                />
-              </div>
-
-              {/* Logoklein rechts */}
-              <div className="flex-shrink-0">
-                <Image
-                  src="/images/logoklein.jpeg"
-                  alt="Praxis Logo"
-                  width={200}
-                  height={200}
-                  className="rounded-full shadow-lg ring-2 ring-white/50 w-20 h-20 sm:w-36 sm:h-36 md:w-44 md:h-44 lg:w-48 lg:h-48 xl:w-[200px] xl:h-[200px] hover:scale-105 transition-all duration-300"
-                  priority
-                />
-              </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Logo Layout - Links: LogoText, Rechts: Logoklein */}
+          <div className="flex items-center justify-between mb-8 lg:mb-12 max-w-full">
+            {/* LogoText links */}
+            <div className="flex-shrink-0 bg-white/60 backdrop-blur-sm rounded-lg p-2 sm:p-3 shadow-sm">
+              <Image
+                src="/images/LogoText.png"
+                alt="Praxis für Gefäßmedizin Remscheid"
+                width={400}
+                height={133}
+                className="w-36 sm:w-56 md:w-72 lg:w-80 xl:w-[400px] h-auto hover:scale-105 transition-all duration-300"
+                priority
+                style={{ mixBlendMode: 'multiply' }}
+              />
             </div>
 
-            {/* Willkommenstext */}
+            {/* Logoklein rechts */}
+            <div className="flex-shrink-0">
+              <Image
+                src="/images/logoklein.jpeg"
+                alt="Praxis Logo"
+                width={150}
+                height={150}
+                className="rounded-full shadow-lg ring-2 ring-white/50 w-16 h-16 sm:w-28 sm:h-28 md:w-36 md:h-36 lg:w-40 lg:h-40 xl:w-[150px] xl:h-[150px] hover:scale-105 transition-all duration-300"
+                priority
+              />
+            </div>
+          </div>
+
+          {/* Willkommenstext */}
+          <div className="text-center max-w-5xl mx-auto">
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-primary-700 mb-4 sm:mb-6 px-2" style={{fontFamily: "'Playfair Display', serif"}}>
               Herzlich willkommen zur Praxis
             </h1>
