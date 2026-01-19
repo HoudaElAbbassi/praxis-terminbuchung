@@ -37,17 +37,35 @@ export default function LeistungenPage() {
                 </h2>
               </div>
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 sm:p-8">
-                <div className="space-y-4">
-                  <div className="flex items-start">
-                    <svg className="w-5 h-5 text-primary-600 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <div>
-                      <h4 className="font-semibold text-gray-900 mb-1">Farbduplexsonographie</h4>
-                      <p className="text-gray-700">Hochmoderne Ultraschalltechnologie zur Beurteilung des Blutflusses und der Gefäßstruktur</p>
-                    </div>
-                  </div>
-                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Farbduplexsonographie</h3>
+                <p className="text-gray-700 mb-4 leading-relaxed">
+                  Eine exakte Diagnostik ist die Grundlage jeder erfolgreichen Behandlung. In unserer Praxis für Gefäßchirurgie setzen wir daher auf modernste Ultraschalltechnik, insbesondere die Farbduplexsonographie – ein schonendes, strahlenfreies und äußerst präzises Untersuchungsverfahren.
+                </p>
+
+                <h4 className="font-semibold text-gray-900 mt-6 mb-2">Was ist die Farbduplexsonographie?</h4>
+                <p className="text-gray-700 mb-4 leading-relaxed">
+                  Die Farbduplexsonographie ist eine spezielle Ultraschalluntersuchung, mit der sowohl die Struktur der Blutgefäße als auch der Blutfluss in Echtzeit dargestellt werden können. Durch die farbliche Darstellung der Strömungsrichtung und -geschwindigkeit lassen sich selbst kleinste Veränderungen zuverlässig erkennen.
+                </p>
+
+                <h4 className="font-semibold text-gray-900 mt-6 mb-2">Wofür wird die Untersuchung eingesetzt?</h4>
+                <p className="text-gray-700 mb-3 leading-relaxed">
+                  Mit der Farbduplexsonographie können unter anderem folgende Gefäßerkrankungen sicher beurteilt werden:
+                </p>
+                <ul className="list-disc list-inside space-y-2 text-gray-700 mb-4 ml-4">
+                  <li>Verengungen oder Verschlüsse von Arterien (z. B. bei Durchblutungsstörungen)</li>
+                  <li>Erkrankungen der Halsschlagadern (Carotisstenosen)</li>
+                  <li>Venenerkrankungen wie Krampfadern oder Thrombosen</li>
+                  <li>Veränderungen der Gefäßwand, z. B. Aussackungen (Aneurysmen)</li>
+                </ul>
+
+                <h4 className="font-semibold text-gray-900 mt-6 mb-2">Ihre Vorteile auf einen Blick</h4>
+                <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
+                  <li>Schmerzfrei und ohne Strahlenbelastung</li>
+                  <li>Hohe diagnostische Genauigkeit</li>
+                  <li>Unmittelbare Ergebnisse</li>
+                  <li>Ambulant durchführbar</li>
+                  <li>Ideal zur Verlaufskontrolle</li>
+                </ul>
               </div>
             </div>
 
@@ -56,7 +74,6 @@ export default function LeistungenPage() {
               <div className="flex items-center mb-4 sm:mb-6">
                 <div className="w-12 h-12 sm:w-14 sm:h-14 bg-blue-500 rounded-xl flex items-center justify-center mr-3 sm:mr-4 flex-shrink-0">
                   <svg className="w-6 h-6 sm:w-7 sm:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    {/* Venen-Symbol: Geschwungenes Blutgefäß mit Ventilen */}
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 4c0 4 2 6 6 6s6-2 6-6M6 20c0-4 2-6 6-6s6 2 6 6M12 10v4M9 12h6M9 16h6" />
                   </svg>
                 </div>
@@ -64,45 +81,108 @@ export default function LeistungenPage() {
                   2. Venenerkrankungen
                 </h2>
               </div>
+
+              {/* Krampfadern */}
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 sm:p-8 mb-6">
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Krampfadern (Varizen)</h3>
+                <p className="text-gray-700 mb-4 leading-relaxed">
+                  Krampfadern sind dauerhaft erweiterte, oberflächliche Venen, die häufig an den Beinen auftreten. Sie sind nicht nur ein kosmetisches Problem, sondern können Beschwerden verursachen und langfristig zu Komplikationen führen.
+                </p>
+
+                <h4 className="font-semibold text-gray-900 mt-6 mb-2">Mögliche Beschwerden:</h4>
+                <ul className="list-disc list-inside space-y-2 text-gray-700 mb-4 ml-4">
+                  <li>Schwere- oder Spannungsgefühl in den Beinen</li>
+                  <li>Beinschwellungen</li>
+                  <li>Nächtliche Wadenkrämpfe</li>
+                  <li>Hautveränderungen oder Entzündungen</li>
+                </ul>
+
+                <h4 className="font-semibold text-gray-900 mt-6 mb-2">Moderne, schonende Behandlung</h4>
+                <p className="text-gray-700 mb-3 leading-relaxed">
+                  Wir bieten minimalinvasive Therapieverfahren, die ambulant durchgeführt werden können, darunter:
+                </p>
+                <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
+                  <li>Schaumverödung (Sklerotherapie)</li>
+                  <li>Mikrosklerotherapie bei Besenreisern</li>
+                </ul>
+                <p className="text-gray-700 mt-4 leading-relaxed">
+                  Die Behandlung erfolgt individuell, schonend und ohne längeren Ausfall im Alltag.
+                </p>
+              </div>
+
+              {/* Chronisch venöse Insuffizienz */}
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 sm:p-8 mb-6">
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Chronisch venöse Insuffizienz (CVI)</h3>
+                <p className="text-gray-700 mb-4 leading-relaxed">
+                  Die chronisch venöse Insuffizienz (CVI) ist eine langfristige Erkrankung des Venensystems, bei der das Blut aus den Beinen nicht mehr ausreichend zum Herzen zurücktransportiert wird. Ursache sind meist geschädigte oder undichte Venenklappen. Dadurch staut sich das Blut in den Beinen – mit zunehmenden Beschwerden und sichtbaren Veränderungen der Haut.
+                </p>
+
+                <h4 className="font-semibold text-gray-900 mt-6 mb-2">Typische Beschwerden</h4>
+                <p className="text-gray-700 mb-3 leading-relaxed">
+                  Eine CVI entwickelt sich meist schleichend. Häufige Symptome sind:
+                </p>
+                <ul className="list-disc list-inside space-y-2 text-gray-700 mb-4 ml-4">
+                  <li>Schwere- und Spannungsgefühl in den Beinen</li>
+                  <li>Beinschwellungen, besonders abends</li>
+                  <li>Krampfadern</li>
+                  <li>Juckreiz, Hautveränderungen oder Verfärbungen</li>
+                  <li>In fortgeschrittenen Stadien schlecht heilende Wunden (offenes Bein)</li>
+                </ul>
+
+                <h4 className="font-semibold text-gray-900 mt-6 mb-2">Warum eine frühe Abklärung wichtig ist</h4>
+                <p className="text-gray-700 mb-4 leading-relaxed">
+                  Unbehandelt kann die chronisch venöse Insuffizienz fortschreiten. Eine frühzeitige Diagnostik ermöglicht es, gezielt gegenzusteuern und Komplikationen zu vermeiden.
+                </p>
+
+                <h4 className="font-semibold text-gray-900 mt-6 mb-2">Moderne Diagnostik für sichere Befunde</h4>
+                <p className="text-gray-700 mb-4 leading-relaxed">
+                  In unserer Praxis erfolgt die Abklärung mittels Farbduplexsonographie, mit der wir Funktion und Durchgängigkeit der Venen sowie den Blutfluss exakt beurteilen können. So lässt sich das Ausmaß der Erkrankung zuverlässig feststellen und eine individuelle Therapie planen.
+                </p>
+
+                <h4 className="font-semibold text-gray-900 mt-6 mb-2">Individuelle Behandlung</h4>
+                <p className="text-gray-700 leading-relaxed">
+                  Unser Ziel ist es, die chronisch venöse Insuffizienz frühzeitig zu erkennen, Beschwerden zu lindern und Ihre Lebensqualität langfristig zu erhalten – mit moderner Medizin, Zeit für Gespräche und einem ganzheitlichen Blick auf Ihre Gefäßgesundheit.
+                </p>
+              </div>
+
+              {/* Tiefe Venenthrombose */}
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 sm:p-8 mb-6">
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Tiefe Venenthrombose (TVT)</h3>
+                <p className="text-gray-700 mb-4 leading-relaxed">
+                  Eine tiefe Venenthrombose (TVT) entsteht, wenn sich ein Blutgerinnsel in einer tiefen Vene bildet, meist im Bein oder Becken. Dadurch wird der Blutabfluss behindert. Eine TVT ist eine ernstzunehmende Erkrankung, da sich das Gerinnsel lösen und über den Blutstrom in die Lunge wandern kann.
+                </p>
+
+                <h4 className="font-semibold text-gray-900 mt-6 mb-2">Typische Anzeichen</h4>
+                <p className="text-gray-700 mb-3 leading-relaxed">
+                  Die Beschwerden können unterschiedlich ausgeprägt sein. Häufige Symptome sind:
+                </p>
+                <ul className="list-disc list-inside space-y-2 text-gray-700 mb-4 ml-4">
+                  <li>Plötzlich auftretende einseitige Beinschwellung</li>
+                  <li>Schmerzen oder Spannungsgefühl im Bein</li>
+                  <li>Überwärmung und Rötung der Haut</li>
+                  <li>Schweregefühl oder Druckschmerz</li>
+                </ul>
+                <p className="text-gray-700 mb-4 leading-relaxed">
+                  Nicht jede Thrombose verursacht deutliche Symptome – daher ist eine frühzeitige Abklärung besonders wichtig.
+                </p>
+
+                <h4 className="font-semibold text-gray-900 mt-6 mb-2">Sichere Diagnostik mit moderner Technik</h4>
+                <p className="text-gray-700 mb-4 leading-relaxed">
+                  Die wichtigste Untersuchung zur Diagnose einer TVT ist die Farbduplexsonographie. Sie ermöglicht es, den Blutfluss in den tiefen Venen sichtbar zu machen und ein Blutgerinnsel zuverlässig zu erkennen oder auszuschließen.
+                </p>
+
+                <h4 className="font-semibold text-gray-900 mt-6 mb-2">Unser Anspruch</h4>
+                <p className="text-gray-700 leading-relaxed">
+                  Wir begleiten Sie von der sicheren Diagnosestellung über die Therapie bis zur Nachsorge. Ziel ist es, Risiken zu minimieren, Beschwerden zu lindern und Folgeschäden wie das postthrombotische Syndrom zu vermeiden.
+                </p>
+              </div>
+
+              {/* Besenreiser */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 sm:p-8">
-                <div className="space-y-4">
-                  <div className="flex items-start">
-                    <svg className="w-5 h-5 text-primary-600 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <div>
-                      <h4 className="font-semibold text-gray-900 mb-1">Besenreiser</h4>
-                      <p className="text-gray-700">Sichtbare, feine Venen an den Beinen – kosmetisch störend, aber meist harmlos</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start">
-                    <svg className="w-5 h-5 text-primary-600 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <div>
-                      <h4 className="font-semibold text-gray-900 mb-1">Beinschwellungen</h4>
-                      <p className="text-gray-700">Zeichen einer Venenschwäche – frühzeitige Behandlung ist wichtig</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start">
-                    <svg className="w-5 h-5 text-primary-600 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <div>
-                      <h4 className="font-semibold text-gray-900 mb-1">Tiefe Venenthrombose</h4>
-                      <p className="text-gray-700">Blutgerinnsel in den tiefen Venen – erfordert schnelle Diagnostik und Behandlung</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start">
-                    <svg className="w-5 h-5 text-primary-600 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <div>
-                      <h4 className="font-semibold text-gray-900 mb-1">Chronisch venöse Insuffizienz</h4>
-                      <p className="text-gray-700">Dauerhafte Schädigung der Venenklappen mit Folgeerscheinungen</p>
-                    </div>
-                  </div>
-                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Besenreiser</h3>
+                <p className="text-gray-700 leading-relaxed">
+                  Sichtbare, feine Venen an den Beinen – kosmetisch störend, aber meist harmlos. Behandlung durch Mikrosklerotherapie möglich.
+                </p>
               </div>
             </div>
 
@@ -118,44 +198,59 @@ export default function LeistungenPage() {
                   3. Arterielle Gefäßerkrankungen
                 </h2>
               </div>
+
+              {/* pAVK */}
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 sm:p-8 mb-6">
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Durchblutungsstörungen der Beine (pAVK – „Schaufensterkrankheit")</h3>
+                <p className="text-gray-700 mb-4 leading-relaxed">
+                  Die periphere arterielle Verschlusskrankheit (pAVK) ist eine häufige Gefäßerkrankung, bei der es durch Ablagerungen in den Arterien zu einer verminderten Durchblutung der Beine kommt. Typisch sind Schmerzen beim Gehen, die nach kurzer Pause wieder nachlassen – daher der Begriff „Schaufensterkrankheit".
+                </p>
+
+                <h4 className="font-semibold text-gray-900 mt-6 mb-2">Symptome können sein:</h4>
+                <ul className="list-disc list-inside space-y-2 text-gray-700 mb-4 ml-4">
+                  <li>Schmerzen oder Krämpfe in Waden, Oberschenkeln oder Gesäß</li>
+                  <li>Kalte Füße oder Beine</li>
+                  <li>Wunden, die schlecht heilen</li>
+                  <li>Verminderte Gehstrecke</li>
+                </ul>
+
+                <h4 className="font-semibold text-gray-900 mt-6 mb-2">Unsere Betreuung</h4>
+                <p className="text-gray-700 leading-relaxed">
+                  In unserer Praxis erfolgt eine präzise Diagnostik mittels Farbduplexsonographie und Durchblutungsmessungen. Auf dieser Basis entwickeln wir ein individuelles Behandlungskonzept, das konservative Maßnahmen, weiterführende Diagnostik ggfs. Therapien umfasst.
+                </p>
+              </div>
+
+              {/* Carotisstenose */}
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 sm:p-8 mb-6">
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Verengung der Halsschlagader (Carotisstenose)</h3>
+                <p className="text-gray-700 mb-4 leading-relaxed">
+                  Die Halsschlagadern versorgen das Gehirn mit Sauerstoff. Eine Verengung (Carotisstenose) entsteht meist durch Arteriosklerose und kann unbehandelt das Risiko für einen Schlaganfall erhöhen.
+                </p>
+
+                <h4 className="font-semibold text-gray-900 mt-6 mb-2">Wichtig zu wissen:</h4>
+                <p className="text-gray-700 mb-4 leading-relaxed">
+                  Carotisstenosen verursachen oft lange Zeit keine Beschwerden und werden häufig zufällig entdeckt.
+                </p>
+
+                <h4 className="font-semibold text-gray-900 mt-6 mb-2">Unsere Diagnostik</h4>
+                <p className="text-gray-700 leading-relaxed">
+                  Mit hochauflösender Farbduplexsonographie können wir Engstellen frühzeitig erkennen und das individuelle Schlaganfallrisiko einschätzen. Gemeinsam mit Ihnen besprechen wir das weitere Vorgehen – von engmaschiger Kontrolle bis zur weiterführenden Therapie.
+                </p>
+              </div>
+
+              {/* Bauchaortenaneurysma & Beinarterienaneurysmen */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 sm:p-8">
-                <div className="space-y-4">
-                  <div className="flex items-start">
-                    <svg className="w-5 h-5 text-primary-600 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <div>
-                      <h4 className="font-semibold text-gray-900 mb-1">pAVK (Schaufensterkrankheit)</h4>
-                      <p className="text-gray-700">Schmerzen beim Gehen durch Durchblutungsstörungen in den Beinen</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start">
-                    <svg className="w-5 h-5 text-primary-600 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <div>
-                      <h4 className="font-semibold text-gray-900 mb-1">Carotisstenose</h4>
-                      <p className="text-gray-700">Verengung der Halsschlagader – kann zu Schlaganfall führen</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start">
-                    <svg className="w-5 h-5 text-primary-600 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <div>
-                      <h4 className="font-semibold text-gray-900 mb-1">Bauchaortenaneurysma</h4>
-                      <p className="text-gray-700">Erweiterung der Bauchschlagader – regelmäßige Kontrolle wichtig</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start">
-                    <svg className="w-5 h-5 text-primary-600 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <div>
-                      <h4 className="font-semibold text-gray-900 mb-1">Aneurysmen der Beinarterien</h4>
-                      <p className="text-gray-700">Aussackungen der Beinarterien mit Komplikationsrisiko</p>
-                    </div>
-                  </div>
+                <div className="mb-6">
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">Bauchaortenaneurysma</h3>
+                  <p className="text-gray-700 leading-relaxed">
+                    Erweiterung der Bauchschlagader – regelmäßige Kontrolle wichtig
+                  </p>
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">Aneurysmen der Beinarterien</h3>
+                  <p className="text-gray-700 leading-relaxed">
+                    Aussackungen der Beinarterien mit Komplikationsrisiko
+                  </p>
                 </div>
               </div>
             </div>
@@ -172,27 +267,29 @@ export default function LeistungenPage() {
                   4. Lymphatische und Fettgewebserkrankungen
                 </h2>
               </div>
+
+              {/* Lymphödem */}
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 sm:p-8 mb-6">
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Lymphödem</h3>
+                <p className="text-gray-700 mb-4 leading-relaxed">
+                  Beim Lymphödem kommt es zu einer Schwellung von Körperregionen, weil der Abfluss der Lymphflüssigkeit gestört ist. Unbehandelt kann dies zu Bewegungseinschränkungen und Hautveränderungen führen.
+                </p>
+
+                <h4 className="font-semibold text-gray-900 mt-6 mb-2">Unsere Leistungen:</h4>
+                <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
+                  <li>Differenzierte Diagnostik</li>
+                  <li>Abgrenzung zu venösen Erkrankungen</li>
+                  <li>Individuelle Therapieempfehlungen</li>
+                  <li>Langfristige Betreuung</li>
+                </ul>
+              </div>
+
+              {/* Lipödem */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 sm:p-8">
-                <div className="space-y-4">
-                  <div className="flex items-start">
-                    <svg className="w-5 h-5 text-primary-600 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <div>
-                      <h4 className="font-semibold text-gray-900 mb-1">Lymphödem</h4>
-                      <p className="text-gray-700">Flüssigkeitsansammlung durch gestörten Lymphabfluss – erfordert spezialisierte Behandlung</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start">
-                    <svg className="w-5 h-5 text-primary-600 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <div>
-                      <h4 className="font-semibold text-gray-900 mb-1">Lipödem</h4>
-                      <p className="text-gray-700">Krankhafte Fettverteilungsstörung mit Schweregefühl und Schmerzen</p>
-                    </div>
-                  </div>
-                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Lipödem</h3>
+                <p className="text-gray-700 leading-relaxed">
+                  Krankhafte Fettverteilungsstörung mit Schweregefühl und Schmerzen
+                </p>
               </div>
             </div>
 
@@ -209,16 +306,31 @@ export default function LeistungenPage() {
                 </h2>
               </div>
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 sm:p-8">
-                <p className="text-base sm:text-lg text-gray-800 leading-relaxed mb-6 font-medium">
-                  Schonende Verfahren ohne Klinikaufenthalt – Sie sind noch am selben Tag wieder zu Hause:
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Ambulante, minimalinvasive Gefäßtherapien</h3>
+                <p className="text-gray-700 mb-4 leading-relaxed">
+                  Viele Gefäßerkrankungen lassen sich heute ambulant und schonend behandeln – ohne Krankenhausaufenthalt.
                 </p>
+
+                <h4 className="font-semibold text-gray-900 mt-6 mb-2">Vorteile für Sie:</h4>
+                <ul className="list-disc list-inside space-y-2 text-gray-700 mb-4 ml-4">
+                  <li>Kurze Behandlungsdauer</li>
+                  <li>Schnelle Erholung</li>
+                  <li>Kein stationärer Aufenthalt</li>
+                  <li>Moderne, sichere Verfahren</li>
+                </ul>
+
+                <p className="text-gray-700 mb-6 leading-relaxed">
+                  Unser Ziel ist es, Ihnen eine effektive Behandlung mit möglichst geringer Belastung zu ermöglichen.
+                </p>
+
+                <h4 className="font-semibold text-gray-900 mt-6 mb-3">Unsere Behandlungsverfahren:</h4>
                 <div className="space-y-4">
                   <div className="flex items-start">
                     <svg className="w-5 h-5 text-primary-600 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                     <div>
-                      <h4 className="font-semibold text-gray-900 mb-1">Minimalinvasive Krampfadertherapie</h4>
+                      <h5 className="font-semibold text-gray-900 mb-1">Minimalinvasive Krampfadertherapie</h5>
                       <p className="text-gray-700">Moderne kathetergestützte Verfahren ohne große Schnitte</p>
                     </div>
                   </div>
@@ -227,7 +339,7 @@ export default function LeistungenPage() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                     <div>
-                      <h4 className="font-semibold text-gray-900 mb-1">Schaumverödung (Sklerotherapie)</h4>
+                      <h5 className="font-semibold text-gray-900 mb-1">Schaumverödung (Sklerotherapie)</h5>
                       <p className="text-gray-700">Bei Krampfadern – effektiv und ambulant durchführbar</p>
                     </div>
                   </div>
@@ -236,7 +348,7 @@ export default function LeistungenPage() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                     <div>
-                      <h4 className="font-semibold text-gray-900 mb-1">Mikrosklerotherapie bei Besenreisern</h4>
+                      <h5 className="font-semibold text-gray-900 mb-1">Mikrosklerotherapie bei Besenreisern</h5>
                       <p className="text-gray-700">Verödung feiner Hautvenen für ein schöneres Hautbild</p>
                     </div>
                   </div>
@@ -333,6 +445,9 @@ export default function LeistungenPage() {
                   <li><Link href="/philosophie" className="hover:text-primary-300 transition-colors">Philosophie</Link></li>
                   <li><Link href="/leistungen" className="hover:text-primary-300 transition-colors">Leistungen</Link></li>
                   <li><Link href="/termine/buchen" className="hover:text-primary-300 transition-colors">Termin buchen</Link></li>
+                  <li><Link href="/kontakt" className="hover:text-primary-300 transition-colors">Kontakt</Link></li>
+                  <li><Link href="/datenschutz" className="hover:text-primary-300 transition-colors">Datenschutz</Link></li>
+                  <li><Link href="/impressum" className="hover:text-primary-300 transition-colors">Impressum</Link></li>
                   <li><Link href="/auth/login" className="hover:text-primary-300 transition-colors">Login</Link></li>
                 </ul>
               </div>
