@@ -18,8 +18,12 @@ const playfairDisplay = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Praxis Terminbuchung",
-  description: "Online Terminbuchung für Ihre Arztpraxis",
+  title: "Praxis für Gefäßmedizin Remscheid",
+  description: "Moderne Gefäßmedizin mit Erfahrung, Präzision und Einfühlungsvermögen. Online Terminbuchung für Gefäßuntersuchungen und Behandlungen.",
+  icons: {
+    icon: '/images/logoklein.jpeg',
+    apple: '/images/logoklein.jpeg',
+  },
 };
 
 export default function RootLayout({
