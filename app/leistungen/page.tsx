@@ -226,13 +226,13 @@ export default function LeistungenPage() {
               </div>
 
               <AccordionItem
-                title="Durchblutungsstörungen der Beine (pAVK – „Schaufensterkrankheit")"
+                title="Durchblutungsstörungen der Beine (pAVK – 'Schaufensterkrankheit')"
                 subtitle="Häufige Gefäßerkrankung mit individueller Behandlung"
                 isOpen={openSection === 'pavk'}
                 onToggle={() => toggleSection('pavk')}
               >
                 <p className="text-gray-700 mb-4 leading-relaxed">
-                  Die periphere arterielle Verschlusskrankheit (pAVK) ist eine häufige Gefäßerkrankung, bei der es durch Ablagerungen in den Arterien zu einer verminderten Durchblutung der Beine kommt. Typisch sind Schmerzen beim Gehen, die nach kurzer Pause wieder nachlassen – daher der Begriff „Schaufensterkrankheit".
+                  Die periphere arterielle Verschlusskrankheit (pAVK) ist eine häufige Gefäßerkrankheit, bei der es durch Ablagerungen in den Arterien zu einer verminderten Durchblutung der Beine kommt. Typisch sind Schmerzen beim Gehen, die nach kurzer Pause wieder nachlassen – daher der Begriff "Schaufensterkrankheit".
                 </p>
 
                 <h4 className="font-semibold text-gray-900 mt-6 mb-2">Symptome können sein:</h4>
