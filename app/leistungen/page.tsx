@@ -1,7 +1,16 @@
+'use client';
+
 import Navigation from '@/components/Navigation';
 import Link from 'next/link';
+import { useState } from 'react';
+import AccordionItem from '@/components/AccordionItem';
 
 export default function LeistungenPage() {
+  const [openSection, setOpenSection] = useState<string | null>(null);
+
+  const toggleSection = (section: string) => {
+    setOpenSection(openSection === section ? null : section);
+  };
   return (
     <>
       <Navigation />
@@ -36,8 +45,13 @@ export default function LeistungenPage() {
                   1. Präzise Diagnostik
                 </h2>
               </div>
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 sm:p-8">
-                <h3 className="text-xl font-bold text-gray-900 mb-3">Farbduplexsonographie</h3>
+
+              <AccordionItem
+                title="Farbduplexsonographie"
+                subtitle="Modernste Ultraschalltechnik für präzise Diagnostik"
+                isOpen={openSection === 'farbduplex'}
+                onToggle={() => toggleSection('farbduplex')}
+              >
                 <p className="text-gray-700 mb-4 leading-relaxed">
                   Eine exakte Diagnostik ist die Grundlage jeder erfolgreichen Behandlung. In unserer Praxis für Gefäßchirurgie setzen wir daher auf modernste Ultraschalltechnik, insbesondere die Farbduplexsonographie – ein schonendes, strahlenfreies und äußerst präzises Untersuchungsverfahren.
                 </p>
@@ -66,7 +80,7 @@ export default function LeistungenPage() {
                   <li>Ambulant durchführbar</li>
                   <li>Ideal zur Verlaufskontrolle</li>
                 </ul>
-              </div>
+              </AccordionItem>
             </div>
 
             {/* 2. Venenerkrankungen */}
@@ -82,9 +96,12 @@ export default function LeistungenPage() {
                 </h2>
               </div>
 
-              {/* Krampfadern */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 sm:p-8 mb-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-3">Krampfadern (Varizen)</h3>
+              <AccordionItem
+                title="Krampfadern (Varizen)"
+                subtitle="Moderne, schonende Behandlung von Venenerkrankungen"
+                isOpen={openSection === 'krampfadern'}
+                onToggle={() => toggleSection('krampfadern')}
+              >
                 <p className="text-gray-700 mb-4 leading-relaxed">
                   Krampfadern sind dauerhaft erweiterte, oberflächliche Venen, die häufig an den Beinen auftreten. Sie sind nicht nur ein kosmetisches Problem, sondern können Beschwerden verursachen und langfristig zu Komplikationen führen.
                 </p>
@@ -108,11 +125,14 @@ export default function LeistungenPage() {
                 <p className="text-gray-700 mt-4 leading-relaxed">
                   Die Behandlung erfolgt individuell, schonend und ohne längeren Ausfall im Alltag.
                 </p>
-              </div>
+              </AccordionItem>
 
-              {/* Chronisch venöse Insuffizienz */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 sm:p-8 mb-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-3">Chronisch venöse Insuffizienz (CVI)</h3>
+              <AccordionItem
+                title="Chronisch venöse Insuffizienz (CVI)"
+                subtitle="Langfristige Venenerkrankung mit gezielter Behandlung"
+                isOpen={openSection === 'cvi'}
+                onToggle={() => toggleSection('cvi')}
+              >
                 <p className="text-gray-700 mb-4 leading-relaxed">
                   Die chronisch venöse Insuffizienz (CVI) ist eine langfristige Erkrankung des Venensystems, bei der das Blut aus den Beinen nicht mehr ausreichend zum Herzen zurücktransportiert wird. Ursache sind meist geschädigte oder undichte Venenklappen. Dadurch staut sich das Blut in den Beinen – mit zunehmenden Beschwerden und sichtbaren Veränderungen der Haut.
                 </p>
@@ -143,11 +163,14 @@ export default function LeistungenPage() {
                 <p className="text-gray-700 leading-relaxed">
                   Unser Ziel ist es, die chronisch venöse Insuffizienz frühzeitig zu erkennen, Beschwerden zu lindern und Ihre Lebensqualität langfristig zu erhalten – mit moderner Medizin, Zeit für Gespräche und einem ganzheitlichen Blick auf Ihre Gefäßgesundheit.
                 </p>
-              </div>
+              </AccordionItem>
 
-              {/* Tiefe Venenthrombose */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 sm:p-8 mb-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-3">Tiefe Venenthrombose (TVT)</h3>
+              <AccordionItem
+                title="Tiefe Venenthrombose (TVT)"
+                subtitle="Ernstzunehmende Erkrankung mit schneller Diagnostik"
+                isOpen={openSection === 'tvt'}
+                onToggle={() => toggleSection('tvt')}
+              >
                 <p className="text-gray-700 mb-4 leading-relaxed">
                   Eine tiefe Venenthrombose (TVT) entsteht, wenn sich ein Blutgerinnsel in einer tiefen Vene bildet, meist im Bein oder Becken. Dadurch wird der Blutabfluss behindert. Eine TVT ist eine ernstzunehmende Erkrankung, da sich das Gerinnsel lösen und über den Blutstrom in die Lunge wandern kann.
                 </p>
@@ -175,15 +198,18 @@ export default function LeistungenPage() {
                 <p className="text-gray-700 leading-relaxed">
                   Wir begleiten Sie von der sicheren Diagnosestellung über die Therapie bis zur Nachsorge. Ziel ist es, Risiken zu minimieren, Beschwerden zu lindern und Folgeschäden wie das postthrombotische Syndrom zu vermeiden.
                 </p>
-              </div>
+              </AccordionItem>
 
-              {/* Besenreiser */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 sm:p-8">
-                <h3 className="text-xl font-bold text-gray-900 mb-3">Besenreiser</h3>
+              <AccordionItem
+                title="Besenreiser"
+                subtitle="Feine Venen – kosmetisch störend, aber behandelbar"
+                isOpen={openSection === 'besenreiser'}
+                onToggle={() => toggleSection('besenreiser')}
+              >
                 <p className="text-gray-700 leading-relaxed">
                   Sichtbare, feine Venen an den Beinen – kosmetisch störend, aber meist harmlos. Behandlung durch Mikrosklerotherapie möglich.
                 </p>
-              </div>
+              </AccordionItem>
             </div>
 
             {/* 3. Arterielle Gefäßerkrankungen */}
@@ -199,9 +225,12 @@ export default function LeistungenPage() {
                 </h2>
               </div>
 
-              {/* pAVK */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 sm:p-8 mb-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-3">Durchblutungsstörungen der Beine (pAVK – „Schaufensterkrankheit")</h3>
+              <AccordionItem
+                title="Durchblutungsstörungen der Beine (pAVK – „Schaufensterkrankheit")"
+                subtitle="Häufige Gefäßerkrankung mit individueller Behandlung"
+                isOpen={openSection === 'pavk'}
+                onToggle={() => toggleSection('pavk')}
+              >
                 <p className="text-gray-700 mb-4 leading-relaxed">
                   Die periphere arterielle Verschlusskrankheit (pAVK) ist eine häufige Gefäßerkrankung, bei der es durch Ablagerungen in den Arterien zu einer verminderten Durchblutung der Beine kommt. Typisch sind Schmerzen beim Gehen, die nach kurzer Pause wieder nachlassen – daher der Begriff „Schaufensterkrankheit".
                 </p>
@@ -218,11 +247,14 @@ export default function LeistungenPage() {
                 <p className="text-gray-700 leading-relaxed">
                   In unserer Praxis erfolgt eine präzise Diagnostik mittels Farbduplexsonographie und Durchblutungsmessungen. Auf dieser Basis entwickeln wir ein individuelles Behandlungskonzept, das konservative Maßnahmen, weiterführende Diagnostik ggfs. Therapien umfasst.
                 </p>
-              </div>
+              </AccordionItem>
 
-              {/* Carotisstenose */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 sm:p-8 mb-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-3">Verengung der Halsschlagader (Carotisstenose)</h3>
+              <AccordionItem
+                title="Verengung der Halsschlagader (Carotisstenose)"
+                subtitle="Frühzeitige Diagnostik zur Schlaganfallprävention"
+                isOpen={openSection === 'carotis'}
+                onToggle={() => toggleSection('carotis')}
+              >
                 <p className="text-gray-700 mb-4 leading-relaxed">
                   Die Halsschlagadern versorgen das Gehirn mit Sauerstoff. Eine Verengung (Carotisstenose) entsteht meist durch Arteriosklerose und kann unbehandelt das Risiko für einen Schlaganfall erhöhen.
                 </p>
@@ -236,23 +268,27 @@ export default function LeistungenPage() {
                 <p className="text-gray-700 leading-relaxed">
                   Mit hochauflösender Farbduplexsonographie können wir Engstellen frühzeitig erkennen und das individuelle Schlaganfallrisiko einschätzen. Gemeinsam mit Ihnen besprechen wir das weitere Vorgehen – von engmaschiger Kontrolle bis zur weiterführenden Therapie.
                 </p>
-              </div>
+              </AccordionItem>
 
-              {/* Bauchaortenaneurysma & Beinarterienaneurysmen */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 sm:p-8">
+              <AccordionItem
+                title="Aneurysmen (Aussackungen von Arterien)"
+                subtitle="Bauchaorta und Beinarterien – Kontrolle und Überwachung"
+                isOpen={openSection === 'aneurysmen'}
+                onToggle={() => toggleSection('aneurysmen')}
+              >
                 <div className="mb-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">Bauchaortenaneurysma</h3>
+                  <h4 className="font-semibold text-gray-900 mb-3">Bauchaortenaneurysma</h4>
                   <p className="text-gray-700 leading-relaxed">
                     Erweiterung der Bauchschlagader – regelmäßige Kontrolle wichtig
                   </p>
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">Aneurysmen der Beinarterien</h3>
+                  <h4 className="font-semibold text-gray-900 mb-3">Aneurysmen der Beinarterien</h4>
                   <p className="text-gray-700 leading-relaxed">
                     Aussackungen der Beinarterien mit Komplikationsrisiko
                   </p>
                 </div>
-              </div>
+              </AccordionItem>
             </div>
 
             {/* 4. Lymphatische und Fettgewebserkrankungen */}
@@ -268,9 +304,12 @@ export default function LeistungenPage() {
                 </h2>
               </div>
 
-              {/* Lymphödem */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 sm:p-8 mb-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-3">Lymphödem</h3>
+              <AccordionItem
+                title="Lymphödem"
+                subtitle="Differenzierte Diagnostik und langfristige Betreuung"
+                isOpen={openSection === 'lymphoedem'}
+                onToggle={() => toggleSection('lymphoedem')}
+              >
                 <p className="text-gray-700 mb-4 leading-relaxed">
                   Beim Lymphödem kommt es zu einer Schwellung von Körperregionen, weil der Abfluss der Lymphflüssigkeit gestört ist. Unbehandelt kann dies zu Bewegungseinschränkungen und Hautveränderungen führen.
                 </p>
@@ -282,15 +321,18 @@ export default function LeistungenPage() {
                   <li>Individuelle Therapieempfehlungen</li>
                   <li>Langfristige Betreuung</li>
                 </ul>
-              </div>
+              </AccordionItem>
 
-              {/* Lipödem */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 sm:p-8">
-                <h3 className="text-xl font-bold text-gray-900 mb-3">Lipödem</h3>
+              <AccordionItem
+                title="Lipödem"
+                subtitle="Krankhafte Fettverteilungsstörung"
+                isOpen={openSection === 'lipoedem'}
+                onToggle={() => toggleSection('lipoedem')}
+              >
                 <p className="text-gray-700 leading-relaxed">
                   Krankhafte Fettverteilungsstörung mit Schweregefühl und Schmerzen
                 </p>
-              </div>
+              </AccordionItem>
             </div>
 
             {/* 5. Ambulante Operationen & minimalinvasive Therapien */}
@@ -305,8 +347,12 @@ export default function LeistungenPage() {
                   5. Ambulante Operationen & minimalinvasive Therapien
                 </h2>
               </div>
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 sm:p-8">
-                <h3 className="text-xl font-bold text-gray-900 mb-3">Ambulante, minimalinvasive Gefäßtherapien</h3>
+              <AccordionItem
+                title="Ambulante, minimalinvasive Gefäßtherapien"
+                subtitle="Schonende Behandlung ohne Krankenhausaufenthalt"
+                isOpen={openSection === 'ambulant'}
+                onToggle={() => toggleSection('ambulant')}
+              >
                 <p className="text-gray-700 mb-4 leading-relaxed">
                   Viele Gefäßerkrankungen lassen sich heute ambulant und schonend behandeln – ohne Krankenhausaufenthalt.
                 </p>
@@ -353,7 +399,7 @@ export default function LeistungenPage() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </AccordionItem>
             </div>
 
             {/* 6. Patienteninformation & Prävention */}
