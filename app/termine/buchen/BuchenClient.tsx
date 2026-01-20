@@ -184,8 +184,7 @@ export default function BuchenClient({ initialAppointmentTypes }: BuchenClientPr
                   <span className="font-medium">Bevorzugte Zeiten:</span> {preferredTimeSlots.map(slot => {
                     const slotNames: {[key: string]: string} = {
                       'morning': 'Vormittags (8-12 Uhr)',
-                      'afternoon': 'Nachmittags (12-17 Uhr)',
-                      'evening': 'Abends (17-20 Uhr)'
+                      'afternoon': 'Nachmittags (12-17 Uhr)'
                     };
                     return slotNames[slot];
                   }).join(', ')}
@@ -376,11 +375,10 @@ export default function BuchenClient({ initialAppointmentTypes }: BuchenClientPr
                 <label className="block text-sm font-semibold text-[#2d3748] mb-3">
                   Bevorzugte Tageszeit (mehrere auswählbar)
                 </label>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {[
                     { value: 'morning', label: 'Vormittags', desc: '8:00 - 12:00 Uhr' },
-                    { value: 'afternoon', label: 'Nachmittags', desc: '12:00 - 17:00 Uhr' },
-                    { value: 'evening', label: 'Abends', desc: '17:00 - 20:00 Uhr' }
+                    { value: 'afternoon', label: 'Nachmittags', desc: '12:00 - 17:00 Uhr' }
                   ].map((slot) => (
                     <button
                       key={slot.value}
@@ -793,8 +791,7 @@ export default function BuchenClient({ initialAppointmentTypes }: BuchenClientPr
                       {preferredTimeSlots.map(slot => {
                         const slotNames: {[key: string]: string} = {
                           'morning': 'Vormittags (8-12 Uhr)',
-                          'afternoon': 'Nachmittags (12-17 Uhr)',
-                          'evening': 'Abends (17-20 Uhr)'
+                          'afternoon': 'Nachmittags (12-17 Uhr)'
                         };
                         return slotNames[slot];
                       }).join(', ')}
