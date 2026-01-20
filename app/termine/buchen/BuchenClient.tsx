@@ -172,7 +172,7 @@ export default function BuchenClient({ initialAppointmentTypes }: BuchenClientPr
                   <span className="font-medium">Bevorzugte Tage:</span> {preferredDays.map(day => {
                     const dayNames: {[key: string]: string} = {
                       'MONDAY': 'Montag', 'TUESDAY': 'Dienstag', 'WEDNESDAY': 'Mittwoch',
-                      'THURSDAY': 'Donnerstag', 'FRIDAY': 'Freitag', 'SATURDAY': 'Samstag'
+                      'THURSDAY': 'Donnerstag', 'FRIDAY': 'Freitag'
                     };
                     return dayNames[day];
                   }).join(', ')}
@@ -418,8 +418,7 @@ export default function BuchenClient({ initialAppointmentTypes }: BuchenClientPr
                     { value: 'TUESDAY', label: 'Dienstag' },
                     { value: 'WEDNESDAY', label: 'Mittwoch' },
                     { value: 'THURSDAY', label: 'Donnerstag' },
-                    { value: 'FRIDAY', label: 'Freitag' },
-                    { value: 'SATURDAY', label: 'Samstag' }
+                    { value: 'FRIDAY', label: 'Freitag' }
                   ].map((day) => (
                     <button
                       key={day.value}
@@ -779,7 +778,7 @@ export default function BuchenClient({ initialAppointmentTypes }: BuchenClientPr
                       {preferredDays.map(day => {
                         const dayNames: {[key: string]: string} = {
                           'MONDAY': 'Montag', 'TUESDAY': 'Dienstag', 'WEDNESDAY': 'Mittwoch',
-                          'THURSDAY': 'Donnerstag', 'FRIDAY': 'Freitag', 'SATURDAY': 'Samstag'
+                          'THURSDAY': 'Donnerstag', 'FRIDAY': 'Freitag'
                         };
                         return dayNames[day];
                       }).join(', ')}
