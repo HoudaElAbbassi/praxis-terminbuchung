@@ -115,8 +115,12 @@ export async function POST(req: NextRequest) {
       // Continue - appointment is still valid even if email fails
     }
 
+    console.log('🔄 Starting practice notification email...');
+    console.log('📧 SMTP_USER:', process.env.SMTP_USER);
+    console.log('📧 PRACTICE_EMAIL:', process.env.PRACTICE_EMAIL);
+
     try {
-      await sendNewAppointmentNotificationToPractice({
+      const practiceResult = await sendNewAppointmentNotificationToPractice({
         patientName: `${appointment.user.firstName} ${appointment.user.lastName}`,
         patientEmail: appointment.user.email,
         date: formattedDate,
@@ -124,9 +128,13 @@ export async function POST(req: NextRequest) {
         appointmentType: appointment.appointmentType.name,
         appointmentId: appointment.id,
       });
-      console.log('✅ Practice notification email sent successfully');
-    } catch (emailError) {
-      console.error('⚠️ Failed to send practice notification email:', emailError);
+      console.log('✅ Practice notification result:', JSON.stringify(practiceResult));
+    } catch (emailError: any) {
+      console.error('⚠️ Failed to send practice notification email:', {
+        message: emailError?.message,
+        code: emailError?.code,
+        stack: emailError?.stack,
+      });
       // Continue - appointment is still valid even if email fails
     }
 
