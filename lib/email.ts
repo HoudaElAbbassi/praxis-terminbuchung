@@ -25,6 +25,7 @@ export interface AppointmentEmailData {
   alternativeDate?: string;
   alternativeTime?: string;
   reason?: string;
+  appointmentId?: string;
 }
 
 /**
@@ -253,13 +254,31 @@ export async function sendAlternativeAppointmentEmail(data: AppointmentEmailData
  * Send email notification to practice staff when new appointment is booked
  */
 export async function sendNewAppointmentNotificationToPractice(data: AppointmentEmailData) {
-  const PRACTICE_EMAIL = process.env.PRACTICE_EMAIL || 'info@gefaessmedizinremscheid.de';
+  const PRACTICE_EMAIL = process.env.PRACTICE_EMAIL || 'praxis@gefaessmedizinremscheid.de';
+  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+
+  // Generiere Quick-Action-Links
+  const appointmentUrl = data.appointmentId
+    ? `${BASE_URL}/admin?highlight=${data.appointmentId}`
+    : `${BASE_URL}/admin`;
+
+  const confirmUrl = data.appointmentId
+    ? `${BASE_URL}/admin/quick-actions/confirm?id=${data.appointmentId}`
+    : appointmentUrl;
+
+  const alternativeUrl = data.appointmentId
+    ? `${BASE_URL}/admin/quick-actions/alternative?id=${data.appointmentId}`
+    : appointmentUrl;
+
+  const rejectUrl = data.appointmentId
+    ? `${BASE_URL}/admin/quick-actions/reject?id=${data.appointmentId}`
+    : appointmentUrl;
 
   try {
     await transporter.sendMail({
       from: `${FROM_NAME} <${FROM_EMAIL}>`,
       to: PRACTICE_EMAIL,
-      subject: `Neue Terminanfrage von ${data.patientName}`,
+      subject: `🔔 Neue Terminanfrage von ${data.patientName}`,
       html: `
         <!DOCTYPE html>
         <html>
@@ -273,6 +292,12 @@ export async function sendNewAppointmentNotificationToPractice(data: Appointment
               .content { background: #f7fafc; padding: 30px; border-radius: 0 0 10px 10px; }
               .appointment-details { background: white; padding: 20px; border-radius: 8px; border-left: 4px solid #4a9d8f; margin: 20px 0; }
               .patient-info { background: white; padding: 20px; border-radius: 8px; border-left: 4px solid #2c5f7c; margin: 20px 0; }
+              .action-buttons { margin: 30px 0; text-align: center; }
+              .btn { display: inline-block; padding: 14px 28px; margin: 8px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 15px; }
+              .btn-confirm { background: #10b981; color: white; }
+              .btn-alternative { background: #f59e0b; color: white; }
+              .btn-reject { background: #ef4444; color: white; }
+              .btn-view { background: #3b82f6; color: white; margin-top: 10px; }
               .footer { text-align: center; margin-top: 30px; color: #666; font-size: 14px; }
             </style>
           </head>
@@ -297,12 +322,23 @@ export async function sendNewAppointmentNotificationToPractice(data: Appointment
                   <p><strong>Terminart:</strong> ${data.appointmentType}</p>
                 </div>
 
-                <p><strong>Nächste Schritte:</strong></p>
-                <ul>
-                  <li>Melden Sie sich im Admin-Dashboard an</li>
-                  <li>Prüfen Sie die Terminanfrage</li>
-                  <li>Bestätigen oder lehnen Sie den Termin ab</li>
-                </ul>
+                <!-- Quick Action Buttons -->
+                <div class="action-buttons">
+                  <h3 style="color: #2c5f7c; margin-bottom: 15px;">⚡ Schnellaktionen:</h3>
+                  <a href="${confirmUrl}" class="btn btn-confirm">✅ Termin bestätigen</a>
+                  <br>
+                  <a href="${alternativeUrl}" class="btn btn-alternative">📅 Alternativtermin vorschlagen</a>
+                  <br>
+                  <a href="${rejectUrl}" class="btn btn-reject">❌ Anfrage ablehnen</a>
+                  <br>
+                  <a href="${appointmentUrl}" class="btn btn-view">👁️ Details im Dashboard ansehen</a>
+                </div>
+
+                <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0; border-radius: 4px;">
+                  <p style="margin: 0; color: #856404; font-size: 14px;">
+                    💡 <strong>Tipp:</strong> Klicken Sie auf einen der Buttons oben, um direkt auf die Terminanfrage zu reagieren. Sie werden automatisch im Admin-Dashboard angemeldet.
+                  </p>
+                </div>
 
                 <div class="footer">
                   <p>Diese E-Mail wurde automatisch generiert vom Terminbuchungssystem<br>
@@ -475,7 +511,7 @@ export async function sendAppointmentProposalEmail(data: ProposalEmailData) {
                   <p style="margin: 0; font-size: 14px; color: #4a5568;">
                     <strong>Bei Fragen erreichen Sie uns:</strong><br>
                     📞 Telefon: 02191 123456<br>
-                    📧 E-Mail: ${process.env.PRACTICE_EMAIL || 'info@gefaessmedizinremscheid.de'}
+                    📧 E-Mail: ${process.env.PRACTICE_EMAIL || 'praxis@gefaessmedizinremscheid.de'}
                   </p>
                 </div>
               </div>
@@ -570,7 +606,7 @@ export async function sendProposalAcceptanceConfirmation(data: AppointmentEmailD
                   <p style="margin: 0; font-size: 14px; color: #4a5568;">
                     <strong>Bei Fragen oder Terminabsage:</strong><br>
                     📞 Telefon: 02191 123456<br>
-                    📧 E-Mail: ${process.env.PRACTICE_EMAIL || 'info@gefaessmedizinremscheid.de'}
+                    📧 E-Mail: ${process.env.PRACTICE_EMAIL || 'praxis@gefaessmedizinremscheid.de'}
                   </p>
                 </div>
               </div>
@@ -600,7 +636,7 @@ export async function sendProposalAcceptanceConfirmation(data: AppointmentEmailD
  */
 export async function sendProposalAcceptedEmailToAdmin(data: AppointmentEmailData) {
   const { patientName, patientEmail, date, time, appointmentType } = data;
-  const adminEmail = process.env.ADMIN_EMAIL || process.env.PRACTICE_EMAIL || 'info@gefaessmedizinremscheid.de';
+  const adminEmail = process.env.ADMIN_EMAIL || process.env.PRACTICE_EMAIL || 'praxis@gefaessmedizinremscheid.de';
 
   try {
     await transporter.sendMail({
@@ -661,7 +697,7 @@ interface RejectionEmailData extends AppointmentEmailData {
  */
 export async function sendProposalRejectedEmailToAdmin(data: RejectionEmailData) {
   const { patientName, patientEmail, date, time, appointmentType, rejectionReason } = data;
-  const adminEmail = process.env.ADMIN_EMAIL || process.env.PRACTICE_EMAIL || 'info@gefaessmedizinremscheid.de';
+  const adminEmail = process.env.ADMIN_EMAIL || process.env.PRACTICE_EMAIL || 'praxis@gefaessmedizinremscheid.de';
 
   try {
     await transporter.sendMail({
@@ -740,7 +776,7 @@ interface ReminderProposal {
  * Sendet Erinnerung an Admin über ausstehende Vorschläge
  */
 export async function sendAdminProposalReminder(proposals: ReminderProposal[]) {
-  const adminEmail = process.env.ADMIN_EMAIL || process.env.PRACTICE_EMAIL || 'info@gefaessmedizinremscheid.de';
+  const adminEmail = process.env.ADMIN_EMAIL || process.env.PRACTICE_EMAIL || 'praxis@gefaessmedizinremscheid.de';
 
   const urgentCount = proposals.filter(p => p.appointment.urgency === 'URGENT').length;
   const normalCount = proposals.filter(p => p.appointment.urgency === 'NORMAL').length;
