@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 
-export default function QuickAlternativePage() {
+function AlternativeContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { data: session, status } = useSession();
@@ -177,7 +177,7 @@ export default function QuickAlternativePage() {
 
             <div className="bg-blue-50 border-l-4 border-blue-500 p-4">
               <p className="text-sm text-blue-700">
-                💡 <strong>Hinweis:</strong> Der Patient erhält eine E-Mail mit diesem Terminvorschlag und kann ihn per Link annehmen oder ablehnen.
+                <strong>Hinweis:</strong> Der Patient erhält eine E-Mail mit diesem Terminvorschlag und kann ihn per Link annehmen oder ablehnen.
               </p>
             </div>
 
@@ -187,7 +187,7 @@ export default function QuickAlternativePage() {
                 disabled={isLoading}
                 className="btn-primary flex-1 bg-accent-600 hover:bg-accent-700"
               >
-                {isLoading ? "Wird gesendet..." : "📅 Vorschlag senden"}
+                {isLoading ? "Wird gesendet..." : "Vorschlag senden"}
               </button>
               <button
                 type="button"
@@ -201,5 +201,20 @@ export default function QuickAlternativePage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function QuickAlternativePage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Lädt...</p>
+        </div>
+      </div>
+    }>
+      <AlternativeContent />
+    </Suspense>
   );
 }
