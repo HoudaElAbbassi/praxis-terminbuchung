@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, Suspense } from "react";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -39,12 +39,27 @@ function LoginForm() {
         return;
       }
 
-      // Nach erfolgreichem Login weiterleiten
-      router.push("/termine/buchen");
-      router.refresh();
+      // Hole Rolle direkt aus der Datenbank statt aus Session
+      const roleResponse = await fetch("/api/auth/check-role", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: formData.email }),
+      });
+
+      const roleData = await roleResponse.json();
+      console.log("User Rolle aus DB:", roleData.role);
+
+      // Nach erfolgreichem Login basierend auf Rolle weiterleiten
+      if (roleData.role === "ADMIN") {
+        console.log("Weiterleitung zu /admin");
+        window.location.href = "/admin";
+      } else {
+        console.log("Weiterleitung zu /termine/buchen");
+        window.location.href = "/termine/buchen";
+      }
     } catch (err) {
+      console.error("Login Fehler:", err);
       setError("Ein Fehler ist aufgetreten");
-    } finally {
       setIsLoading(false);
     }
   };

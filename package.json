@@ -14,7 +14,10 @@
     "create-admin": "tsx scripts/create-admin.ts",
     "quick-admin": "tsx scripts/create-quick-admin.ts",
     "check-db": "tsx scripts/check-db.ts",
-    "test-login": "tsx scripts/test-login.ts"
+    "test-login": "tsx scripts/test-login.ts",
+    "admin:check": "tsx scripts/check-admin.ts",
+    "admin:reset-password": "tsx scripts/reset-admin-password.ts",
+    "admin:create": "tsx scripts/create-admin-cli.ts"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.1",
