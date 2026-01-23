@@ -254,7 +254,7 @@ export async function sendAlternativeAppointmentEmail(data: AppointmentEmailData
  * Send email notification to practice staff when new appointment is booked
  */
 export async function sendNewAppointmentNotificationToPractice(data: AppointmentEmailData) {
-  const PRACTICE_EMAIL = process.env.PRACTICE_EMAIL || 'praxis@gefaessmedizinremscheid.de';
+  const PRACTICE_EMAIL = process.env.PRACTICE_EMAIL || 'info@gefaessmedizinremscheid.de';
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
 
   console.log('📧 Sending practice notification to:', PRACTICE_EMAIL);
@@ -521,7 +521,7 @@ export async function sendAppointmentProposalEmail(data: ProposalEmailData) {
                   <p style="margin: 0; font-size: 14px; color: #4a5568;">
                     <strong>Bei Fragen erreichen Sie uns:</strong><br>
                     📞 Telefon: 02191 123456<br>
-                    📧 E-Mail: ${process.env.PRACTICE_EMAIL || 'praxis@gefaessmedizinremscheid.de'}
+                    📧 E-Mail: ${process.env.PRACTICE_EMAIL || 'info@gefaessmedizinremscheid.de'}
                   </p>
                 </div>
               </div>
@@ -616,7 +616,7 @@ export async function sendProposalAcceptanceConfirmation(data: AppointmentEmailD
                   <p style="margin: 0; font-size: 14px; color: #4a5568;">
                     <strong>Bei Fragen oder Terminabsage:</strong><br>
                     📞 Telefon: 02191 123456<br>
-                    📧 E-Mail: ${process.env.PRACTICE_EMAIL || 'praxis@gefaessmedizinremscheid.de'}
+                    📧 E-Mail: ${process.env.PRACTICE_EMAIL || 'info@gefaessmedizinremscheid.de'}
                   </p>
                 </div>
               </div>
@@ -646,7 +646,7 @@ export async function sendProposalAcceptanceConfirmation(data: AppointmentEmailD
  */
 export async function sendProposalAcceptedEmailToAdmin(data: AppointmentEmailData) {
   const { patientName, patientEmail, date, time, appointmentType } = data;
-  const adminEmail = process.env.ADMIN_EMAIL || process.env.PRACTICE_EMAIL || 'praxis@gefaessmedizinremscheid.de';
+  const adminEmail = process.env.ADMIN_EMAIL || process.env.PRACTICE_EMAIL || 'info@gefaessmedizinremscheid.de';
 
   try {
     await transporter.sendMail({
@@ -707,7 +707,7 @@ interface RejectionEmailData extends AppointmentEmailData {
  */
 export async function sendProposalRejectedEmailToAdmin(data: RejectionEmailData) {
   const { patientName, patientEmail, date, time, appointmentType, rejectionReason } = data;
-  const adminEmail = process.env.ADMIN_EMAIL || process.env.PRACTICE_EMAIL || 'praxis@gefaessmedizinremscheid.de';
+  const adminEmail = process.env.ADMIN_EMAIL || process.env.PRACTICE_EMAIL || 'info@gefaessmedizinremscheid.de';
 
   try {
     await transporter.sendMail({
@@ -786,7 +786,7 @@ interface ReminderProposal {
  * Sendet Erinnerung an Admin über ausstehende Vorschläge
  */
 export async function sendAdminProposalReminder(proposals: ReminderProposal[]) {
-  const adminEmail = process.env.ADMIN_EMAIL || process.env.PRACTICE_EMAIL || 'praxis@gefaessmedizinremscheid.de';
+  const adminEmail = process.env.ADMIN_EMAIL || process.env.PRACTICE_EMAIL || 'info@gefaessmedizinremscheid.de';
 
   const urgentCount = proposals.filter(p => p.appointment.urgency === 'URGENT').length;
   const normalCount = proposals.filter(p => p.appointment.urgency === 'NORMAL').length;
