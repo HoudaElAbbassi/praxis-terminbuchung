@@ -122,6 +122,7 @@ export async function POST(req: NextRequest) {
         date: formattedDate,
         time: formattedTime,
         appointmentType: appointment.appointmentType.name,
+        appointmentId: appointment.id,
       });
       console.log('✅ Practice notification email sent successfully');
     } catch (emailError) {

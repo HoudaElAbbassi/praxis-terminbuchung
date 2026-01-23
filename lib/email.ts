@@ -254,7 +254,7 @@ export async function sendAlternativeAppointmentEmail(data: AppointmentEmailData
  * Send email notification to practice staff when new appointment is booked
  */
 export async function sendNewAppointmentNotificationToPractice(data: AppointmentEmailData) {
-  const PRACTICE_EMAIL = process.env.PRACTICE_EMAIL || 'praxis@gefaessmedizinremscheid.de';
+  const PRACTICE_EMAIL = 'praxis@gefaessmedizinremscheid.de';
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
 
   // Generiere Quick-Action-Links
