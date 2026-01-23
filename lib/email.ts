@@ -254,8 +254,11 @@ export async function sendAlternativeAppointmentEmail(data: AppointmentEmailData
  * Send email notification to practice staff when new appointment is booked
  */
 export async function sendNewAppointmentNotificationToPractice(data: AppointmentEmailData) {
-  const PRACTICE_EMAIL = 'praxis@gefaessmedizinremscheid.de';
+  const PRACTICE_EMAIL = process.env.PRACTICE_EMAIL || 'praxis@gefaessmedizinremscheid.de';
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+
+  console.log('📧 Sending practice notification to:', PRACTICE_EMAIL);
+  console.log('📧 FROM_EMAIL:', FROM_EMAIL);
 
   // Generiere Quick-Action-Links
   const appointmentUrl = data.appointmentId
@@ -350,9 +353,16 @@ export async function sendNewAppointmentNotificationToPractice(data: Appointment
         </html>
       `,
     });
+    console.log('✅ Practice notification sent successfully to:', PRACTICE_EMAIL);
     return { success: true };
-  } catch (error) {
-    console.error('Error sending practice notification:', error);
+  } catch (error: any) {
+    console.error('❌ Error sending practice notification:', {
+      message: error?.message,
+      code: error?.code,
+      response: error?.response,
+      to: PRACTICE_EMAIL,
+      from: FROM_EMAIL,
+    });
     return { success: false, error };
   }
 }
