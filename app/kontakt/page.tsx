@@ -194,7 +194,7 @@ export default function KontaktPage() {
                 {/* Google Maps */}
                 <div className="bg-gray-100 rounded-xl overflow-hidden shadow-sm border border-gray-200" style={{height: '400px'}}>
                   <iframe
-                    src="https://maps.google.com/maps?q=Freiheitsstra%C3%9Fe+203,+42853+Remscheid&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                    src="https://maps.google.com/maps?q=51.1789,7.1897&z=16&output=embed"
                     width="100%"
                     height="100%"
                     style={{border: 0}}
