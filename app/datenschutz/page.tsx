@@ -98,7 +98,7 @@ export default function DatenschutzPage() {
                     <p className="mt-3">
                       <strong>Telefon:</strong> 02191 6917400<br />
                       <strong>Fax:</strong> 02191 4694938<br />
-                      <strong>E-Mail:</strong> info@praxis-remscheid.de
+                      <strong>E-Mail:</strong> info@gefaessmedizinremscheid.de
                     </p>
                   </div>
                   <p className="leading-relaxed">
@@ -321,7 +321,7 @@ export default function DatenschutzPage() {
                     <p>Abdelkarim Alyandouzi</p>
                     <p className="mt-3">
                       <strong>Telefon:</strong> 02191 6917400<br />
-                      <strong>E-Mail:</strong> info@praxis-remscheid.de
+                      <strong>E-Mail:</strong> info@gefaessmedizinremscheid.de
                     </p>
                   </div>
                 </section>

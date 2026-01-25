@@ -45,7 +45,7 @@ export default function ImpressumPage() {
                 <strong>Fax:</strong> 02191 4694938
               </p>
               <p>
-                <strong>E-Mail:</strong> info@praxis-remscheid.de
+                <strong>E-Mail:</strong> info@gefaessmedizinremscheid.de
               </p>
             </section>
 

@@ -105,7 +105,7 @@ Einen Moment bitte...`,
 Bitte kontaktieren Sie uns telefonisch oder per E-Mail:
 
 📞 **Telefon:** 02191 6917400
-✉️ **E-Mail:** info@praxis-remscheid.de
+✉️ **E-Mail:** info@gefaessmedizinremscheid.de
 
 **Sprechzeiten:**
 Montag und Mittwoch: 8:00 - 15:00 Uhr
@@ -426,7 +426,7 @@ Unser Praxisteam wird Ihre Anfrage **prioritär bearbeiten** und sich schnellstm
 
 **Telefon:** 02191 6917400
 **Fax:** 02191 4694938
-**E-Mail:** info@praxis-remscheid.de
+**E-Mail:** info@gefaessmedizinremscheid.de
 
 **Sprechzeiten:**
 Montag und Mittwoch: 8:00 - 15:00 Uhr

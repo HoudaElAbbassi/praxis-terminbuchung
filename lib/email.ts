@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
 });
 
 // Default sender email
-const FROM_EMAIL = process.env.EMAIL_FROM || 'info@praxis-remscheid.de';
+const FROM_EMAIL = process.env.EMAIL_FROM || 'info@gefaessmedizinremscheid.de';
 const FROM_NAME = 'Praxis für Gefäßmedizin Remscheid';
 
 export interface AppointmentEmailData {
@@ -80,7 +80,7 @@ export async function sendAppointmentConfirmedEmail(data: AppointmentEmailData) 
 
                 <p>Bei Fragen erreichen Sie uns unter:</p>
                 <p>📞 Telefon: 02191 6917400<br>
-                📧 E-Mail: info@praxis-remscheid.de</p>
+                📧 E-Mail: info@gefaessmedizinremscheid.de</p>
 
                 <div class="footer">
                   <p>Praxis für Gefäßmedizin Remscheid<br>
@@ -239,7 +239,7 @@ export async function sendAlternativeAppointmentEmail(data: AppointmentEmailData
                 <p><strong>Bitte bestätigen Sie den Alternativtermin:</strong></p>
                 <ul>
                   <li>Telefonisch unter: 02191 6917400</li>
-                  <li>Per E-Mail: info@praxis-remscheid.de</li>
+                  <li>Per E-Mail: info@gefaessmedizinremscheid.de</li>
                   <li>Oder buchen Sie online einen anderen Termin</li>
                 </ul>
 
@@ -468,7 +468,7 @@ export async function sendAppointmentProposalEmail(data: ProposalEmailData) {
 
   try {
     await transporter.sendMail({
-      from: process.env.EMAIL_FROM || 'Praxis für Gefäßmedizin Remscheid <info@praxis-remscheid.de>',
+      from: process.env.EMAIL_FROM || 'Praxis für Gefäßmedizin Remscheid <info@gefaessmedizinremscheid.de>',
       to: patientEmail,
       subject: 'Terminvorschlag - Praxis für Gefäßmedizin Remscheid',
       html: `
@@ -567,7 +567,7 @@ export async function sendProposalAcceptanceConfirmation(data: AppointmentEmailD
 
   try {
     await transporter.sendMail({
-      from: process.env.EMAIL_FROM || 'Praxis für Gefäßmedizin Remscheid <info@praxis-remscheid.de>',
+      from: process.env.EMAIL_FROM || 'Praxis für Gefäßmedizin Remscheid <info@gefaessmedizinremscheid.de>',
       to: patientEmail,
       subject: 'Terminbestätigung - Praxis für Gefäßmedizin Remscheid',
       html: `
@@ -663,7 +663,7 @@ export async function sendProposalAcceptedEmailToAdmin(data: AppointmentEmailDat
 
   try {
     await transporter.sendMail({
-      from: process.env.EMAIL_FROM || 'Praxis für Gefäßmedizin Remscheid <info@praxis-remscheid.de>',
+      from: process.env.EMAIL_FROM || 'Praxis für Gefäßmedizin Remscheid <info@gefaessmedizinremscheid.de>',
       to: adminEmail,
       subject: `✅ Terminvorschlag angenommen - ${patientName}`,
       html: `
@@ -724,7 +724,7 @@ export async function sendProposalRejectedEmailToAdmin(data: RejectionEmailData)
 
   try {
     await transporter.sendMail({
-      from: process.env.EMAIL_FROM || 'Praxis für Gefäßmedizin Remscheid <info@praxis-remscheid.de>',
+      from: process.env.EMAIL_FROM || 'Praxis für Gefäßmedizin Remscheid <info@gefaessmedizinremscheid.de>',
       to: adminEmail,
       subject: `❌ Terminvorschlag abgelehnt - ${patientName}`,
       html: `
@@ -822,7 +822,7 @@ export async function sendAdminProposalReminder(proposals: ReminderProposal[]) {
 
   try {
     await transporter.sendMail({
-      from: process.env.EMAIL_FROM || 'Praxis für Gefäßmedizin Remscheid <info@praxis-remscheid.de>',
+      from: process.env.EMAIL_FROM || 'Praxis für Gefäßmedizin Remscheid <info@gefaessmedizinremscheid.de>',
       to: adminEmail,
       subject: `⏰ Erinnerung: ${proposals.length} ausstehende Terminvorschläge`,
       html: `
