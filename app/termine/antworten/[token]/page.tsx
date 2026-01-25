@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -32,7 +32,7 @@ type ProposalData = {
   };
 };
 
-export default function AppointmentResponsePage() {
+function AppointmentResponseContent() {
   const params = useParams();
   const searchParams = useSearchParams();
   const token = params.token as string;
@@ -503,5 +503,20 @@ export default function AppointmentResponsePage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function AppointmentResponsePage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#e8f4f2] via-white to-[#f7fafc]">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#2c5f7c] mx-auto mb-4"></div>
+          <p className="text-gray-600">Lädt...</p>
+        </div>
+      </div>
+    }>
+      <AppointmentResponseContent />
+    </Suspense>
   );
 }

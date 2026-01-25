@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from 'react';
 const reviews = [
   {
     id: 1,
-    name: 'Swetlana Wank',
+    name: 'Swetlana W.',
     initial: 'S',
     color: 'from-blue-500 to-blue-600',
     text: 'Herr Alyandouzi und sein Team sind nur zu empfehlen. Sie zeigen sich nicht schlecht gestimmt und sowohl Herr Alyandouzi sowie seine MitarbeiterInnen haben immer ein offenes Ohr! Ich kann nur positives berichten und bin froh zu einen kompetenten Facharzt in Remscheid gefunden zu haben.',
@@ -13,7 +13,7 @@ const reviews = [
   },
   {
     id: 2,
-    name: 'Manuela Guhlke',
+    name: 'Manuela G.',
     initial: 'M',
     color: 'from-green-500 to-green-600',
     text: 'Ich hatte heute meinen ersten Termin bei Dr. Abdelkarim Alyandouzi und kann ihn als Facharzt und seine Kolleg*innen nur weiterempfehlen. Untersuchung und Gespräch waren mehr als zufriedenstellend. Ich bin am Empfang mit Freundlichkeit empfangen worden und für die spätere Behandlung hat sich Dr. Alyandouzi sehr viel Zeit genommen.',
@@ -24,12 +24,12 @@ const reviews = [
     name: 'Marlene O.',
     initial: 'M',
     color: 'from-purple-500 to-purple-600',
-    text: 'Herr Alyandouzi ist ein wirklich sehr guter Arzt wie man ihn sich wünscht im Gegenteil zu vielen anderen. Er geht auf einen ein und interessiert sich auch wirklich und hilft. Auf jedenfall zu 1000% weiter zu empfehlen. Arzthelferinnen auch super super nett ❤️',
+    text: 'Herr Alyandouzi ist ein wirklich sehr guter Arzt wie man ihn sich wünscht im Gegenteil zu vielen anderen. Er geht auf einen ein und interessiert sich auch wirklich und hilft. Auf jedenfall zu 1000% weiter zu empfehlen. Arzthelferinnen auch super super nett.',
     date: 'vor einem Jahr',
   },
   {
     id: 4,
-    name: 'Elke Gimpel',
+    name: 'Elke G.',
     initial: 'E',
     color: 'from-orange-500 to-orange-600',
     text: 'Hatte heute meinen ersten Termin bei Hr.Alyandouzi. Habe mich sehr gut behandelt gefühlt. Die Arzthelferinnen sind super nett und freundlich. Durfte sogar ne halbe Stunde vor dem vereinbarten Termin ins Behandlungszimmer. Hr Alyandouzi hat sich viel Zeit für unser Erstgespräch genommen, ein fachlich kompetenter und sehr einfühlsamer Arzt.',
@@ -37,7 +37,7 @@ const reviews = [
   },
   {
     id: 5,
-    name: 'Big Boss',
+    name: 'Big B.',
     initial: 'B',
     color: 'from-teal-500 to-teal-600',
     text: 'Ein Arzt den man mit gutem Gewissen weiter empfehlen kann',

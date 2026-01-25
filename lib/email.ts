@@ -103,57 +103,70 @@ export async function sendAppointmentConfirmedEmail(data: AppointmentEmailData) 
  * Send email when appointment is rejected by doctor
  */
 export async function sendAppointmentRejectedEmail(data: AppointmentEmailData) {
+  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+
   try {
     await transporter.sendMail({
       from: `${FROM_NAME} <${FROM_EMAIL}>`,
       to: data.patientEmail,
-      subject: 'Terminabsage - Praxis für Gefäßmedizin Remscheid',
+      subject: 'Ihre Terminanfrage - Praxis für Gefäßmedizin Remscheid',
       html: `
         <!DOCTYPE html>
         <html>
           <head>
             <meta charset="utf-8">
             <style>
-              body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+              body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
               .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-              .header { background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
-              .header h1 { color: white; margin: 0; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+              .header { background: linear-gradient(135deg, #2c5f7c 0%, #4a9d8f 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+              .header h1 { color: white; margin: 0; font-size: 24px; }
               .content { background: #f7fafc; padding: 30px; border-radius: 0 0 10px 10px; }
-              .appointment-details { background: white; padding: 20px; border-radius: 8px; border-left: 4px solid #dc2626; margin: 20px 0; }
-              .button { display: inline-block; padding: 12px 30px; background: #2c5f7c; color: white; text-decoration: none; border-radius: 6px; margin: 20px 0; }
-              .footer { text-align: center; margin-top: 30px; color: #666; font-size: 14px; }
+              .info-box { background: white; padding: 20px; border-radius: 8px; border-left: 4px solid #2c5f7c; margin: 20px 0; }
+              .button { display: inline-block; padding: 14px 32px; background: #4a9d8f; color: white; text-decoration: none; border-radius: 8px; margin: 10px 5px; font-weight: bold; }
+              .button:hover { background: #3d8378; }
+              .footer { text-align: center; margin-top: 30px; color: #666; font-size: 14px; border-top: 1px solid #e0e0e0; padding-top: 20px; }
+              .contact-info { background: #e8f4f2; padding: 15px; border-radius: 8px; margin-top: 20px; }
             </style>
           </head>
           <body>
             <div class="container">
               <div class="header">
-                <h1>Terminabsage</h1>
+                <h1>Praxis für Gefäßmedizin Remscheid</h1>
               </div>
               <div class="content">
                 <p>Sehr geehrte/r ${data.patientName},</p>
 
-                <p>leider müssen wir Ihnen mitteilen, dass der folgende Termin nicht stattfinden kann:</p>
+                <p>vielen Dank für Ihre Terminanfrage. Leider können wir den gewünschten Termin nicht wie angefragt bestätigen.</p>
 
-                <div class="appointment-details">
-                  <h3 style="color: #dc2626; margin-top: 0;">Abgesagter Termin:</h3>
-                  <p><strong>Datum:</strong> ${data.date}</p>
-                  <p><strong>Uhrzeit:</strong> ${data.time} Uhr</p>
+                <div class="info-box">
+                  <h3 style="color: #2c5f7c; margin-top: 0;">Ihre Anfrage:</h3>
                   <p><strong>Terminart:</strong> ${data.appointmentType}</p>
-                  ${data.reason ? `<p><strong>Grund:</strong> ${data.reason}</p>` : ''}
+                  ${data.date ? `<p><strong>Gewünschtes Datum:</strong> ${data.date}</p>` : ''}
+                  ${data.time ? `<p><strong>Gewünschte Uhrzeit:</strong> ${data.time} Uhr</p>` : ''}
                 </div>
 
-                <p>Bitte vereinbaren Sie einen neuen Termin:</p>
-                <ul>
-                  <li>Online über unsere Website</li>
-                  <li>Telefonisch unter: 02191 6917400</li>
-                  <li>Per E-Mail: info@praxis-remscheid.de</li>
-                </ul>
+                <p>Gerne können Sie einen neuen Termin vereinbaren:</p>
 
-                <p>Wir entschuldigen uns für die Unannehmlichkeiten.</p>
+                <div style="text-align: center; margin: 25px 0;">
+                  <a href="${BASE_URL}/termine/buchen" class="button">Neuen Termin anfragen</a>
+                </div>
+
+                <div class="contact-info">
+                  <p style="margin: 0;"><strong>Oder kontaktieren Sie uns direkt:</strong></p>
+                  <p style="margin: 5px 0;">Telefon: <a href="tel:021916917400" style="color: #2c5f7c;">02191 6917400</a></p>
+                  <p style="margin: 5px 0;">E-Mail: <a href="mailto:info@gefaessmedizinremscheid.de" style="color: #2c5f7c;">info@gefaessmedizinremscheid.de</a></p>
+                </div>
+
+                <p style="margin-top: 25px;">Wir freuen uns, Sie bald in unserer Praxis begrüßen zu dürfen.</p>
+
+                <p>Mit freundlichen Grüßen,<br>
+                <strong>Ihr Praxisteam</strong></p>
 
                 <div class="footer">
-                  <p>Praxis für Gefäßmedizin Remscheid<br>
-                  Abdelkarim Alyandouzi</p>
+                  <p><strong>Praxis für Gefäßmedizin Remscheid</strong><br>
+                  Abdelkarim Alyandouzi<br>
+                  Freiheitsstraße 203 (3. Etage)<br>
+                  42853 Remscheid</p>
                 </div>
               </div>
             </div>

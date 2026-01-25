@@ -35,15 +35,30 @@ export async function GET() {
       },
     });
 
-    // Upcoming appointments (from today onwards)
+    // Upcoming appointments (from today onwards OR pending without date)
     const upcoming = await prisma.appointment.count({
       where: {
-        date: {
-          gte: today,
-        },
-        status: {
-          in: ["PENDING", "CONFIRMED"],
-        },
+        OR: [
+          {
+            date: {
+              gte: today,
+            },
+            status: {
+              in: ["PENDING", "CONFIRMED"],
+            },
+          },
+          {
+            date: null,
+            status: "PENDING",
+          },
+        ],
+      },
+    });
+
+    // Open requests (PENDING status only)
+    const openRequests = await prisma.appointment.count({
+      where: {
+        status: "PENDING",
       },
     });
 
@@ -51,6 +66,7 @@ export async function GET() {
       total,
       today: todayCount,
       upcoming,
+      openRequests,
     });
   } catch (error) {
     console.error("Error fetching stats:", error);
