@@ -1,7 +1,39 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
-import { sendAppointmentConfirmedEmail, sendAppointmentRejectedEmail } from "@/lib/email";
+import { sendAppointmentConfirmedEmail, sendAppointmentCancelledEmail, sendAppointmentRejectedEmail } from "@/lib/email";
+
+// Helper: Präferenzen in lesbaren Text umwandeln
+function formatPreferredDays(preferredDays: string | null): string {
+  if (!preferredDays) return "Keine Angabe";
+  try {
+    const days = JSON.parse(preferredDays);
+    const dayNames: Record<string, string> = {
+      MONDAY: "Montag",
+      TUESDAY: "Dienstag",
+      WEDNESDAY: "Mittwoch",
+      THURSDAY: "Donnerstag",
+      FRIDAY: "Freitag",
+    };
+    return days.map((d: string) => dayNames[d] || d).join(", ");
+  } catch {
+    return preferredDays;
+  }
+}
+
+function formatPreferredTimeSlots(preferredTimeSlots: string | null): string {
+  if (!preferredTimeSlots) return "Keine Angabe";
+  try {
+    const slots = JSON.parse(preferredTimeSlots);
+    const slotNames: Record<string, string> = {
+      morning: "Vormittags (8-12 Uhr)",
+      afternoon: "Nachmittags (12-17 Uhr)",
+    };
+    return slots.map((s: string) => slotNames[s] || s).join(", ");
+  } catch {
+    return preferredTimeSlots;
+  }
+}
 
 export async function PATCH(
   request: NextRequest,
@@ -43,40 +75,73 @@ export async function PATCH(
       },
     });
 
-    // Send email notification to patient about status change
-    const appointmentDate = appointment.date
-      ? new Date(appointment.date).toLocaleDateString("de-DE", {
+    // Prüfen ob ein konkreter Termin festgelegt wurde
+    const hasConcreteAppointment = appointment.date && appointment.startTime;
+
+    // Send email notifications (non-blocking)
+    try {
+      if (status === "CONFIRMED" && hasConcreteAppointment) {
+        // Bestätigung eines konkreten Termins
+        const appointmentDate = new Date(appointment.date!).toLocaleDateString("de-DE", {
           weekday: "long",
           year: "numeric",
           month: "long",
           day: "numeric",
-        })
-      : "Noch nicht festgelegt";
-
-    const appointmentTime = appointment.startTime
-      ? new Date(appointment.startTime).toLocaleTimeString("de-DE", {
+        });
+        const appointmentTime = new Date(appointment.startTime!).toLocaleTimeString("de-DE", {
           hour: "2-digit",
           minute: "2-digit",
-        })
-      : "Noch nicht festgelegt";
+        });
 
-    const emailData = {
-      patientName: `${appointment.user.firstName} ${appointment.user.lastName}`,
-      patientEmail: appointment.user.email,
-      date: appointmentDate,
-      time: appointmentTime,
-      appointmentType: appointment.appointmentType.name,
-      doctorName: "Abdelkarim Alyandouzi",
-    };
-
-    // Send email notifications (non-blocking)
-    try {
-      if (status === "CONFIRMED") {
-        await sendAppointmentConfirmedEmail(emailData);
+        await sendAppointmentConfirmedEmail({
+          patientName: `${appointment.user.firstName} ${appointment.user.lastName}`,
+          patientEmail: appointment.user.email,
+          date: appointmentDate,
+          time: appointmentTime,
+          appointmentType: appointment.appointmentType.name,
+          doctorName: "Abdelkarim Alyandouzi",
+        });
         console.log('✅ Appointment confirmation email sent successfully');
+
       } else if (status === "CANCELLED") {
-        await sendAppointmentRejectedEmail(emailData);
-        console.log('✅ Appointment cancellation email sent successfully');
+        if (hasConcreteAppointment) {
+          // Absage eines bestätigten/konkreten Termins
+          const appointmentDate = new Date(appointment.date!).toLocaleDateString("de-DE", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          });
+          const appointmentTime = new Date(appointment.startTime!).toLocaleTimeString("de-DE", {
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+
+          await sendAppointmentCancelledEmail({
+            patientName: `${appointment.user.firstName} ${appointment.user.lastName}`,
+            patientEmail: appointment.user.email,
+            date: appointmentDate,
+            time: appointmentTime,
+            appointmentType: appointment.appointmentType.name,
+            doctorName: "Abdelkarim Alyandouzi",
+          });
+          console.log('✅ Appointment cancellation email sent successfully');
+
+        } else {
+          // Ablehnung einer Anfrage (noch kein konkreter Termin)
+          const preferredDays = formatPreferredDays(appointment.preferredDays);
+          const preferredTimeSlots = formatPreferredTimeSlots(appointment.preferredTimeSlots);
+
+          await sendAppointmentRejectedEmail({
+            patientName: `${appointment.user.firstName} ${appointment.user.lastName}`,
+            patientEmail: appointment.user.email,
+            date: preferredDays,
+            time: preferredTimeSlots,
+            appointmentType: appointment.appointmentType.name,
+            doctorName: "Abdelkarim Alyandouzi",
+          });
+          console.log('✅ Appointment rejection email sent successfully');
+        }
       }
     } catch (emailError) {
       console.error('⚠️ Failed to send status change email:', emailError);
