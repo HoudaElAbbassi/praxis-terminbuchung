@@ -52,6 +52,14 @@ export default function Footer() {
                   Datenschutzerklärung
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/karriere"
+                  className="text-gray-300 hover:text-white transition-colors"
+                >
+                  Karriere
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

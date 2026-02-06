@@ -24,7 +24,7 @@ export async function POST(request: Request) {
     } = body;
 
     // Validate required fields
-    if (!appointmentTypeId || !preferredTimeSlots || !preferredDays || !firstName || !lastName || !email || !phone || !insuranceType || isFirstVisit === undefined || !reasonForVisit) {
+    if (!appointmentTypeId || !preferredTimeSlots || !preferredDays || !firstName || !lastName || !email || !phone || !dateOfBirth || !insuranceType || isFirstVisit === undefined || !reasonForVisit) {
       return NextResponse.json(
         { error: "Alle Pflichtfelder müssen ausgefüllt werden" },
         { status: 400 }
