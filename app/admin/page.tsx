@@ -127,6 +127,9 @@ export default function AdminDashboard() {
       case "COMPLETED":
         message = "Möchten Sie diesen Termin als abgeschlossen markieren?";
         break;
+      case "DELETE":
+        message = "Möchten Sie diesen Termin wirklich endgültig löschen? Diese Aktion kann nicht rückgängig gemacht werden.";
+        break;
       default:
         message = "Möchten Sie diese Aktion wirklich durchführen?";
     }
@@ -164,6 +167,30 @@ export default function AdminDashboard() {
     } catch (error) {
       console.error("Error updating appointment status:", error);
       alert("Fehler beim Aktualisieren des Terminstatus");
+    }
+  };
+
+  const deleteAppointment = async (appointmentId: string) => {
+    try {
+      const res = await fetch(`/api/admin/appointments/${appointmentId}/delete`, {
+        method: "DELETE",
+      });
+
+      if (res.ok) {
+        fetchAppointments();
+        fetchStats();
+        setConfirmDialog({
+          isOpen: false,
+          action: "",
+          appointmentId: "",
+          message: "",
+        });
+      } else {
+        alert("Fehler beim Löschen des Termins");
+      }
+    } catch (error) {
+      console.error("Error deleting appointment:", error);
+      alert("Fehler beim Löschen des Termins");
     }
   };
 
@@ -676,18 +703,63 @@ export default function AdminDashboard() {
                       )}
 
                       {appointment.status === "CONFIRMED" && (
-                        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                        <div className="flex flex-col gap-2">
+                          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                            <button
+                              onClick={() => openConfirmDialog(appointment.id, "COMPLETED")}
+                              className="flex-1 bg-[#2c5f7c] hover:bg-[#1f4459] active:bg-[#1f4459] text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg text-sm sm:text-base touch-manipulation"
+                            >
+                              Als abgeschlossen markieren
+                            </button>
+                            <button
+                              onClick={() => openConfirmDialog(appointment.id, "CANCELLED")}
+                              className="flex-1 bg-red-600 hover:bg-red-700 active:bg-red-700 text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg text-sm sm:text-base touch-manipulation"
+                            >
+                              Absagen
+                            </button>
+                          </div>
                           <button
-                            onClick={() => openConfirmDialog(appointment.id, "COMPLETED")}
-                            className="flex-1 bg-[#2c5f7c] hover:bg-[#1f4459] active:bg-[#1f4459] text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg text-sm sm:text-base touch-manipulation"
+                            onClick={() => openConfirmDialog(appointment.id, "DELETE")}
+                            className="w-full bg-gray-500 hover:bg-gray-600 active:bg-gray-600 text-white px-3 sm:px-4 py-2 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-1.5 text-xs sm:text-sm touch-manipulation"
                           >
-                            Als abgeschlossen markieren
+                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                            </svg>
+                            Termin löschen
                           </button>
+                        </div>
+                      )}
+
+                      {(appointment.status === "COMPLETED" || appointment.status === "CANCELLED") && (
+                        <div className="flex flex-col gap-2">
+                          <button
+                            onClick={() => openConfirmDialog(appointment.id, "DELETE")}
+                            className="w-full bg-gray-500 hover:bg-gray-600 active:bg-gray-600 text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-1.5 sm:gap-2 text-sm sm:text-base touch-manipulation"
+                          >
+                            <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                            </svg>
+                            Termin löschen
+                          </button>
+                        </div>
+                      )}
+
+                      {appointment.status === "PROPOSAL_SENT" && (
+                        <div className="flex flex-col gap-2">
                           <button
                             onClick={() => openConfirmDialog(appointment.id, "CANCELLED")}
-                            className="flex-1 bg-red-600 hover:bg-red-700 active:bg-red-700 text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg text-sm sm:text-base touch-manipulation"
+                            className="w-full bg-red-600 hover:bg-red-700 active:bg-red-700 text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-1.5 sm:gap-2 text-sm sm:text-base touch-manipulation"
                           >
                             Absagen
+                          </button>
+                          <button
+                            onClick={() => openConfirmDialog(appointment.id, "DELETE")}
+                            className="w-full bg-gray-500 hover:bg-gray-600 active:bg-gray-600 text-white px-3 sm:px-4 py-2 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-1.5 text-xs sm:text-sm touch-manipulation"
+                          >
+                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                            </svg>
+                            Termin löschen
                           </button>
                         </div>
                       )}
@@ -823,18 +895,63 @@ export default function AdminDashboard() {
                         )}
 
                         {appointment.status === "CONFIRMED" && (
-                          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                          <div className="flex flex-col gap-2">
+                            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                              <button
+                                onClick={() => openConfirmDialog(appointment.id, "COMPLETED")}
+                                className="flex-1 bg-[#2c5f7c] hover:bg-[#1f4459] active:bg-[#1f4459] text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg text-sm sm:text-base touch-manipulation"
+                              >
+                                Als abgeschlossen markieren
+                              </button>
+                              <button
+                                onClick={() => openConfirmDialog(appointment.id, "CANCELLED")}
+                                className="flex-1 bg-red-600 hover:bg-red-700 active:bg-red-700 text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg text-sm sm:text-base touch-manipulation"
+                              >
+                                Absagen
+                              </button>
+                            </div>
                             <button
-                              onClick={() => openConfirmDialog(appointment.id, "COMPLETED")}
-                              className="flex-1 bg-[#2c5f7c] hover:bg-[#1f4459] active:bg-[#1f4459] text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg text-sm sm:text-base touch-manipulation"
+                              onClick={() => openConfirmDialog(appointment.id, "DELETE")}
+                              className="w-full bg-gray-500 hover:bg-gray-600 active:bg-gray-600 text-white px-3 sm:px-4 py-2 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-1.5 text-xs sm:text-sm touch-manipulation"
                             >
-                              Als abgeschlossen markieren
+                              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                              </svg>
+                              Termin löschen
                             </button>
+                          </div>
+                        )}
+
+                        {(appointment.status === "COMPLETED" || appointment.status === "CANCELLED") && (
+                          <div className="flex flex-col gap-2">
+                            <button
+                              onClick={() => openConfirmDialog(appointment.id, "DELETE")}
+                              className="w-full bg-gray-500 hover:bg-gray-600 active:bg-gray-600 text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-1.5 sm:gap-2 text-sm sm:text-base touch-manipulation"
+                            >
+                              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                              </svg>
+                              Termin löschen
+                            </button>
+                          </div>
+                        )}
+
+                        {appointment.status === "PROPOSAL_SENT" && (
+                          <div className="flex flex-col gap-2">
                             <button
                               onClick={() => openConfirmDialog(appointment.id, "CANCELLED")}
-                              className="flex-1 bg-red-600 hover:bg-red-700 active:bg-red-700 text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg text-sm sm:text-base touch-manipulation"
+                              className="w-full bg-red-600 hover:bg-red-700 active:bg-red-700 text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-1.5 sm:gap-2 text-sm sm:text-base touch-manipulation"
                             >
                               Absagen
+                            </button>
+                            <button
+                              onClick={() => openConfirmDialog(appointment.id, "DELETE")}
+                              className="w-full bg-gray-500 hover:bg-gray-600 active:bg-gray-600 text-white px-3 sm:px-4 py-2 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-1.5 text-xs sm:text-sm touch-manipulation"
+                            >
+                              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                              </svg>
+                              Termin löschen
                             </button>
                           </div>
                         )}
@@ -904,7 +1021,7 @@ export default function AdminDashboard() {
             <div className="flex items-center gap-4 mb-4">
               <div className={`p-3 rounded-full ${
                 confirmDialog.action === "CONFIRMED" ? "bg-green-100" :
-                confirmDialog.action === "CANCELLED" ? "bg-red-100" :
+                confirmDialog.action === "CANCELLED" || confirmDialog.action === "DELETE" ? "bg-red-100" :
                 "bg-blue-100"
               }`}>
                 {confirmDialog.action === "CONFIRMED" && (
@@ -922,6 +1039,11 @@ export default function AdminDashboard() {
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
                 )}
+                {confirmDialog.action === "DELETE" && (
+                  <svg className="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                  </svg>
+                )}
               </div>
               <h3 className="text-xl font-bold text-[#2c5f7c]">Bestätigung erforderlich</h3>
             </div>
@@ -936,10 +1058,10 @@ export default function AdminDashboard() {
                 Abbrechen
               </button>
               <button
-                onClick={() => updateAppointmentStatus(confirmDialog.appointmentId, confirmDialog.action)}
+                onClick={() => confirmDialog.action === "DELETE" ? deleteAppointment(confirmDialog.appointmentId) : updateAppointmentStatus(confirmDialog.appointmentId, confirmDialog.action)}
                 className={`flex-1 px-4 py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg text-white ${
                   confirmDialog.action === "CONFIRMED" ? "bg-[#4a9d8f] hover:bg-[#3d8378]" :
-                  confirmDialog.action === "CANCELLED" ? "bg-red-600 hover:bg-red-700" :
+                  confirmDialog.action === "CANCELLED" || confirmDialog.action === "DELETE" ? "bg-red-600 hover:bg-red-700" :
                   "bg-[#2c5f7c] hover:bg-[#1f4459]"
                 }`}
               >

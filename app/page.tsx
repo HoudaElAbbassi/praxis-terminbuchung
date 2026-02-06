@@ -142,6 +142,7 @@ export default function Home() {
                 <li><Link href="/kontakt" className="hover:text-primary-300 transition-colors">Kontakt</Link></li>
                 <li><Link href="/datenschutz" className="hover:text-primary-300 transition-colors">Datenschutz</Link></li>
                 <li><Link href="/impressum" className="hover:text-primary-300 transition-colors">Impressum</Link></li>
+                <li><Link href="/karriere" className="hover:text-primary-300 transition-colors">Karriere</Link></li>
                 <li><Link href="/auth/login" className="hover:text-primary-300 transition-colors">Login</Link></li>
               </ul>
             </div>

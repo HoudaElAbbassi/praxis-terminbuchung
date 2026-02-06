@@ -14,6 +14,7 @@ export default function Navigation() {
   const navLinks = [
     { href: '/philosophie', label: 'Philosophie' },
     { href: '/leistungen', label: 'Leistungen' },
+    { href: '/karriere', label: 'Karriere' },
     { href: '/kontakt', label: 'Kontakt' },
     { href: '/termine/buchen', label: 'Termin buchen' },
   ];

@@ -60,7 +60,7 @@ export default function BuchenClient({ initialAppointmentTypes }: BuchenClientPr
     setError("");
 
     // Validierung
-    if (!contactData.firstName || !contactData.lastName || !contactData.email || !contactData.phone || !contactData.address || !contactData.notes) {
+    if (!contactData.firstName || !contactData.lastName || !contactData.email || !contactData.phone || !contactData.address || !contactData.notes || !contactData.dateOfBirth) {
       setError("Bitte füllen Sie alle Pflichtfelder aus");
       setIsLoading(false);
       return;
@@ -635,11 +635,12 @@ export default function BuchenClient({ initialAppointmentTypes }: BuchenClientPr
 
               <div className="mb-6">
                 <label className="block text-sm font-semibold text-[#2d3748] mb-2">
-                  Geburtsdatum (optional)
+                  Geburtsdatum *
                 </label>
                 <input
                   type="date"
                   name="dateOfBirth"
+                  required
                   value={contactData.dateOfBirth}
                   onChange={handleContactChange}
                   placeholder="TT.MM.JJJJ"
@@ -712,7 +713,7 @@ export default function BuchenClient({ initialAppointmentTypes }: BuchenClientPr
                 </button>
                 <button
                   onClick={() => setStep(4)}
-                  disabled={!contactData.firstName || !contactData.lastName || !contactData.email || !contactData.phone || !contactData.address || !contactData.notes || !contactData.insuranceType || !contactData.isFirstVisit || !contactData.reasonForVisit || !privacyAccepted}
+                  disabled={!contactData.firstName || !contactData.lastName || !contactData.email || !contactData.phone || !contactData.address || !contactData.notes || !contactData.dateOfBirth || !contactData.insuranceType || !contactData.isFirstVisit || !contactData.reasonForVisit || !privacyAccepted}
                   className="btn-primary flex-1 py-4 sm:py-3 disabled:bg-gray-300 disabled:cursor-not-allowed disabled:shadow-none touch-manipulation text-base"
                 >
                   Weiter zur Bestätigung
