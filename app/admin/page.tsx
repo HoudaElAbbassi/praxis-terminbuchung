@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -23,6 +23,7 @@ type Appointment = {
   isFirstVisit: boolean | null;
   reasonForVisit: string | null;
   notes: string | null;
+  createdAt?: string;
   user: {
     firstName: string;
     lastName: string;
@@ -37,6 +38,11 @@ type Appointment = {
   };
 };
 
+// Filter-Typen
+type StatusFilter = "ALL" | "PENDING" | "PROPOSAL_SENT" | "CONFIRMED" | "COMPLETED" | "CANCELLED";
+type UrgencyFilter = "ALL" | "URGENT" | "NORMAL" | "FLEXIBLE";
+type SortOption = "date_desc" | "date_asc" | "name_asc" | "name_desc" | "urgency" | "status";
+
 export default function AdminDashboard() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -48,6 +54,15 @@ export default function AdminDashboard() {
   const [isSetTimeModalOpen, setIsSetTimeModalOpen] = useState(false);
   const [isSendProposalModalOpen, setIsSendProposalModalOpen] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
+
+  // Neue Filter-States
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("ALL");
+  const [urgencyFilter, setUrgencyFilter] = useState<UrgencyFilter>("ALL");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortOption, setSortOption] = useState<SortOption>("date_desc");
+  const [showFilters, setShowFilters] = useState(true);
+  const [viewMode, setViewMode] = useState<"cards" | "table">("table"); // Default: Tabelle
+
   const [confirmDialog, setConfirmDialog] = useState<{
     isOpen: boolean;
     action: string;
@@ -113,6 +128,75 @@ export default function AdminDashboard() {
     } catch (error) {
       console.error("Error fetching stats:", error);
     }
+  };
+
+  // Gefilterte und sortierte Termine
+  const filteredAppointments = useMemo(() => {
+    let filtered = [...appointments];
+
+    // Status-Filter
+    if (statusFilter !== "ALL") {
+      filtered = filtered.filter(apt => apt.status === statusFilter);
+    }
+
+    // Dringlichkeits-Filter
+    if (urgencyFilter !== "ALL") {
+      filtered = filtered.filter(apt => apt.urgency === urgencyFilter);
+    }
+
+    // Suchfeld (Name oder E-Mail)
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
+      filtered = filtered.filter(apt =>
+        `${apt.user.firstName} ${apt.user.lastName}`.toLowerCase().includes(query) ||
+        apt.user.email.toLowerCase().includes(query) ||
+        apt.user.phone.includes(query)
+      );
+    }
+
+    // Sortierung
+    filtered.sort((a, b) => {
+      switch (sortOption) {
+        case "date_desc":
+          // Neueste zuerst, Termine ohne Datum ans Ende
+          if (!a.date && !b.date) return 0;
+          if (!a.date) return 1;
+          if (!b.date) return -1;
+          return new Date(b.date).getTime() - new Date(a.date).getTime();
+        case "date_asc":
+          // Älteste zuerst, Termine ohne Datum ans Ende
+          if (!a.date && !b.date) return 0;
+          if (!a.date) return 1;
+          if (!b.date) return -1;
+          return new Date(a.date).getTime() - new Date(b.date).getTime();
+        case "name_asc":
+          return `${a.user.firstName} ${a.user.lastName}`.localeCompare(`${b.user.firstName} ${b.user.lastName}`);
+        case "name_desc":
+          return `${b.user.firstName} ${b.user.lastName}`.localeCompare(`${a.user.firstName} ${a.user.lastName}`);
+        case "urgency":
+          const urgencyOrder: Record<string, number> = { URGENT: 0, NORMAL: 1, FLEXIBLE: 2 };
+          return (urgencyOrder[a.urgency || 'NORMAL'] || 1) - (urgencyOrder[b.urgency || 'NORMAL'] || 1);
+        case "status":
+          const statusOrder: Record<string, number> = { PENDING: 0, PROPOSAL_SENT: 1, CONFIRMED: 2, COMPLETED: 3, CANCELLED: 4 };
+          return (statusOrder[a.status] || 99) - (statusOrder[b.status] || 99);
+        default:
+          return 0;
+      }
+    });
+
+    return filtered;
+  }, [appointments, statusFilter, urgencyFilter, searchQuery, sortOption]);
+
+  // Prüfen ob Filter aktiv sind
+  const hasActiveFilters = statusFilter !== "ALL" || urgencyFilter !== "ALL" || searchQuery.trim() !== "" || selectedDate !== "";
+
+  // Filter zurücksetzen
+  const resetFilters = () => {
+    setStatusFilter("ALL");
+    setUrgencyFilter("ALL");
+    setSearchQuery("");
+    setSelectedDate("");
+    setSortOption("date_desc");
   };
 
   const openConfirmDialog = (appointmentId: string, action: string) => {
@@ -462,41 +546,194 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Date Selector */}
-        <div className="card p-4 sm:p-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0 mb-3 sm:mb-4">
-            <label className="block text-xs sm:text-sm font-semibold text-[#2d3748]">
-              <svg className="w-4 h-4 sm:w-5 sm:h-5 inline-block mr-1 sm:mr-2 text-[#2c5f7c]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        {/* Filter-Bereich */}
+        <div className="card p-4 sm:p-6 mb-4 sm:mb-6">
+          {/* Filter Header */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className="flex items-center gap-2 text-[#2c5f7c] font-semibold text-sm sm:text-base"
+            >
+              <svg className={`w-5 h-5 transition-transform ${showFilters ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
-              Datum filtern (optional)
-            </label>
-            {selectedDate && (
-              <button
-                onClick={() => setSelectedDate("")}
-                className="text-xs sm:text-sm text-[#2c5f7c] hover:text-[#1f4459] active:text-[#1f4459] font-semibold flex items-center gap-1 touch-manipulation self-start sm:self-auto"
-              >
-                <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-                Filter entfernen
-              </button>
-            )}
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+              </svg>
+              Filter & Sortierung
+              {hasActiveFilters && (
+                <span className="bg-[#4a9d8f] text-white text-xs px-2 py-0.5 rounded-full">Aktiv</span>
+              )}
+            </button>
+            <div className="flex items-center gap-3">
+              {/* Ansicht-Toggle */}
+              <div className="flex items-center bg-gray-100 rounded-lg p-1">
+                <button
+                  onClick={() => setViewMode("table")}
+                  className={`p-2 rounded-md transition-all ${viewMode === "table" ? "bg-white shadow text-[#2c5f7c]" : "text-gray-500 hover:text-gray-700"}`}
+                  title="Tabellenansicht"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                  </svg>
+                </button>
+                <button
+                  onClick={() => setViewMode("cards")}
+                  className={`p-2 rounded-md transition-all ${viewMode === "cards" ? "bg-white shadow text-[#2c5f7c]" : "text-gray-500 hover:text-gray-700"}`}
+                  title="Kartenansicht"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                  </svg>
+                </button>
+              </div>
+              <span className="text-sm text-gray-600">
+                <span className="font-semibold text-[#2c5f7c]">{filteredAppointments.length}</span> von {appointments.length} Terminen
+              </span>
+              {hasActiveFilters && (
+                <button
+                  onClick={resetFilters}
+                  className="text-sm text-red-600 hover:text-red-700 font-semibold flex items-center gap-1"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                  Filter zurücksetzen
+                </button>
+              )}
+            </div>
           </div>
-          <input
-            type="date"
-            value={selectedDate}
-            onChange={(e) => setSelectedDate(e.target.value)}
-            placeholder="Alle anstehenden Termine"
-            className="input-field text-gray-900 text-sm sm:text-base"
-          />
-          {!selectedDate && (
-            <p className="text-xs sm:text-sm text-gray-600 mt-2 flex items-center gap-1">
-              <svg className="w-3 h-3 sm:w-4 sm:h-4 text-[#4a9d8f] flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-              </svg>
-              Zeige alle anstehenden Termine (bis zu 50)
-            </p>
+
+          {/* Filter-Optionen */}
+          {showFilters && (
+            <div className="space-y-4">
+              {/* Suchfeld */}
+              <div>
+                <label className="block text-xs font-semibold text-gray-600 mb-1.5">Suche</label>
+                <div className="relative">
+                  <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Name, E-Mail oder Telefon..."
+                    className="w-full pl-10 pr-4 py-2.5 border-2 border-gray-200 rounded-lg focus:border-[#2c5f7c] focus:ring-2 focus:ring-[#2c5f7c]/20 transition-all text-sm"
+                  />
+                  {searchQuery && (
+                    <button
+                      onClick={() => setSearchQuery("")}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Filter-Reihe */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {/* Status-Filter */}
+                <div>
+                  <label className="block text-xs font-semibold text-gray-600 mb-1.5">Status</label>
+                  <select
+                    value={statusFilter}
+                    onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}
+                    className="w-full px-3 py-2.5 border-2 border-gray-200 rounded-lg focus:border-[#2c5f7c] focus:ring-2 focus:ring-[#2c5f7c]/20 transition-all text-sm bg-white"
+                  >
+                    <option value="ALL">Alle Status</option>
+                    <option value="PENDING">⏳ Ausstehend</option>
+                    <option value="PROPOSAL_SENT">📧 Vorschlag gesendet</option>
+                    <option value="CONFIRMED">✓ Bestätigt</option>
+                    <option value="COMPLETED">✓ Abgeschlossen</option>
+                    <option value="CANCELLED">✗ Abgesagt</option>
+                  </select>
+                </div>
+
+                {/* Dringlichkeits-Filter */}
+                <div>
+                  <label className="block text-xs font-semibold text-gray-600 mb-1.5">Dringlichkeit</label>
+                  <select
+                    value={urgencyFilter}
+                    onChange={(e) => setUrgencyFilter(e.target.value as UrgencyFilter)}
+                    className="w-full px-3 py-2.5 border-2 border-gray-200 rounded-lg focus:border-[#2c5f7c] focus:ring-2 focus:ring-[#2c5f7c]/20 transition-all text-sm bg-white"
+                  >
+                    <option value="ALL">Alle Dringlichkeiten</option>
+                    <option value="URGENT">🔴 Dringend</option>
+                    <option value="NORMAL">🟡 Normal</option>
+                    <option value="FLEXIBLE">🟢 Flexibel</option>
+                  </select>
+                </div>
+
+                {/* Datum-Filter */}
+                <div>
+                  <label className="block text-xs font-semibold text-gray-600 mb-1.5">Datum</label>
+                  <input
+                    type="date"
+                    value={selectedDate}
+                    onChange={(e) => setSelectedDate(e.target.value)}
+                    className="w-full px-3 py-2.5 border-2 border-gray-200 rounded-lg focus:border-[#2c5f7c] focus:ring-2 focus:ring-[#2c5f7c]/20 transition-all text-sm"
+                  />
+                </div>
+
+                {/* Sortierung */}
+                <div>
+                  <label className="block text-xs font-semibold text-gray-600 mb-1.5">Sortierung</label>
+                  <select
+                    value={sortOption}
+                    onChange={(e) => setSortOption(e.target.value as SortOption)}
+                    className="w-full px-3 py-2.5 border-2 border-gray-200 rounded-lg focus:border-[#2c5f7c] focus:ring-2 focus:ring-[#2c5f7c]/20 transition-all text-sm bg-white"
+                  >
+                    <option value="date_desc">Datum (neueste zuerst)</option>
+                    <option value="date_asc">Datum (älteste zuerst)</option>
+                    <option value="name_asc">Name (A-Z)</option>
+                    <option value="name_desc">Name (Z-A)</option>
+                    <option value="urgency">Dringlichkeit</option>
+                    <option value="status">Status</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Status-Schnellfilter (Chips) */}
+              <div>
+                <label className="block text-xs font-semibold text-gray-600 mb-2">Schnellfilter Status</label>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    { value: "ALL", label: "Alle", color: "gray" },
+                    { value: "PENDING", label: "⏳ Ausstehend", color: "yellow" },
+                    { value: "PROPOSAL_SENT", label: "📧 Vorschlag", color: "purple" },
+                    { value: "CONFIRMED", label: "✓ Bestätigt", color: "green" },
+                    { value: "COMPLETED", label: "✓ Abgeschlossen", color: "blue" },
+                    { value: "CANCELLED", label: "✗ Abgesagt", color: "red" },
+                  ].map((option) => (
+                    <button
+                      key={option.value}
+                      onClick={() => setStatusFilter(option.value as StatusFilter)}
+                      className={`px-3 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all ${
+                        statusFilter === option.value
+                          ? option.color === "gray" ? "bg-gray-700 text-white" :
+                            option.color === "yellow" ? "bg-yellow-500 text-white" :
+                            option.color === "purple" ? "bg-purple-500 text-white" :
+                            option.color === "green" ? "bg-green-500 text-white" :
+                            option.color === "blue" ? "bg-blue-500 text-white" :
+                            "bg-red-500 text-white"
+                          : option.color === "gray" ? "bg-gray-100 text-gray-700 hover:bg-gray-200" :
+                            option.color === "yellow" ? "bg-yellow-50 text-yellow-700 hover:bg-yellow-100" :
+                            option.color === "purple" ? "bg-purple-50 text-purple-700 hover:bg-purple-100" :
+                            option.color === "green" ? "bg-green-50 text-green-700 hover:bg-green-100" :
+                            option.color === "blue" ? "bg-blue-50 text-blue-700 hover:bg-blue-100" :
+                            "bg-red-50 text-red-700 hover:bg-red-100"
+                      }`}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
           )}
         </div>
 
@@ -509,20 +746,198 @@ export default function AdminDashboard() {
             {selectedDate ? `Termine für ${formatDate(selectedDate)}` : "Alle anstehenden Termine"}
           </h2>
 
-          {appointments.length === 0 ? (
+          {filteredAppointments.length === 0 ? (
             <div className="text-center py-8 sm:py-12 bg-[#e8f4f2] rounded-lg">
               <svg className="w-16 h-16 sm:w-20 sm:h-20 mx-auto text-[#4a9d8f] mb-3 sm:mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
-              <p className="text-gray-600 text-base sm:text-lg">{selectedDate ? "Keine Termine für diesen Tag" : "Keine anstehenden Termine"}</p>
+              <p className="text-gray-600 text-base sm:text-lg">
+                {hasActiveFilters
+                  ? "Keine Termine gefunden mit diesen Filterkriterien"
+                  : selectedDate
+                    ? "Keine Termine für diesen Tag"
+                    : "Keine anstehenden Termine"}
+              </p>
+              {hasActiveFilters && (
+                <button
+                  onClick={resetFilters}
+                  className="mt-4 text-[#2c5f7c] hover:text-[#1f4459] font-semibold text-sm"
+                >
+                  Filter zurücksetzen
+                </button>
+              )}
+            </div>
+          ) : viewMode === "table" ? (
+            /* ========== TABELLENANSICHT ========== */
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="bg-[#2c5f7c] text-white">
+                    <th className="px-3 py-3 text-left font-semibold rounded-tl-lg">Datum</th>
+                    <th className="px-3 py-3 text-left font-semibold">Uhrzeit</th>
+                    <th className="px-3 py-3 text-left font-semibold">Patient</th>
+                    <th className="px-3 py-3 text-left font-semibold hidden md:table-cell">Kontakt</th>
+                    <th className="px-3 py-3 text-left font-semibold hidden lg:table-cell">Terminart</th>
+                    <th className="px-3 py-3 text-center font-semibold">Status</th>
+                    <th className="px-3 py-3 text-center font-semibold hidden sm:table-cell">Dringlichkeit</th>
+                    <th className="px-3 py-3 text-center font-semibold rounded-tr-lg">Aktionen</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {filteredAppointments.map((appointment, index) => (
+                    <tr
+                      key={appointment.id}
+                      className={`hover:bg-[#e8f4f2] transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}
+                    >
+                      {/* Datum */}
+                      <td className="px-3 py-3 whitespace-nowrap">
+                        {appointment.date ? (
+                          <div>
+                            <div className="font-medium text-gray-900">
+                              {new Date(appointment.date).toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "2-digit" })}
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              {new Date(appointment.date).toLocaleDateString("de-DE", { weekday: "short" })}
+                            </div>
+                          </div>
+                        ) : (
+                          <span className="text-xs text-gray-500 italic">Offen</span>
+                        )}
+                      </td>
+                      {/* Uhrzeit */}
+                      <td className="px-3 py-3 whitespace-nowrap">
+                        {appointment.startTime ? (
+                          <span className="font-medium text-[#2c5f7c]">{formatTime(appointment.startTime)}</span>
+                        ) : (
+                          <div className="text-xs text-gray-500">
+                            <div>{translateTimeSlots(appointment.preferredTimeSlots)}</div>
+                          </div>
+                        )}
+                      </td>
+                      {/* Patient */}
+                      <td className="px-3 py-3">
+                        <div className="font-medium text-gray-900">
+                          {appointment.user.firstName} {appointment.user.lastName}
+                        </div>
+                        <div className="text-xs text-gray-500 md:hidden">{appointment.user.phone}</div>
+                      </td>
+                      {/* Kontakt (hidden on mobile) */}
+                      <td className="px-3 py-3 hidden md:table-cell">
+                        <div className="text-xs">
+                          <div className="text-gray-600">{appointment.user.phone}</div>
+                          <div className="text-gray-400 truncate max-w-[150px]">{appointment.user.email}</div>
+                        </div>
+                      </td>
+                      {/* Terminart (hidden on mobile/tablet) */}
+                      <td className="px-3 py-3 hidden lg:table-cell">
+                        <span className="text-gray-700">{appointment.appointmentType.name}</span>
+                      </td>
+                      {/* Status */}
+                      <td className="px-3 py-3 text-center">
+                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                          appointment.status === "PENDING" ? "bg-yellow-100 text-yellow-800" :
+                          appointment.status === "PROPOSAL_SENT" ? "bg-purple-100 text-purple-800" :
+                          appointment.status === "CONFIRMED" ? "bg-green-100 text-green-800" :
+                          appointment.status === "CANCELLED" ? "bg-red-100 text-red-800" :
+                          appointment.status === "COMPLETED" ? "bg-blue-100 text-blue-800" :
+                          "bg-gray-100 text-gray-800"
+                        }`}>
+                          {appointment.status === "PENDING" ? "Offen" :
+                           appointment.status === "PROPOSAL_SENT" ? "Vorschlag" :
+                           appointment.status === "CONFIRMED" ? "Bestätigt" :
+                           appointment.status === "CANCELLED" ? "Abgesagt" :
+                           appointment.status === "COMPLETED" ? "Fertig" :
+                           appointment.status}
+                        </span>
+                      </td>
+                      {/* Dringlichkeit (hidden on mobile) */}
+                      <td className="px-3 py-3 text-center hidden sm:table-cell">
+                        <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs ${
+                          appointment.urgency === 'URGENT' ? 'bg-red-100 text-red-600' :
+                          appointment.urgency === 'FLEXIBLE' ? 'bg-green-100 text-green-600' :
+                          'bg-yellow-100 text-yellow-600'
+                        }`} title={
+                          appointment.urgency === 'URGENT' ? 'Dringend' :
+                          appointment.urgency === 'FLEXIBLE' ? 'Flexibel' : 'Normal'
+                        }>
+                          {appointment.urgency === 'URGENT' ? '!' :
+                           appointment.urgency === 'FLEXIBLE' ? '~' : '•'}
+                        </span>
+                      </td>
+                      {/* Aktionen */}
+                      <td className="px-3 py-3">
+                        <div className="flex items-center justify-center gap-1">
+                          {appointment.status === "PENDING" && (
+                            <>
+                              <button
+                                onClick={() => handleSendProposal(appointment)}
+                                className="p-1.5 text-purple-600 hover:bg-purple-100 rounded-lg transition-colors"
+                                title="Terminvorschlag senden"
+                              >
+                                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                  <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                                  <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                                </svg>
+                              </button>
+                              <button
+                                onClick={() => handleSetAppointmentTime(appointment)}
+                                className="p-1.5 text-[#4a9d8f] hover:bg-[#e8f4f2] rounded-lg transition-colors"
+                                title="Termin direkt festlegen"
+                              >
+                                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
+                                </svg>
+                              </button>
+                              <button
+                                onClick={() => openConfirmDialog(appointment.id, "CANCELLED")}
+                                className="p-1.5 text-red-600 hover:bg-red-100 rounded-lg transition-colors"
+                                title="Ablehnen"
+                              >
+                                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                                </svg>
+                              </button>
+                            </>
+                          )}
+                          {appointment.status === "CONFIRMED" && (
+                            <>
+                              <button
+                                onClick={() => openConfirmDialog(appointment.id, "COMPLETED")}
+                                className="p-1.5 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors"
+                                title="Als abgeschlossen markieren"
+                              >
+                                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                </svg>
+                              </button>
+                              <button
+                                onClick={() => openConfirmDialog(appointment.id, "CANCELLED")}
+                                className="p-1.5 text-red-600 hover:bg-red-100 rounded-lg transition-colors"
+                                title="Absagen"
+                              >
+                                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                                </svg>
+                              </button>
+                            </>
+                          )}
+                          {(appointment.status === "COMPLETED" || appointment.status === "CANCELLED") && (
+                            <span className="text-xs text-gray-400">—</span>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           ) : (
             <div className="space-y-4 sm:space-y-6">
               {!selectedDate ? (
-                // Group by date when no filter is active
+                // Group by date when no date filter is active
                 (() => {
                   const groupedByDate: { [key: string]: Appointment[] } = {};
-                  appointments.forEach(apt => {
+                  filteredAppointments.forEach(apt => {
                     const dateKey = apt.date || 'pending';
                     if (!groupedByDate[dateKey]) {
                       groupedByDate[dateKey] = [];
@@ -772,7 +1187,7 @@ export default function AdminDashboard() {
                 })()
               ) : (
                 // Show appointments without grouping when a date is selected
-                appointments.map((appointment) => (
+                filteredAppointments.map((appointment) => (
                   <div
                     key={appointment.id}
                     className="border-2 border-gray-200 rounded-lg p-3 sm:p-4 md:p-6 hover:border-[#2c5f7c] hover:shadow-lg transition-all duration-300 bg-white"
