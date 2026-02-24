@@ -16,26 +16,28 @@ export async function GET() {
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
 
-    // Total appointments
+    // Total appointments (nur nicht intern erledigt)
     const total = await prisma.appointment.count({
       where: {
         status: {
           in: ["PENDING", "CONFIRMED", "COMPLETED"],
         },
+        handledInternally: false,
       },
     });
 
-    // Today's appointments
+    // Today's appointments (nur nicht intern erledigt)
     const todayCount = await prisma.appointment.count({
       where: {
         date: today,
         status: {
           in: ["PENDING", "CONFIRMED", "COMPLETED"],
         },
+        handledInternally: false,
       },
     });
 
-    // Upcoming appointments (from today onwards OR pending without date)
+    // Upcoming appointments (nur nicht intern erledigt)
     const upcoming = await prisma.appointment.count({
       where: {
         OR: [
@@ -46,10 +48,12 @@ export async function GET() {
             status: {
               in: ["PENDING", "CONFIRMED"],
             },
+            handledInternally: false,
           },
           {
             date: null,
             status: "PENDING",
+            handledInternally: false,
           },
         ],
       },

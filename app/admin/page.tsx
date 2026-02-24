@@ -225,6 +225,7 @@ export default function AdminDashboard() {
             apt.id === appointmentId ? { ...apt, handledInternally: !currentValue } : apt
           )
         );
+        fetchStats();
       } else {
         alert("Fehler beim Aktualisieren");
       }
