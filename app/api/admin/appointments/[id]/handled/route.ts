@@ -4,7 +4,7 @@ import { auth } from "@/lib/auth";
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth();
@@ -13,6 +13,7 @@ export async function PATCH(
       return NextResponse.json({ error: "Nicht autorisiert" }, { status: 403 });
     }
 
+    const { id } = await params;
     const { handledInternally } = await req.json();
 
     if (typeof handledInternally !== "boolean") {
@@ -20,7 +21,7 @@ export async function PATCH(
     }
 
     const appointment = await prisma.appointment.update({
-      where: { id: params.id },
+      where: { id },
       data: { handledInternally },
     });
 
