@@ -24,6 +24,7 @@ type Appointment = {
   reasonForVisit: string | null;
   notes: string | null;
   createdAt?: string;
+  handledInternally: boolean;
   user: {
     firstName: string;
     lastName: string;
@@ -42,6 +43,7 @@ type Appointment = {
 type StatusFilter = "ALL" | "PENDING" | "PROPOSAL_SENT" | "CONFIRMED" | "COMPLETED" | "CANCELLED";
 type UrgencyFilter = "ALL" | "URGENT" | "NORMAL" | "FLEXIBLE";
 type SortOption = "date_desc" | "date_asc" | "name_asc" | "name_desc" | "urgency" | "status";
+type HandledFilter = "ALL" | "HANDLED" | "NOT_HANDLED";
 
 export default function AdminDashboard() {
   const { data: session, status } = useSession();
@@ -58,6 +60,7 @@ export default function AdminDashboard() {
   // Neue Filter-States
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("ALL");
   const [urgencyFilter, setUrgencyFilter] = useState<UrgencyFilter>("ALL");
+  const [handledFilter, setHandledFilter] = useState<HandledFilter>("ALL");
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState<SortOption>("date_desc");
   const [showFilters, setShowFilters] = useState(true);
@@ -144,6 +147,13 @@ export default function AdminDashboard() {
       filtered = filtered.filter(apt => apt.urgency === urgencyFilter);
     }
 
+    // Intern-erledigt-Filter
+    if (handledFilter === "HANDLED") {
+      filtered = filtered.filter(apt => apt.handledInternally === true);
+    } else if (handledFilter === "NOT_HANDLED") {
+      filtered = filtered.filter(apt => apt.handledInternally === false);
+    }
+
     // Suchfeld (Name oder E-Mail)
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase().trim();
@@ -185,18 +195,43 @@ export default function AdminDashboard() {
     });
 
     return filtered;
-  }, [appointments, statusFilter, urgencyFilter, searchQuery, sortOption]);
+  }, [appointments, statusFilter, urgencyFilter, handledFilter, searchQuery, sortOption]);
 
   // Prüfen ob Filter aktiv sind
-  const hasActiveFilters = statusFilter !== "ALL" || urgencyFilter !== "ALL" || searchQuery.trim() !== "" || selectedDate !== "";
+  const hasActiveFilters = statusFilter !== "ALL" || urgencyFilter !== "ALL" || handledFilter !== "ALL" || searchQuery.trim() !== "" || selectedDate !== "";
 
   // Filter zurücksetzen
   const resetFilters = () => {
     setStatusFilter("ALL");
     setUrgencyFilter("ALL");
+    setHandledFilter("ALL");
     setSearchQuery("");
     setSelectedDate("");
     setSortOption("date_desc");
+  };
+
+  // Intern-erledigt umschalten
+  const toggleHandledInternally = async (appointmentId: string, currentValue: boolean) => {
+    try {
+      const res = await fetch(`/api/admin/appointments/${appointmentId}/handled`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ handledInternally: !currentValue }),
+      });
+
+      if (res.ok) {
+        setAppointments(prev =>
+          prev.map(apt =>
+            apt.id === appointmentId ? { ...apt, handledInternally: !currentValue } : apt
+          )
+        );
+      } else {
+        alert("Fehler beim Aktualisieren");
+      }
+    } catch (error) {
+      console.error("Error toggling handledInternally:", error);
+      alert("Fehler beim Aktualisieren");
+    }
   };
 
   const openConfirmDialog = (appointmentId: string, action: string) => {
@@ -635,7 +670,7 @@ export default function AdminDashboard() {
               </div>
 
               {/* Filter-Reihe */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                 {/* Status-Filter */}
                 <div>
                   <label className="block text-xs font-semibold text-gray-600 mb-1.5">Status</label>
@@ -665,6 +700,20 @@ export default function AdminDashboard() {
                     <option value="URGENT">🔴 Dringend</option>
                     <option value="NORMAL">🟡 Normal</option>
                     <option value="FLEXIBLE">🟢 Flexibel</option>
+                  </select>
+                </div>
+
+                {/* Intern-erledigt-Filter */}
+                <div>
+                  <label className="block text-xs font-semibold text-gray-600 mb-1.5">Intern erledigt</label>
+                  <select
+                    value={handledFilter}
+                    onChange={(e) => setHandledFilter(e.target.value as HandledFilter)}
+                    className="w-full px-3 py-2.5 border-2 border-gray-200 rounded-lg focus:border-[#2c5f7c] focus:ring-2 focus:ring-[#2c5f7c]/20 transition-all text-sm bg-white"
+                  >
+                    <option value="ALL">Alle</option>
+                    <option value="HANDLED">✅ Erledigt</option>
+                    <option value="NOT_HANDLED">◻ Offen</option>
                   </select>
                 </div>
 
@@ -780,6 +829,7 @@ export default function AdminDashboard() {
                     <th className="px-3 py-3 text-left font-semibold hidden lg:table-cell">Terminart</th>
                     <th className="px-3 py-3 text-center font-semibold">Status</th>
                     <th className="px-3 py-3 text-center font-semibold hidden sm:table-cell">Dringlichkeit</th>
+                    <th className="px-3 py-3 text-center font-semibold hidden sm:table-cell" title="Intern erledigt">Erledigt</th>
                     <th className="px-3 py-3 text-center font-semibold rounded-tr-lg">Aktionen</th>
                   </tr>
                 </thead>
@@ -863,6 +913,28 @@ export default function AdminDashboard() {
                           {appointment.urgency === 'URGENT' ? '!' :
                            appointment.urgency === 'FLEXIBLE' ? '~' : '•'}
                         </span>
+                      </td>
+                      {/* Intern erledigt (hidden on mobile) */}
+                      <td className="px-3 py-3 text-center hidden sm:table-cell">
+                        <button
+                          onClick={() => toggleHandledInternally(appointment.id, appointment.handledInternally)}
+                          title={appointment.handledInternally ? "Als offen markieren" : "Als intern erledigt markieren"}
+                          className={`inline-flex items-center justify-center w-7 h-7 rounded-full transition-colors ${
+                            appointment.handledInternally
+                              ? 'bg-teal-100 text-teal-700 hover:bg-teal-200'
+                              : 'bg-gray-100 text-gray-400 hover:bg-gray-200'
+                          }`}
+                        >
+                          {appointment.handledInternally ? (
+                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                            </svg>
+                          ) : (
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                            </svg>
+                          )}
+                        </button>
                       </td>
                       {/* Aktionen */}
                       <td className="px-3 py-3">
@@ -1081,6 +1153,34 @@ export default function AdminDashboard() {
                         </div>
                       )}
 
+                      {/* Intern erledigt Toggle */}
+                      <div className="mb-3">
+                        <button
+                          onClick={() => toggleHandledInternally(appointment.id, appointment.handledInternally)}
+                          className={`w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                            appointment.handledInternally
+                              ? 'bg-teal-100 text-teal-800 hover:bg-teal-200 border border-teal-300'
+                              : 'bg-gray-100 text-gray-600 hover:bg-gray-200 border border-gray-200'
+                          }`}
+                        >
+                          {appointment.handledInternally ? (
+                            <>
+                              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                              </svg>
+                              Intern erledigt
+                            </>
+                          ) : (
+                            <>
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                              </svg>
+                              Als intern erledigt markieren
+                            </>
+                          )}
+                        </button>
+                      </div>
+
                       {/* Action Buttons */}
                       {appointment.status === "PENDING" && (
                         <div className="flex flex-col gap-2">
@@ -1283,6 +1383,34 @@ export default function AdminDashboard() {
                               <span className="font-medium">Notizen:</span> <span>{appointment.notes}</span>
                             </p>
                           )}
+                        </div>
+
+                        {/* Intern erledigt Toggle */}
+                        <div className="mb-3">
+                          <button
+                            onClick={() => toggleHandledInternally(appointment.id, appointment.handledInternally)}
+                            className={`w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                              appointment.handledInternally
+                                ? 'bg-teal-100 text-teal-800 hover:bg-teal-200 border border-teal-300'
+                                : 'bg-gray-100 text-gray-600 hover:bg-gray-200 border border-gray-200'
+                            }`}
+                          >
+                            {appointment.handledInternally ? (
+                              <>
+                                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                </svg>
+                                Intern erledigt
+                              </>
+                            ) : (
+                              <>
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                </svg>
+                                Als intern erledigt markieren
+                              </>
+                            )}
+                          </button>
                         </div>
 
                         {/* Action Buttons */}

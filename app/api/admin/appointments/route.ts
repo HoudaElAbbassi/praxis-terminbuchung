@@ -12,6 +12,12 @@ export async function GET(req: NextRequest) {
 
     const searchParams = req.nextUrl.searchParams;
     const dateParam = searchParams.get("date");
+    const handledParam = searchParams.get("handled"); // "true" | "false" | null (alle)
+
+    const handledFilter =
+      handledParam === "true" ? true :
+      handledParam === "false" ? false :
+      undefined;
 
     if (dateParam) {
       // If date is provided, filter by that specific date
@@ -24,6 +30,7 @@ export async function GET(req: NextRequest) {
           status: {
             in: ["PENDING", "CONFIRMED", "COMPLETED"],
           },
+          ...(handledFilter !== undefined && { handledInternally: handledFilter }),
         },
         include: {
           user: {
@@ -58,6 +65,7 @@ export async function GET(req: NextRequest) {
             {
               status: "PENDING",
               date: null,
+              ...(handledFilter !== undefined && { handledInternally: handledFilter }),
             },
             // Appointments with dates >= today
             {
@@ -67,6 +75,7 @@ export async function GET(req: NextRequest) {
               status: {
                 in: ["PENDING", "CONFIRMED", "COMPLETED"],
               },
+              ...(handledFilter !== undefined && { handledInternally: handledFilter }),
             },
           ],
         },

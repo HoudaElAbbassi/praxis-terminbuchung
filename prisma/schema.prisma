@@ -84,6 +84,9 @@ model Appointment {
   urgency           UrgencyLevel?   @default(NORMAL)
   specialRemarks    String?         // Freitext für besondere Wünsche/Einschränkungen
 
+  // Internes Feld für Admin
+  handledInternally Boolean         @default(false) // Intern als erledigt markiert
+
   // Relationen
   userId            String
   user              User            @relation(fields: [userId], references: [id], onDelete: Cascade)
