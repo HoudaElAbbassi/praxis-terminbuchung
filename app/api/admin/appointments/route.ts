@@ -97,7 +97,6 @@ export async function GET(req: NextRequest) {
           { date: "asc" }, // null dates will come first
           { startTime: "asc" },
         ],
-        take: 50, // Limit to 50 appointments
       });
 
       return NextResponse.json(appointments);
