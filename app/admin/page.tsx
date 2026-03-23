@@ -42,7 +42,7 @@ type Appointment = {
 // Filter-Typen
 type StatusFilter = "ALL" | "PENDING" | "PROPOSAL_SENT" | "CONFIRMED" | "COMPLETED" | "CANCELLED";
 type UrgencyFilter = "ALL" | "URGENT" | "NORMAL" | "FLEXIBLE";
-type SortOption = "date_desc" | "date_asc" | "name_asc" | "name_desc" | "urgency" | "status";
+type SortOption = "date_desc" | "date_asc" | "name_asc" | "name_desc" | "urgency" | "status" | "created_desc" | "created_asc";
 type HandledFilter = "ALL" | "HANDLED" | "NOT_HANDLED";
 
 export default function AdminDashboard() {
@@ -67,6 +67,7 @@ export default function AdminDashboard() {
   const [viewMode, setViewMode] = useState<"cards" | "table">("table"); // Default: Tabelle
 
   const [detailAppointment, setDetailAppointment] = useState<Appointment | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const [confirmDialog, setConfirmDialog] = useState<{
     isOpen: boolean;
@@ -191,6 +192,16 @@ export default function AdminDashboard() {
         case "status":
           const statusOrder: Record<string, number> = { PENDING: 0, PROPOSAL_SENT: 1, CONFIRMED: 2, COMPLETED: 3, CANCELLED: 4 };
           return (statusOrder[a.status] || 99) - (statusOrder[b.status] || 99);
+        case "created_desc":
+          if (!a.createdAt && !b.createdAt) return 0;
+          if (!a.createdAt) return 1;
+          if (!b.createdAt) return -1;
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        case "created_asc":
+          if (!a.createdAt && !b.createdAt) return 0;
+          if (!a.createdAt) return 1;
+          if (!b.createdAt) return -1;
+          return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
         default:
           return 0;
       }
@@ -198,6 +209,19 @@ export default function AdminDashboard() {
 
     return filtered;
   }, [appointments, statusFilter, urgencyFilter, handledFilter, searchQuery, sortOption]);
+
+  // Seite zurücksetzen bei Filteränderungen
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [statusFilter, urgencyFilter, handledFilter, searchQuery, sortOption, selectedDate]);
+
+  // Pagination
+  const PAGE_SIZE = 25;
+  const totalPages = Math.ceil(filteredAppointments.length / PAGE_SIZE);
+  const paginatedAppointments = useMemo(() => {
+    const start = (currentPage - 1) * PAGE_SIZE;
+    return filteredAppointments.slice(start, start + PAGE_SIZE);
+  }, [filteredAppointments, currentPage]);
 
   // Prüfen ob Filter aktiv sind
   const hasActiveFilters = statusFilter !== "ALL" || urgencyFilter !== "ALL" || handledFilter !== "ALL" || searchQuery.trim() !== "" || selectedDate !== "";
@@ -210,6 +234,19 @@ export default function AdminDashboard() {
     setSearchQuery("");
     setSelectedDate("");
     setSortOption("date_desc");
+    setCurrentPage(1);
+  };
+
+  // Hilfsfunktion für Spalten-Sortierung
+  const handleColumnSort = (asc: SortOption, desc: SortOption) => {
+    setSortOption(prev => prev === desc ? asc : desc);
+    setCurrentPage(1);
+  };
+
+  const sortIcon = (asc: SortOption, desc: SortOption) => {
+    if (sortOption === asc) return " ↑";
+    if (sortOption === desc) return " ↓";
+    return "";
   };
 
   // Intern-erledigt umschalten
@@ -539,51 +576,6 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Statistics Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6 mb-4 sm:mb-6 md:mb-8">
-          <div className="card border-l-4 border-[#2c5f7c] p-4 sm:p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-500 text-xs sm:text-sm font-semibold">Termine Gesamt</p>
-                <p className="text-3xl sm:text-4xl font-bold text-[#2c5f7c] mt-1 sm:mt-2">{stats.total}</p>
-              </div>
-              <div className="bg-[#e8f4f2] p-3 sm:p-4 rounded-full">
-                <svg className="w-6 h-6 sm:w-8 sm:h-8 text-[#2c5f7c]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-              </div>
-            </div>
-          </div>
-
-          <div className="card border-l-4 border-[#4a9d8f] p-4 sm:p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-500 text-xs sm:text-sm font-semibold">Heute</p>
-                <p className="text-3xl sm:text-4xl font-bold text-[#4a9d8f] mt-1 sm:mt-2">{stats.today}</p>
-              </div>
-              <div className="bg-[#e8f4f2] p-3 sm:p-4 rounded-full">
-                <svg className="w-6 h-6 sm:w-8 sm:h-8 text-[#4a9d8f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-            </div>
-          </div>
-
-          <div className="card border-l-4 border-[#3d7a9e] p-4 sm:p-6 sm:col-span-2 lg:col-span-1">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-500 text-xs sm:text-sm font-semibold">Bevorstehend</p>
-                <p className="text-3xl sm:text-4xl font-bold text-[#3d7a9e] mt-1 sm:mt-2">{stats.upcoming}</p>
-              </div>
-              <div className="bg-[#e8f4f2] p-3 sm:p-4 rounded-full">
-                <svg className="w-6 h-6 sm:w-8 sm:h-8 text-[#3d7a9e]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                </svg>
-              </div>
-            </div>
-          </div>
-        </div>
-
         {/* Filter-Bereich */}
         <div className="card p-4 sm:p-6 mb-4 sm:mb-6">
           {/* Filter Header */}
@@ -825,17 +817,33 @@ export default function AdminDashboard() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="bg-[#2c5f7c] text-white">
-                    <th className="px-3 py-3 text-left font-semibold rounded-tl-lg">Datum</th>
+                    <th
+                      className="px-3 py-3 text-left font-semibold rounded-tl-lg cursor-pointer hover:bg-[#1f4459] select-none"
+                      onClick={() => handleColumnSort("date_asc", "date_desc")}
+                    >
+                      Datum{sortIcon("date_asc", "date_desc")}
+                    </th>
                     <th className="px-3 py-3 text-left font-semibold">Uhrzeit</th>
-                    <th className="px-3 py-3 text-left font-semibold">Patient</th>
+                    <th
+                      className="px-3 py-3 text-left font-semibold cursor-pointer hover:bg-[#1f4459] select-none"
+                      onClick={() => handleColumnSort("name_asc", "name_desc")}
+                    >
+                      Patient{sortIcon("name_asc", "name_desc")}
+                    </th>
                     <th className="px-3 py-3 text-left font-semibold hidden md:table-cell">Kontakt</th>
                     <th className="px-3 py-3 text-left font-semibold hidden lg:table-cell">Terminart</th>
+                    <th
+                      className="px-3 py-3 text-left font-semibold hidden xl:table-cell cursor-pointer hover:bg-[#1f4459] select-none"
+                      onClick={() => handleColumnSort("created_asc", "created_desc")}
+                    >
+                      Eingang{sortIcon("created_asc", "created_desc")}
+                    </th>
                     <th className="px-3 py-3 text-center font-semibold hidden sm:table-cell" title="Intern erledigt">Erledigt</th>
                     <th className="px-3 py-3 text-center font-semibold rounded-tr-lg">Aktionen</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  {filteredAppointments.map((appointment, index) => (
+                  {paginatedAppointments.map((appointment, index) => (
                     <tr
                       key={appointment.id}
                       onClick={() => setDetailAppointment(appointment)}
@@ -883,6 +891,21 @@ export default function AdminDashboard() {
                       {/* Terminart (hidden on mobile/tablet) */}
                       <td className="px-3 py-3 hidden lg:table-cell">
                         <span className="text-gray-700">{appointment.appointmentType.name}</span>
+                      </td>
+                      {/* Eingangsdatum (hidden until xl) */}
+                      <td className="px-3 py-3 hidden xl:table-cell whitespace-nowrap">
+                        {appointment.createdAt ? (
+                          <div>
+                            <div className="text-gray-700 text-xs">
+                              {new Date(appointment.createdAt).toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "2-digit" })}
+                            </div>
+                            <div className="text-gray-400 text-xs">
+                              {new Date(appointment.createdAt).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })}
+                            </div>
+                          </div>
+                        ) : (
+                          <span className="text-xs text-gray-400">—</span>
+                        )}
                       </td>
                       {/* Intern erledigt (hidden on mobile) */}
                       <td className="px-3 py-3 text-center hidden sm:table-cell" onClick={(e) => e.stopPropagation()}>
@@ -972,6 +995,69 @@ export default function AdminDashboard() {
                   ))}
                 </tbody>
               </table>
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-200">
+                  <span className="text-sm text-gray-500">
+                    Seite <span className="font-semibold text-[#2c5f7c]">{currentPage}</span> von <span className="font-semibold text-[#2c5f7c]">{totalPages}</span>
+                    {" "}({filteredAppointments.length} Termine gesamt)
+                  </span>
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={() => setCurrentPage(1)}
+                      disabled={currentPage === 1}
+                      className="px-2 py-1.5 text-sm rounded-lg border border-gray-200 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 text-gray-600"
+                    >
+                      «
+                    </button>
+                    <button
+                      onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                      disabled={currentPage === 1}
+                      className="px-3 py-1.5 text-sm rounded-lg border border-gray-200 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 text-gray-600"
+                    >
+                      ‹
+                    </button>
+                    {Array.from({ length: totalPages }, (_, i) => i + 1)
+                      .filter(p => p === 1 || p === totalPages || Math.abs(p - currentPage) <= 2)
+                      .reduce<(number | "...")[]>((acc, p, idx, arr) => {
+                        if (idx > 0 && p - (arr[idx - 1] as number) > 1) acc.push("...");
+                        acc.push(p);
+                        return acc;
+                      }, [])
+                      .map((p, i) =>
+                        p === "..." ? (
+                          <span key={`ellipsis-${i}`} className="px-2 py-1.5 text-sm text-gray-400">…</span>
+                        ) : (
+                          <button
+                            key={p}
+                            onClick={() => setCurrentPage(p as number)}
+                            className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${
+                              currentPage === p
+                                ? "bg-[#2c5f7c] text-white border-[#2c5f7c]"
+                                : "border-gray-200 hover:bg-gray-50 text-gray-600"
+                            }`}
+                          >
+                            {p}
+                          </button>
+                        )
+                      )}
+                    <button
+                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                      disabled={currentPage === totalPages}
+                      className="px-3 py-1.5 text-sm rounded-lg border border-gray-200 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 text-gray-600"
+                    >
+                      ›
+                    </button>
+                    <button
+                      onClick={() => setCurrentPage(totalPages)}
+                      disabled={currentPage === totalPages}
+                      className="px-2 py-1.5 text-sm rounded-lg border border-gray-200 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 text-gray-600"
+                    >
+                      »
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
             <div className="space-y-4 sm:space-y-6">
