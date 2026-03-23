@@ -62,7 +62,7 @@ export default function AdminDashboard() {
   const [urgencyFilter, setUrgencyFilter] = useState<UrgencyFilter>("ALL");
   const [handledFilter, setHandledFilter] = useState<HandledFilter>("ALL");
   const [searchQuery, setSearchQuery] = useState("");
-  const [sortOption, setSortOption] = useState<SortOption>("date_desc");
+  const [sortOption, setSortOption] = useState<SortOption>("created_desc");
   const [showFilters, setShowFilters] = useState(true);
   const [viewMode, setViewMode] = useState<"cards" | "table">("table"); // Default: Tabelle
 
@@ -731,8 +731,10 @@ export default function AdminDashboard() {
                     onChange={(e) => setSortOption(e.target.value as SortOption)}
                     className="w-full px-3 py-2.5 border-2 border-gray-200 rounded-lg focus:border-[#2c5f7c] focus:ring-2 focus:ring-[#2c5f7c]/20 transition-all text-sm bg-white"
                   >
-                    <option value="date_desc">Datum (neueste zuerst)</option>
-                    <option value="date_asc">Datum (älteste zuerst)</option>
+                    <option value="created_desc">Eingang (neueste zuerst)</option>
+                    <option value="created_asc">Eingang (älteste zuerst)</option>
+                    <option value="date_desc">Termin (neueste zuerst)</option>
+                    <option value="date_asc">Termin (älteste zuerst)</option>
                     <option value="name_asc">Name (A-Z)</option>
                     <option value="name_desc">Name (Z-A)</option>
                     <option value="urgency">Dringlichkeit</option>
