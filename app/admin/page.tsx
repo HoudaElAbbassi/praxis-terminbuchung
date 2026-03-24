@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -68,6 +68,9 @@ export default function AdminDashboard() {
 
   const [detailAppointment, setDetailAppointment] = useState<Appointment | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [toast, setToast] = useState<{ message: string; count: number } | null>(null);
+  const knownIdsRef = useRef<Set<string> | null>(null);
+  const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [confirmDialog, setConfirmDialog] = useState<{
     isOpen: boolean;
@@ -80,6 +83,72 @@ export default function AdminDashboard() {
     appointmentId: "",
     message: "",
   });
+
+  const playNotificationSound = useCallback(() => {
+    try {
+      const ctx = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+      const times = [
+        { freq: 880, start: 0, end: 0.25 },
+        { freq: 1100, start: 0.2, end: 0.45 },
+      ];
+      times.forEach(({ freq, start, end }) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.type = "sine";
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.25, ctx.currentTime + start);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + end);
+        osc.start(ctx.currentTime + start);
+        osc.stop(ctx.currentTime + end);
+      });
+    } catch {
+      // Audio nicht verfügbar
+    }
+  }, []);
+
+  const showToast = useCallback((count: number) => {
+    if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+    setToast({ message: count === 1 ? "Neuer Termineingang!" : `${count} neue Termineingänge!`, count });
+    toastTimerRef.current = setTimeout(() => setToast(null), 6000);
+  }, []);
+
+  // Polling: alle 30 Sekunden auf neue Termine prüfen
+  useEffect(() => {
+    if (status !== "authenticated" || session?.user?.role !== "ADMIN") return;
+
+    const poll = async () => {
+      try {
+        const res = await fetch("/api/admin/appointments");
+        const data = await res.json();
+        if (!res.ok || !Array.isArray(data)) return;
+
+        const incomingIds = new Set(data.map((a: Appointment) => a.id));
+
+        if (knownIdsRef.current === null) {
+          // Erster Load — IDs merken, keine Benachrichtigung
+          knownIdsRef.current = incomingIds;
+          return;
+        }
+
+        const newOnes = data.filter((a: Appointment) => !knownIdsRef.current!.has(a.id));
+        if (newOnes.length > 0) {
+          knownIdsRef.current = incomingIds;
+          playNotificationSound();
+          showToast(newOnes.length);
+          setAppointments(data);
+        }
+      } catch {
+        // Netzwerkfehler ignorieren
+      }
+    };
+
+    // Ersten Stand sofort erfassen (ohne Benachrichtigung)
+    poll();
+    const interval = setInterval(poll, 30_000);
+    return () => clearInterval(interval);
+  }, [status, session, playNotificationSound, showToast]);
 
   useEffect(() => {
     if (status === "loading") {
@@ -1915,6 +1984,31 @@ export default function AdminDashboard() {
                 Bestätigen
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Toast-Benachrichtigung für neue Termine */}
+      {toast && (
+        <div className="fixed bottom-6 right-6 z-50 animate-slide-in">
+          <div className="bg-[#2c5f7c] text-white px-5 py-4 rounded-xl shadow-2xl flex items-center gap-3 min-w-[260px]">
+            <div className="bg-white/20 p-2 rounded-full flex-shrink-0">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+              </svg>
+            </div>
+            <div className="flex-1">
+              <p className="font-semibold text-sm">{toast.message}</p>
+              <p className="text-white/70 text-xs mt-0.5">Tabelle wurde aktualisiert</p>
+            </div>
+            <button
+              onClick={() => setToast(null)}
+              className="text-white/60 hover:text-white transition-colors ml-1"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
         </div>
       )}
