@@ -233,7 +233,7 @@ export default function AdminDashboard() {
     setHandledFilter("ALL");
     setSearchQuery("");
     setSelectedDate("");
-    setSortOption("date_desc");
+    setSortOption("created_desc");
     setCurrentPage(1);
   };
 
