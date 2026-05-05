@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcrypt";
-import { sendNewAppointmentNotification, sendNewAppointmentNotificationToPractice } from "@/lib/email";
+import { sendNewAppointmentNotification } from "@/lib/email";
 
 export async function POST(request: Request) {
   try {
@@ -161,14 +161,6 @@ export async function POST(request: Request) {
       console.log('✅ Patient notification email sent successfully');
     } catch (emailError) {
       console.error('⚠️ Failed to send patient notification email:', emailError);
-      // Continue - appointment is still valid even if email fails
-    }
-
-    try {
-      await sendNewAppointmentNotificationToPractice(emailData);
-      console.log('✅ Practice notification email sent successfully');
-    } catch (emailError) {
-      console.error('⚠️ Failed to send practice notification email:', emailError);
       // Continue - appointment is still valid even if email fails
     }
 
