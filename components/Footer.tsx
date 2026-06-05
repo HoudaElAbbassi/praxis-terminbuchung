@@ -17,7 +17,7 @@ export default function Footer() {
             <p className="text-gray-300 text-sm mt-3">
               Tel: 02191 6917400<br />
               Fax: 02191 4694938<br />
-              E-Mail: info@gefaessmedizinremscheid.de
+              E-Mail: praxis@gefaessmedizinremscheid.de
             </p>
           </div>
 
