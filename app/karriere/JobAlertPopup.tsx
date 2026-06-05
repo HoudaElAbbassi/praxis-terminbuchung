@@ -117,7 +117,7 @@ export default function JobAlertPopup() {
               Stellenanzeige ansehen
             </button>
             <a
-              href="mailto:info@gefaessmedizinremscheid.de?subject=Bewerbung als MFA"
+              href="mailto:praxis@gefaessmedizinremscheid.de?subject=Bewerbung als MFA"
               className="w-full inline-flex items-center justify-center border-2 border-primary-200 text-primary-700 hover:bg-primary-50 py-3 rounded-xl font-semibold transition-all duration-300 text-sm"
             >
               Direkt per E-Mail bewerben
