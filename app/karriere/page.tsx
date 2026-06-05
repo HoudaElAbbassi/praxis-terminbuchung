@@ -205,19 +205,11 @@ export default function KarrierePage() {
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#4a9d8f] mt-2.5 flex-shrink-0"></span>
-                    Durchführung von Duplexsonographien (Einarbeitung möglich)
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#4a9d8f] mt-2.5 flex-shrink-0"></span>
                     Terminplanung und Praxisorganisation
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#4a9d8f] mt-2.5 flex-shrink-0"></span>
                     Dokumentation und Abrechnung (EBM / GOÄ)
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#4a9d8f] mt-2.5 flex-shrink-0"></span>
-                    Wundversorgung und Verbandswechsel
                   </li>
                 </ul>
               </div>
