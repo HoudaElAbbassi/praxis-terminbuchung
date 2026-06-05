@@ -301,7 +301,7 @@ export default function KarrierePage() {
 
                 <div className="flex flex-col sm:flex-row gap-3 justify-center mb-5">
                   <a
-                    href="mailto:info@gefaessmedizinremscheid.de?subject=Bewerbung als MFA"
+                    href="mailto:praxis@gefaessmedizinremscheid.de?subject=Bewerbung als MFA"
                     className="inline-flex items-center justify-center bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 shadow-md hover:shadow-lg text-base"
                   >
                     <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
@@ -344,7 +344,7 @@ export default function KarrierePage() {
             wir freuen uns immer über Bewerbungen von motivierten Menschen.
           </p>
           <a
-            href="mailto:info@gefaessmedizinremscheid.de?subject=Initiativbewerbung"
+            href="mailto:praxis@gefaessmedizinremscheid.de?subject=Initiativbewerbung"
             className="inline-flex items-center justify-center bg-[#4a9d8f] hover:bg-[#3d8378] text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 shadow-md hover:shadow-lg text-base"
           >
             <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
