@@ -50,7 +50,7 @@ export default function VacationPopup() {
           <div className="flex items-start gap-3">
             <span className="text-amber-500 mt-0.5">📅</span>
             <div>
-              <span className="font-semibold">Wiederöffnung:</span> ab 25. März
+              <span className="font-semibold">Wiederöffnung:</span> ab 24. August
               <p className="text-gray-500 text-xs mt-0.5">Alle Anfragen werden dann umgehend bearbeitet.</p>
             </div>
           </div>
