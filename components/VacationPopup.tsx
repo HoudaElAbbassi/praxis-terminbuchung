@@ -38,7 +38,7 @@ export default function VacationPopup() {
           </div>
           <div>
             <h2 className="text-lg font-bold text-gray-900">Praxisurlaub</h2>
-            <p className="text-sm text-amber-600 font-medium">Geschlossen bis einschließlich 23. August</p>
+            <p className="text-sm text-amber-600 font-medium">Geschlossen bis einschließlich 24. August</p>
           </div>
         </div>
 

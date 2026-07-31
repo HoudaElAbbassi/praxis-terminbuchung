@@ -15,7 +15,7 @@ export default function VacationBanner() {
             <span className="text-amber-500 text-xl mt-0.5 flex-shrink-0">🏖️</span>
             <div className="flex flex-col sm:flex-row sm:items-center sm:flex-wrap gap-x-4 gap-y-1 text-sm">
               <span className="font-semibold text-amber-800">
-                Praxisurlaub bis 23. August
+                Praxisurlaub bis 24. August
               </span>
               <span className="hidden sm:inline text-amber-400">|</span>
               <span>
