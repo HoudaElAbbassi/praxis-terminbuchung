@@ -24,13 +24,10 @@ export default function VacationBanner() {
               <span className="hidden sm:inline text-amber-400">|</span>
               <span>
                 Notfall:{" "}
-                <a
-                  href="tel:116117"
-                  className="inline-flex items-center gap-1 font-bold text-amber-700 underline underline-offset-2 hover:text-amber-900 transition-colors"
-                >
-                  📞 116 117
-                </a>
-                <span className="text-amber-600 ml-1">(Ärztlicher Bereitschaftsdienst)</span>
+<a href="tel:112" className="font-bold text-amber-700 underline underline-offset-2 hover:text-amber-900 transition-colors">📞 112</a>
+                <span className="text-amber-600 mx-1">·</span>
+                <a href="tel:116117" className="font-bold text-amber-700 underline underline-offset-2 hover:text-amber-900 transition-colors">116 117</a>
+                <span className="text-amber-600 ml-1">(Bereitschaftsdienst)</span>
               </span>
             </div>
           </div>

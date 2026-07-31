@@ -50,7 +50,7 @@ export default function VacationPopup() {
           <div className="flex items-start gap-3">
             <span className="text-amber-500 mt-0.5">📅</span>
             <div>
-              <span className="font-semibold">Wiederöffnung:</span> ab 24. August
+              <span className="font-semibold">Wiederöffnung:</span> ab 25. August
               <p className="text-gray-500 text-xs mt-0.5">Alle Anfragen werden dann umgehend bearbeitet.</p>
             </div>
           </div>
@@ -67,12 +67,15 @@ export default function VacationPopup() {
             <span className="text-red-500 mt-0.5">🚨</span>
             <div>
               <span className="font-semibold">Notfall?</span>
-              <p className="mt-0.5">
+              <p className="mt-1">
+                Notruf:{" "}
+                <a href="tel:112" className="font-bold text-red-600 hover:text-red-800 underline underline-offset-2 transition-colors">
+                  112
+                </a>
+              </p>
+              <p className="mt-1">
                 Ärztlicher Bereitschaftsdienst:{" "}
-                <a
-                  href="tel:116117"
-                  className="font-bold text-red-600 hover:text-red-800 underline underline-offset-2 transition-colors"
-                >
+                <a href="tel:116117" className="font-bold text-red-600 hover:text-red-800 underline underline-offset-2 transition-colors">
                   116 117
                 </a>
               </p>
