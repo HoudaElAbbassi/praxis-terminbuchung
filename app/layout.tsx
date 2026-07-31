@@ -3,6 +3,7 @@ import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 import ChatWidget from "@/components/Chatbot/ChatWidget";
+import VacationBanner from "@/components/VacationBanner";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -34,7 +35,7 @@ export default function RootLayout({
   return (
     <html lang="de">
       <body className={`${inter.variable} ${playfairDisplay.variable} font-sans`}>
-        <Providers>{children}</Providers>
+        <Providers><VacationBanner />{children}</Providers>
         <ChatWidget />
       </body>
     </html>
