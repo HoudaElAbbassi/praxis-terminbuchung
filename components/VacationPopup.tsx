@@ -6,12 +6,12 @@ export default function VacationPopup() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const dismissed = sessionStorage.getItem('vacationPopupDismissed');
+    const dismissed = sessionStorage.getItem('vacationPopupDismissed_aug2025');
     if (!dismissed) setVisible(true);
   }, []);
 
   const dismiss = () => {
-    sessionStorage.setItem('vacationPopupDismissed', 'true');
+    sessionStorage.setItem('vacationPopupDismissed_aug2025', 'true');
     setVisible(false);
   };
 
@@ -38,7 +38,7 @@ export default function VacationPopup() {
           </div>
           <div>
             <h2 className="text-lg font-bold text-gray-900">Praxisurlaub</h2>
-            <p className="text-sm text-amber-600 font-medium">Die Praxis ist aktuell geschlossen</p>
+            <p className="text-sm text-amber-600 font-medium">Geschlossen bis einschließlich 23. August</p>
           </div>
         </div>
 
