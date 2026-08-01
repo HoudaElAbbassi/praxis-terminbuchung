@@ -19,7 +19,7 @@ export default function VacationBanner() {
               </span>
               <span className="hidden sm:inline text-amber-400">|</span>
               <span>
-                Vertretung: <strong>Dr. med. Florian Lepique</strong>, Remscheid
+                Vertretung: <strong>Dr. med. Florian Lepique</strong>, Remscheid &ndash; Sanaklinikum Remscheid, Gefäßchirurgie
               </span>
               <span className="hidden sm:inline text-amber-400">|</span>
               <span>

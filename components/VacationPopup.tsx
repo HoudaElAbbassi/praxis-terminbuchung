@@ -60,6 +60,7 @@ export default function VacationPopup() {
             <div>
               <span className="font-semibold">Vertretung:</span>
               <p>Dr. med. Florian Lepique, Remscheid</p>
+              <p className="text-gray-500 text-xs mt-0.5">Sanaklinikum Remscheid, Gefäßchirurgie</p>
             </div>
           </div>
 
