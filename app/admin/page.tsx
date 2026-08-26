@@ -966,17 +966,9 @@ export default function AdminDashboard() {
                       </td>
                       {/* Versicherung (hidden on mobile/tablet) */}
                       <td className="px-3 py-3 hidden lg:table-cell whitespace-nowrap">
-                        {appointment.insuranceType === 'PRIVATE' ? (
-                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                            Privat
-                          </span>
-                        ) : appointment.insuranceType === 'STATUTORY' ? (
-                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                            Gesetzlich
-                          </span>
-                        ) : (
-                          <span className="text-xs text-gray-400">—</span>
-                        )}
+                        <span className="text-xs font-medium text-gray-700">
+                          {appointment.insuranceType === 'PRIVATE' ? 'PV' : appointment.insuranceType === 'STATUTORY' ? 'GV' : '—'}
+                        </span>
                       </td>
                       {/* Eingangsdatum (hidden until xl) */}
                       <td className="px-3 py-3 hidden xl:table-cell whitespace-nowrap">
