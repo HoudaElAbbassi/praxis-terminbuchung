@@ -903,6 +903,7 @@ export default function AdminDashboard() {
                     </th>
                     <th className="px-3 py-3 text-left font-semibold hidden md:table-cell">Kontakt</th>
                     <th className="px-3 py-3 text-left font-semibold hidden lg:table-cell">Terminart</th>
+                    <th className="px-3 py-3 text-left font-semibold hidden lg:table-cell">Versicherung</th>
                     <th
                       className="px-3 py-3 text-left font-semibold hidden xl:table-cell cursor-pointer hover:bg-[#1f4459] select-none"
                       onClick={() => handleColumnSort("created_asc", "created_desc")}
@@ -962,6 +963,20 @@ export default function AdminDashboard() {
                       {/* Terminart (hidden on mobile/tablet) */}
                       <td className="px-3 py-3 hidden lg:table-cell">
                         <span className="text-gray-700">{appointment.appointmentType.name}</span>
+                      </td>
+                      {/* Versicherung (hidden on mobile/tablet) */}
+                      <td className="px-3 py-3 hidden lg:table-cell whitespace-nowrap">
+                        {appointment.insuranceType === 'PRIVATE' ? (
+                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            Privat
+                          </span>
+                        ) : appointment.insuranceType === 'STATUTORY' ? (
+                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            Gesetzlich
+                          </span>
+                        ) : (
+                          <span className="text-xs text-gray-400">—</span>
+                        )}
                       </td>
                       {/* Eingangsdatum (hidden until xl) */}
                       <td className="px-3 py-3 hidden xl:table-cell whitespace-nowrap">
