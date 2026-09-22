@@ -15,6 +15,18 @@ const DEFAULTS: Record<string, string> = {
   contact_phone: "",
   contact_email: "praxis@gefaessmedizinremscheid.de",
   contact_address: "",
+  leistungen_hero: "Unsere Schwerpunkte im Bereich Gefäßmedizin",
+  leistungen_farbduplex: "Modernste Ultraschalltechnik für präzise Diagnostik",
+  leistungen_krampfadern: "Moderne, schonende Behandlung von Venenerkrankungen",
+  leistungen_cvi: "Langfristige Venenerkrankung mit gezielter Behandlung",
+  leistungen_tvt: "Ernstzunehmende Erkrankung mit schneller Diagnostik",
+  leistungen_besenreiser: "Feine Venen – kosmetisch störend, aber behandelbar",
+  leistungen_pavk: "Häufige Gefäßerkrankung mit individueller Behandlung",
+  leistungen_carotis: "Frühzeitige Diagnostik zur Schlaganfallprävention",
+  leistungen_aneurysma: "Bauchaorta und Beinarterien – Kontrolle und Überwachung",
+  leistungen_lymphoedem: "Differenzierte Diagnostik und langfristige Betreuung",
+  leistungen_lipoedem: "Krankhafte Fettverteilungsstörung",
+  leistungen_therapie: "Schonende Behandlung ohne Krankenhausaufenthalt",
 };
 
 export default function InhaltePage() {
@@ -209,7 +221,43 @@ export default function InhaltePage() {
           </div>
         </section>
 
-        <div className="flex justify-end">
+
+        {/* Leistungen Kurztexte */}
+        <section className="bg-white rounded-xl shadow-sm p-6 mb-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+            <span className="w-7 h-7 bg-primary-100 rounded-lg flex items-center justify-center text-primary-600 text-sm">🏥</span>
+            Leistungen – Kurztexte
+          </h2>
+          <p className="text-xs text-gray-400 mb-4">Diese Kurzbeschreibungen erscheinen unter jeder Leistung auf der Leistungsseite.</p>
+          <div className="space-y-3">
+            {[
+              { label: "Hero-Untertitel", key: "leistungen_hero" },
+              { label: "Farbduplexsonographie", key: "leistungen_farbduplex" },
+              { label: "Krampfadern (Varizen)", key: "leistungen_krampfadern" },
+              { label: "Chron. venöse Insuffizienz", key: "leistungen_cvi" },
+              { label: "Tiefe Venenthrombose", key: "leistungen_tvt" },
+              { label: "Besenreiser", key: "leistungen_besenreiser" },
+              { label: "Durchblutungsstörungen (pAVK)", key: "leistungen_pavk" },
+              { label: "Carotisstenose", key: "leistungen_carotis" },
+              { label: "Aneurysmen", key: "leistungen_aneurysma" },
+              { label: "Lymphödem", key: "leistungen_lymphoedem" },
+              { label: "Lipödem", key: "leistungen_lipoedem" },
+              { label: "Ambulante Gefäßtherapien", key: "leistungen_therapie" },
+            ].map(({ label, key }) => (
+              <div key={key} className="flex items-center gap-4">
+                <label className="w-52 text-sm font-medium text-gray-700 flex-shrink-0">{label}</label>
+                <input
+                  type="text"
+                  value={values[key] ?? ""}
+                  onChange={(e) => set(key, e.target.value)}
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 text-sm"
+                />
+              </div>
+            ))}
+          </div>
+        </section>
+
+                <div className="flex justify-end">
           <button
             onClick={handleSave}
             disabled={isSaving}
