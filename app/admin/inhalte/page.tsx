@@ -17,6 +17,13 @@ const DEFAULTS: Record<string, string> = {
   contact_address: "",
   contact_fax: "02191 4694938",
   kontakt_hero: "Wir freuen uns auf Ihren Besuch",
+  impressum_name: "Praxis für Gefäßmedizin Remscheid",
+  impressum_inhaber: "Abdelkarim Alyandouzi",
+  impressum_street: "Freiheitsstraße 203",
+  impressum_city: "42853 Remscheid",
+  impressum_beruf1: "Facharzt für Gefäßchirurgie",
+  impressum_beruf2: "Facharzt für Viszeralchirurgie",
+  impressum_ustid: "Auf Anfrage",
   leistungen_hero: "Unsere Schwerpunkte im Bereich Gefäßmedizin",
   leistungen_farbduplex: "Modernste Ultraschalltechnik für präzise Diagnostik",
   leistungen_krampfadern: "Moderne, schonende Behandlung von Venenerkrankungen",
@@ -244,7 +251,38 @@ export default function InhaltePage() {
         </section>
 
 
-        {/* Leistungen Kurztexte */}
+        {/* Impressum */}
+        <section className="bg-white rounded-xl shadow-sm p-6 mb-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+            <span className="w-7 h-7 bg-primary-100 rounded-lg flex items-center justify-center text-primary-600 text-sm">📄</span>
+            Impressum
+          </h2>
+          <div className="space-y-4">
+            {[
+              { label: "Praxisname", key: "impressum_name", placeholder: "Praxis für Gefäßmedizin Remscheid" },
+              { label: "Inhaber", key: "impressum_inhaber", placeholder: "Abdelkarim Alyandouzi" },
+              { label: "Straße & Hausnummer", key: "impressum_street", placeholder: "Freiheitsstraße 203" },
+              { label: "PLZ & Ort", key: "impressum_city", placeholder: "42853 Remscheid" },
+              { label: "Berufsbezeichnung 1", key: "impressum_beruf1", placeholder: "Facharzt für Gefäßchirurgie" },
+              { label: "Berufsbezeichnung 2", key: "impressum_beruf2", placeholder: "Facharzt für Viszeralchirurgie" },
+              { label: "Umsatzsteuer-ID", key: "impressum_ustid", placeholder: "z.B. DE123456789 oder Auf Anfrage" },
+            ].map(({ label, key, placeholder }) => (
+              <div key={key} className="flex items-center gap-4">
+                <label className="w-48 text-sm font-medium text-gray-700 flex-shrink-0">{label}</label>
+                <input
+                  type="text"
+                  value={values[key] ?? ""}
+                  onChange={(e) => set(key, e.target.value)}
+                  placeholder={placeholder}
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900"
+                />
+              </div>
+            ))}
+            <p className="text-xs text-gray-400">Telefon, Fax und E-Mail werden aus den Kontaktdaten oben übernommen.</p>
+          </div>
+        </section>
+
+                {/* Leistungen Kurztexte */}
         <section className="bg-white rounded-xl shadow-sm p-6 mb-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
             <span className="w-7 h-7 bg-primary-100 rounded-lg flex items-center justify-center text-primary-600 text-sm">🏥</span>

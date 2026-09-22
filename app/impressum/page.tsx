@@ -1,7 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
+import { prisma } from "@/lib/prisma";
 
-export default function ImpressumPage() {
+export default async function ImpressumPage() {
+  const rows = await prisma.settings.findMany();
+  const s: Record<string, string> = {};
+  for (const row of rows) s[row.key] = row.value;
+  const g = (key: string, fallback: string) => s[key] || fallback;
   return (
     <div className="min-h-screen bg-gradient-to-b from-primary-50 to-white py-12 px-4">
       <div className="max-w-4xl mx-auto">
@@ -30,29 +35,29 @@ export default function ImpressumPage() {
           <div className="space-y-6 text-gray-700">
             <section>
               <h2 className="text-2xl font-semibold text-gray-900 mb-3">Angaben gemäß § 5 TMG</h2>
-              <p className="font-medium text-lg">Praxis für Gefäßmedizin Remscheid</p>
-              <p>Inhaber: Abdelkarim Alyandouzi</p>
-              <p>Freiheitsstraße 203</p>
-              <p>42853 Remscheid</p>
+              <p className="font-medium text-lg">{g("impressum_name","Praxis für Gefäßmedizin Remscheid")}</p>
+              <p>Inhaber: {g("impressum_inhaber","Abdelkarim Alyandouzi")}</p>
+              <p>{g("impressum_street","Freiheitsstraße 203")}</p>
+              <p>{g("impressum_city","42853 Remscheid")}</p>
             </section>
 
             <section>
               <h2 className="text-2xl font-semibold text-gray-900 mb-3">Kontakt</h2>
               <p>
-                <strong>Telefon:</strong> 02191 6917400
+                <strong>Telefon:</strong> {g("contact_phone","02191 6917400")}
               </p>
               <p>
-                <strong>Fax:</strong> 02191 4694938
+                <strong>Fax:</strong> {g("contact_fax","02191 4694938")}
               </p>
               <p>
-                <strong>E-Mail:</strong> praxis@gefaessmedizinremscheid.de
+                <strong>E-Mail:</strong> {g("contact_email","praxis@gefaessmedizinremscheid.de")}
               </p>
             </section>
 
             <section>
               <h2 className="text-2xl font-semibold text-gray-900 mb-3">Berufsbezeichnung</h2>
-              <p>Facharzt für Gefäßchirurgie</p>
-              <p>Facharzt für Viszeralchirurgie</p>
+              <p>{g("impressum_beruf1","Facharzt für Gefäßchirurgie")}</p>
+              <p>{g("impressum_beruf2","Facharzt für Viszeralchirurgie")}</p>
               <p>Verliehen in: Deutschland</p>
             </section>
 
@@ -87,7 +92,7 @@ export default function ImpressumPage() {
               <p>
                 Umsatzsteuer-Identifikationsnummer gemäß §27a Umsatzsteuergesetz:
               </p>
-              <p>Auf Anfrage</p>
+              <p>{g("impressum_ustid","Auf Anfrage")}</p>
             </section>
 
             <section>
@@ -95,10 +100,10 @@ export default function ImpressumPage() {
               <p>
                 Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:
               </p>
-              <p className="mt-2">Abdelkarim Alyandouzi</p>
-              <p>Praxis für Gefäßmedizin Remscheid</p>
-              <p>Freiheitsstraße 203</p>
-              <p>42853 Remscheid</p>
+              <p className="mt-2">{g("impressum_inhaber","Abdelkarim Alyandouzi")}</p>
+              <p>{g("impressum_name","Praxis für Gefäßmedizin Remscheid")}</p>
+              <p>{g("impressum_street","Freiheitsstraße 203")}</p>
+              <p>{g("impressum_city","42853 Remscheid")}</p>
             </section>
 
             <section>
