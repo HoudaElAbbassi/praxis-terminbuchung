@@ -5,8 +5,9 @@ import ReviewsCarousel from '@/components/ReviewsCarousel';
 import { prisma } from '@/lib/prisma';
 
 const DEFAULTS: Record<string, string> = {
-  welcome_title: '{s.welcome_title}',
-  welcome_text: '{s.welcome_text}',
+  welcome_title: 'Herzlich willkommen zur Praxis',
+  welcome_text:
+    'Ich freue mich, Sie in modernen, hellen Räumen begrüßen zu dürfen. Als Facharzt für Gefäßchirurgie und Viszeralchirurgie biete ich eine patientenorientierte und menschlich zugewandte Medizin. Mein Ziel ist es, die Versorgung mit modernster Technik zu verbinden und Ihnen eine vertraute, angenehme Atmosphäre zu bieten.',
 };
 
 export default async function Home() {
