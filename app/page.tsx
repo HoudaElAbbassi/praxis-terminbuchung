@@ -2,8 +2,17 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Navigation from '@/components/Navigation';
 import ReviewsCarousel from '@/components/ReviewsCarousel';
+import { prisma } from '@/lib/prisma';
 
-export default function Home() {
+const DEFAULTS: Record<string, string> = {
+  welcome_title: '{s.welcome_title}',
+  welcome_text: '{s.welcome_text}',
+};
+
+export default async function Home() {
+  const settingsRows = await prisma.settings.findMany();
+  const s: Record<string, string> = { ...DEFAULTS };
+  for (const row of settingsRows) s[row.key] = row.value;
   return (
     <main className="min-h-screen bg-white">
       <Navigation />
@@ -42,10 +51,10 @@ export default function Home() {
           {/* Willkommenstext */}
           <div className="text-center max-w-5xl mx-auto">
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-primary-700 mb-4 sm:mb-6 px-2" style={{fontFamily: "'Playfair Display', serif"}}>
-              Herzlich willkommen zur Praxis
+              {s.welcome_title}
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-gray-800 leading-relaxed max-w-3xl mx-auto px-4 font-medium">
-              Ich freue mich, Sie in modernen, hellen Räumen begrüßen zu dürfen. Als Facharzt für Gefäßchirurgie und Viszeralchirurgie biete ich eine patientenorientierte und menschlich zugewandte Medizin. Mein Ziel ist es, die Versorgung mit modernster Technik zu verbinden und Ihnen eine vertraute, angenehme Atmosphäre zu bieten.
+              {s.welcome_text}
             </p>
           </div>
         </div>

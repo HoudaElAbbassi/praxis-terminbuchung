@@ -636,6 +636,12 @@ export default function AdminDashboard() {
                 Verfügbarkeit
               </Link>
               <Link
+                href="/admin/inhalte"
+                className="flex-1 sm:flex-none bg-amber-600 hover:bg-amber-700 active:bg-amber-700 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg text-center text-sm sm:text-base touch-manipulation"
+              >
+                Inhalte
+              </Link>
+              <Link
                 href="/admin/einstellungen"
                 className="flex-1 sm:flex-none bg-[#2c5f7c] hover:bg-[#1f4459] active:bg-[#1f4459] text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg text-center text-sm sm:text-base touch-manipulation"
               >
