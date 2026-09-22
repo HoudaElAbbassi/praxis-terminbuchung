@@ -1,7 +1,13 @@
 import Navigation from '@/components/Navigation';
 import Link from 'next/link';
+import Image from 'next/image';
+import { prisma } from '@/lib/prisma';
 
-export default function PhilosophiePage() {
+export default async function PhilosophiePage() {
+  const team = await prisma.teamMember.findMany({
+    where: { isActive: true },
+    orderBy: [{ order: 'asc' }, { createdAt: 'asc' }],
+  });
   return (
     <>
       <Navigation />
@@ -139,7 +145,37 @@ export default function PhilosophiePage() {
           </div>
         </section>
 
-        {/* Footer */}
+
+        {/* Team Section */}
+        {team.length > 0 && (
+          <section className="py-12 sm:py-16 bg-gray-50">
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-10" style={{fontFamily: "'Playfair Display', serif"}}>
+                Unser Team
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {team.map((member) => (
+                  <div key={member.id} className="bg-white rounded-xl shadow-sm p-6 flex flex-col items-center text-center">
+                    <div className="w-24 h-24 rounded-full bg-primary-100 mb-4 overflow-hidden flex items-center justify-center flex-shrink-0">
+                      {member.imageUrl ? (
+                        <Image src={member.imageUrl} alt={member.name} width={96} height={96} className="object-cover w-full h-full" />
+                      ) : (
+                        <svg className="w-12 h-12 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                      )}
+                    </div>
+                    <h3 className="font-bold text-gray-900 text-lg">{member.name}</h3>
+                    <p className="text-primary-600 text-sm font-medium mb-2">{member.role}</p>
+                    {member.description && <p className="text-gray-500 text-sm leading-relaxed">{member.description}</p>}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+                {/* Footer */}
         <footer className="bg-gray-800 text-white py-8 sm:py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
