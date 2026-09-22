@@ -15,6 +15,8 @@ const DEFAULTS: Record<string, string> = {
   contact_phone: "",
   contact_email: "praxis@gefaessmedizinremscheid.de",
   contact_address: "",
+  contact_fax: "02191 4694938",
+  kontakt_hero: "Wir freuen uns auf Ihren Besuch",
   leistungen_hero: "Unsere Schwerpunkte im Bereich Gefäßmedizin",
   leistungen_farbduplex: "Modernste Ultraschalltechnik für präzise Diagnostik",
   leistungen_krampfadern: "Moderne, schonende Behandlung von Venenerkrankungen",
@@ -209,12 +211,32 @@ export default function InhaltePage() {
               />
             </div>
             <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Fax</label>
+              <input
+                type="text"
+                value={values.contact_fax ?? ""}
+                onChange={(e) => set("contact_fax", e.target.value)}
+                placeholder="z.B. 02191 4694938"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900"
+              />
+            </div>
+            <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Adresse</label>
               <input
                 type="text"
                 value={values.contact_address}
                 onChange={(e) => set("contact_address", e.target.value)}
                 placeholder="z.B. Musterstraße 1, 42853 Remscheid"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Kontaktseite – Untertitel</label>
+              <input
+                type="text"
+                value={values.kontakt_hero ?? ""}
+                onChange={(e) => set("kontakt_hero", e.target.value)}
+                placeholder="z.B. Wir freuen uns auf Ihren Besuch"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900"
               />
             </div>

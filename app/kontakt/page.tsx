@@ -1,7 +1,12 @@
 import Navigation from '@/components/Navigation';
 import Link from 'next/link';
+import { prisma } from '@/lib/prisma';
 
-export default function KontaktPage() {
+export default async function KontaktPage() {
+  const rows = await prisma.settings.findMany();
+  const s: Record<string, string> = {};
+  for (const row of rows) s[row.key] = row.value;
+  const g = (key: string, fallback: string) => s[key] || fallback;
   return (
     <>
       <Navigation />
@@ -14,7 +19,7 @@ export default function KontaktPage() {
                 Kontakt & <span className="text-primary-600">Anfahrt</span>
               </h1>
               <p className="text-lg sm:text-xl text-gray-800 font-medium px-2">
-                Wir freuen uns auf Ihren Besuch
+                {g("kontakt_hero", "Wir freuen uns auf Ihren Besuch")}
               </p>
             </div>
           </div>
@@ -56,8 +61,8 @@ export default function KontaktPage() {
                     </div>
                     <div>
                       <h3 className="font-bold text-gray-900 mb-1">Telefon</h3>
-                      <a href="tel:021916917400" className="text-primary-600 hover:underline text-base">
-                        02191 6917400
+                      <a href={`tel:${g("contact_phone","021916917400").replace(/\s/g,"")}`} className="text-primary-600 hover:underline text-base">
+                        {g("contact_phone","02191 6917400")}
                       </a>
                     </div>
                   </div>
@@ -73,7 +78,7 @@ export default function KontaktPage() {
                     </div>
                     <div>
                       <h3 className="font-bold text-gray-900 mb-1">Fax</h3>
-                      <p className="text-gray-700 text-base">02191 4694938</p>
+                      <p className="text-gray-700 text-base">{g("contact_fax","02191 4694938")}</p>
                     </div>
                   </div>
                 </div>
@@ -91,15 +96,15 @@ export default function KontaktPage() {
                       <div className="space-y-2 text-sm">
                         <div className="flex justify-between">
                           <span className="text-gray-700 font-medium">Montag und Mittwoch:</span>
-                          <span className="text-gray-700">8:00 - 15:00 Uhr</span>
+                          <span className="text-gray-700">{g("opening_mon_wed","8:00 - 15:00 Uhr")}</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-gray-700 font-medium">Dienstag und Donnerstag:</span>
-                          <span className="text-gray-700">10:00 - 17:00 Uhr</span>
+                          <span className="text-gray-700">{g("opening_tue_thu","10:00 - 17:00 Uhr")}</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-gray-700 font-medium">Freitag:</span>
-                          <span className="text-gray-700">8:00 - 12:00 Uhr</span>
+                          <span className="text-gray-700">{g("opening_fri","8:00 - 12:00 Uhr")}</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-gray-700 font-medium">Samstag - Sonntag:</span>
@@ -169,7 +174,7 @@ export default function KontaktPage() {
                     <div>
                       <h3 className="font-bold text-gray-900 mb-2">Adresse</h3>
                       <p className="text-gray-700 leading-relaxed">
-                        Freiheitsstraße 203 (3. Etage)<br />
+                        {g("contact_address","Freiheitsstraße 203 (3. Etage)")}<br />
                         42853 Remscheid
                       </p>
                     </div>
@@ -260,13 +265,13 @@ export default function KontaktPage() {
                     Online Termin buchen
                   </Link>
                   <a
-                    href="tel:021916917400"
+                    href={`tel:${g("contact_phone","021916917400").replace(/\s/g,"")}`}
                     className="inline-flex items-center justify-center bg-white/20 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-white/30 transition-all duration-300 border-2 border-white/40 text-sm sm:text-base"
                   >
                     <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                     </svg>
-                    02191 6917400
+                    {g("contact_phone","02191 6917400")}
                   </a>
                 </div>
               </div>
@@ -292,9 +297,9 @@ export default function KontaktPage() {
                   Kontakt
                 </h3>
                 <ul className="space-y-1 sm:space-y-2 text-sm sm:text-base text-gray-300">
-                  <li>Tel: 02191 6917400</li>
-                  <li>Fax: 02191 4694938</li>
-                  <li>Freiheitsstraße 203 (3. Etage)</li>
+                  <li>Tel: {g("contact_phone","02191 6917400")}</li>
+                  <li>Fax: {g("contact_fax","02191 4694938")}</li>
+                  <li>{g("contact_address","Freiheitsstraße 203 (3. Etage)")}</li>
                   <li>42853 Remscheid</li>
                 </ul>
               </div>
