@@ -4,10 +4,15 @@ import Image from 'next/image';
 import { prisma } from '@/lib/prisma';
 
 export default async function PhilosophiePage() {
-  const team = await prisma.teamMember.findMany({
-    where: { isActive: true },
-    orderBy: [{ order: 'asc' }, { createdAt: 'asc' }],
-  });
+  let team: Awaited<ReturnType<typeof prisma.teamMember.findMany>> = [];
+  try {
+    team = await prisma.teamMember.findMany({
+      where: { isActive: true },
+      orderBy: [{ order: 'asc' }, { createdAt: 'asc' }],
+    });
+  } catch {
+    // Table may not exist yet in production
+  }
   return (
     <>
       <Navigation />
