@@ -25,9 +25,9 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-4">Sprechzeiten</h3>
             <p className="text-gray-300 text-sm">
-              Montag und Mittwoch: 8-15:00 Uhr<br />
-              Dienstag und Donnerstag: 10-17:00 Uhr<br />
-              Freitag: 8-12 Uhr<br />
+              Montag und Mittwoch: 08:00 – 12:00, 12:30 – 16:00 Uhr<br />
+              Dienstag und Donnerstag: 10:00 – 14:00, 14:30 – 17:00 Uhr<br />
+              Freitag: 08:00 – 12:00 Uhr<br />
               Samstag-Sonntag: Geschlossen
             </p>
           </div>

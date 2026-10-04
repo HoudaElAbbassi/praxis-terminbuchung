@@ -9,8 +9,8 @@ const DEFAULTS: Record<string, string> = {
   welcome_title: "Herzlich willkommen zur Praxis",
   welcome_text:
     "Ich freue mich, Sie in modernen, hellen Räumen begrüßen zu dürfen. Als Facharzt für Gefäßchirurgie und Viszeralchirurgie biete ich eine patientenorientierte und menschlich zugewandte Medizin. Mein Ziel ist es, die Versorgung mit modernster Technik zu verbinden und Ihnen eine vertraute, angenehme Atmosphäre zu bieten.",
-  opening_mon_wed: "08:00 – 15:00 Uhr",
-  opening_tue_thu: "10:00 – 17:00 Uhr",
+  opening_mon_wed: "08:00 – 12:00, 12:30 – 16:00 Uhr",
+  opening_tue_thu: "10:00 – 14:00, 14:30 – 17:00 Uhr",
   opening_fri: "08:00 – 12:00 Uhr",
   contact_phone: "",
   contact_email: "praxis@gefaessmedizinremscheid.de",
@@ -182,7 +182,7 @@ export default function InhaltePage() {
                   type="text"
                   value={values[key]}
                   onChange={(e) => set(key, e.target.value)}
-                  placeholder="z.B. 08:00 – 15:00 Uhr"
+                  placeholder="z.B. 08:00 – 12:00, 12:30 – 16:00 Uhr"
                   className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900"
                 />
               </div>

@@ -94,21 +94,21 @@ export default async function KontaktPage() {
                     <div className="flex-1">
                       <h3 className="font-bold text-gray-900 mb-3">Sprechzeiten</h3>
                       <div className="space-y-2 text-sm">
-                        <div className="flex justify-between">
+                        <div className="flex justify-between gap-4">
                           <span className="text-gray-700 font-medium">Montag und Mittwoch:</span>
-                          <span className="text-gray-700">{g("opening_mon_wed","8:00 - 15:00 Uhr")}</span>
+                          <span className="text-gray-700 text-right">{g("opening_mon_wed","08:00 – 12:00, 12:30 – 16:00 Uhr")}</span>
                         </div>
-                        <div className="flex justify-between">
+                        <div className="flex justify-between gap-4">
                           <span className="text-gray-700 font-medium">Dienstag und Donnerstag:</span>
-                          <span className="text-gray-700">{g("opening_tue_thu","10:00 - 17:00 Uhr")}</span>
+                          <span className="text-gray-700 text-right">{g("opening_tue_thu","10:00 – 14:00, 14:30 – 17:00 Uhr")}</span>
                         </div>
-                        <div className="flex justify-between">
+                        <div className="flex justify-between gap-4">
                           <span className="text-gray-700 font-medium">Freitag:</span>
-                          <span className="text-gray-700">{g("opening_fri","8:00 - 12:00 Uhr")}</span>
+                          <span className="text-gray-700 text-right">{g("opening_fri","08:00 – 12:00 Uhr")}</span>
                         </div>
-                        <div className="flex justify-between">
+                        <div className="flex justify-between gap-4">
                           <span className="text-gray-700 font-medium">Samstag - Sonntag:</span>
-                          <span className="text-gray-700">Geschlossen</span>
+                          <span className="text-gray-700 text-right">Geschlossen</span>
                         </div>
                       </div>
                       <div className="mt-4 pt-4 border-t border-gray-200">

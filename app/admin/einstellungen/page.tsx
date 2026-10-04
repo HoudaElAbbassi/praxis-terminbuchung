@@ -230,9 +230,9 @@ export default function EinstellungenPage() {
           <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
             <p className="text-blue-900 font-medium mb-2">Aktuelle Öffnungszeiten:</p>
             <div className="text-blue-800 space-y-1">
-              <p>Montag und Mittwoch: 8:00 - 15:00 Uhr</p>
-              <p>Dienstag und Donnerstag: 10:00 - 17:00 Uhr</p>
-              <p>Freitag: 8:00 - 12:00 Uhr</p>
+              <p>Montag und Mittwoch: 08:00 – 12:00, 12:30 – 16:00 Uhr</p>
+              <p>Dienstag und Donnerstag: 10:00 – 14:00, 14:30 – 17:00 Uhr</p>
+              <p>Freitag: 08:00 – 12:00 Uhr</p>
               <p>Samstag-Sonntag: Geschlossen</p>
             </div>
             <p className="text-blue-600 text-sm mt-2">

@@ -108,9 +108,9 @@ Bitte kontaktieren Sie uns telefonisch oder per E-Mail:
 ✉️ **E-Mail:** info@gefaessmedizinremscheid.de
 
 **Sprechzeiten:**
-Montag und Mittwoch: 8:00 - 15:00 Uhr
-Dienstag und Donnerstag: 10:00 - 17:00 Uhr
-Freitag: 8:00 - 12:00 Uhr`,
+Montag und Mittwoch: 08:00 – 12:00, 12:30 – 16:00 Uhr
+Dienstag und Donnerstag: 10:00 – 14:00, 14:30 – 17:00 Uhr
+Freitag: 08:00 – 12:00 Uhr`,
     quickReplies: [
       { label: 'Doch lieber online buchen', value: 'book_online' },
       { label: '« Zurück zum Menü', value: 'main_menu' },
@@ -231,13 +231,13 @@ Wählen Sie ein Thema:`,
     response: `🕐 **Unsere Sprechzeiten:**
 
 **Montag und Mittwoch:**
-8:00 - 15:00 Uhr
+08:00 – 12:00, 12:30 – 16:00 Uhr
 
 **Dienstag und Donnerstag:**
-10:00 - 17:00 Uhr
+10:00 – 14:00, 14:30 – 17:00 Uhr
 
 **Freitag:**
-8:00 - 12:00 Uhr
+08:00 – 12:00 Uhr
 
 **Samstag-Sonntag:**
 Geschlossen
@@ -376,9 +376,9 @@ Für einen kurzfristigen Termin haben Sie folgende Möglichkeiten:`,
 **Telefon:** 02191 6917400
 
 **Sprechzeiten:**
-Montag und Mittwoch: 8:00 - 15:00 Uhr
-Dienstag und Donnerstag: 10:00 - 17:00 Uhr
-Freitag: 8:00 - 12:00 Uhr
+Montag und Mittwoch: 08:00 – 12:00, 12:30 – 16:00 Uhr
+Dienstag und Donnerstag: 10:00 – 14:00, 14:30 – 17:00 Uhr
+Freitag: 08:00 – 12:00 Uhr
 
 Schildern Sie am Telefon, dass es dringend ist. Wir finden eine Lösung für Sie!
 
@@ -429,9 +429,9 @@ Unser Praxisteam wird Ihre Anfrage **prioritär bearbeiten** und sich schnellstm
 **E-Mail:** info@gefaessmedizinremscheid.de
 
 **Sprechzeiten:**
-Montag und Mittwoch: 8:00 - 15:00 Uhr
-Dienstag und Donnerstag: 10:00 - 17:00 Uhr
-Freitag: 8:00 - 12:00 Uhr
+Montag und Mittwoch: 08:00 – 12:00, 12:30 – 16:00 Uhr
+Dienstag und Donnerstag: 10:00 – 14:00, 14:30 – 17:00 Uhr
+Freitag: 08:00 – 12:00 Uhr
 Samstag-Sonntag: Geschlossen
 
 **Adresse:**
