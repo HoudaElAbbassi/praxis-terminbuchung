@@ -623,7 +623,6 @@ export default function BuchenClient({ initialAppointmentTypes }: BuchenClientPr
                   </optgroup>
                   <optgroup label="Lymphatische Erkrankungen">
                     <option value="Lymphödem">Lymphödem</option>
-                    <option value="Lipödem">Lipödem</option>
                   </optgroup>
                   <optgroup label="Sonstiges">
                     <option value="Kontrolle">Kontroll-Termin</option>

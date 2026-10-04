@@ -294,7 +294,7 @@ export default function LeistungenContent({ s }: { s: Settings }) {
               </AccordionItem>
             </div>
 
-            {/* 4. Lymphatische und Fettgewebserkrankungen */}
+            {/* 4. Lymphatische Erkrankungen */}
             <div className="mb-12 sm:mb-16">
               <div className="flex items-center mb-4 sm:mb-6">
                 <div className="w-12 h-12 sm:w-14 sm:h-14 bg-accent-500 rounded-xl flex items-center justify-center mr-3 sm:mr-4 flex-shrink-0">
@@ -303,7 +303,7 @@ export default function LeistungenContent({ s }: { s: Settings }) {
                   </svg>
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-bold text-gray-900" style={{fontFamily: "'Playfair Display', serif"}}>
-                  4. Lymphatische und Fettgewebserkrankungen
+                  4. Lymphatische Erkrankungen
                 </h2>
               </div>
 
