@@ -34,7 +34,6 @@ const DEFAULTS: Record<string, string> = {
   leistungen_carotis: "Frühzeitige Diagnostik zur Schlaganfallprävention",
   leistungen_aneurysma: "Bauchaorta und Beinarterien – Kontrolle und Überwachung",
   leistungen_lymphoedem: "Differenzierte Diagnostik und langfristige Betreuung",
-  leistungen_lipoedem: "Krankhafte Fettverteilungsstörung",
   leistungen_therapie: "Schonende Behandlung ohne Krankenhausaufenthalt",
 };
 
@@ -301,7 +300,6 @@ export default function InhaltePage() {
               { label: "Carotisstenose", key: "leistungen_carotis" },
               { label: "Aneurysmen", key: "leistungen_aneurysma" },
               { label: "Lymphödem", key: "leistungen_lymphoedem" },
-              { label: "Lipödem", key: "leistungen_lipoedem" },
               { label: "Ambulante Gefäßtherapien", key: "leistungen_therapie" },
             ].map(({ label, key }) => (
               <div key={key} className="flex items-center gap-4">

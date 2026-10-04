@@ -325,17 +325,6 @@ export default function LeistungenContent({ s }: { s: Settings }) {
                   <li>Langfristige Betreuung</li>
                 </ul>
               </AccordionItem>
-
-              <AccordionItem
-                title="Lipödem"
-                subtitle={g("leistungen_lipoedem", "Krankhafte Fettverteilungsstörung")}
-                isOpen={openSection === 'lipoedem'}
-                onToggle={() => toggleSection('lipoedem')}
-              >
-                <p className="text-gray-700 leading-relaxed">
-                  Krankhafte Fettverteilungsstörung mit Schweregefühl und Schmerzen
-                </p>
-              </AccordionItem>
             </div>
 
             {/* 5. Ambulante Operationen & minimalinvasive Therapien */}
